@@ -1,0 +1,19 @@
+Process:         minishell [8500]
+Path:            /Volumes/VOLUME/*/minishell
+Load Address:    0x10a92f000
+Identifier:      minishell
+Version:         ???
+Code Type:       X86-64
+Parent Process:  zsh [91481]
+
+Date/Time:       2022-01-25 12:53:24.201 +0100
+Launch Time:     2022-01-25 12:53:17.029 +0100
+OS Version:      Mac OS X 10.15.7 (19H1615)
+Report Version:  7
+Analysis Tool:   /usr/bin/leaks
+----
+
+leaks Report Version: 4.0
+Process 8500: 368 nodes malloced for 308 KB
+Process 8500: 0 leaks for 0 total leaked bytes.
+
