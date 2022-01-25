@@ -3,7 +3,8 @@ NAME		=	minishell
 
 CC			=	gcc
 CFLAGS		=	-Wall -Werror -Wextra
-L_FLAGS		= 	-lreadline
+L_FLAGS		= 	-lreadline -L $(HOME)/.brew/opt/readline/lib
+C_FLAG		=	-I $(HOME)/.brew/opt/readline/include
 
 SRC_DIR		=	./src/
 OBJ_DIR		=	./obj/
@@ -14,7 +15,16 @@ SRC_LIST	=	main.c	\
 				input_parsing.c	\
 				builtin_init.c	env_init.c env_lst_utils.c \
 				utils.c	\
-				cmd_splitter.c	cmd_utils.c
+				cmd_splitter.c	cmd_utils.c \
+				builtin_echo.c			\
+				builtin_cd.c			\
+				builtin_pwd.c			\
+				builtin_env.c			\
+				builtin_unset.c			\
+				builtin_export.c		\
+				get_env_var.c			\
+				create_prompt.c			\
+				utilities.c				
 
 # BONUS_LIST	=	minishell_bonus.c
 
@@ -53,7 +63,7 @@ $(OBJ_DIR):
 	@echo "$(GREEN)creating: object-files: $(NC)\c"
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	@$(CC) $(CFLAGS) $^ -c -o $@
+	@$(CC) $(CFLAGS) $(C_FLAG) $^ -c -o $@
 	@echo "$(GREEN)>$(NC)\c"
 
 # bonus: $(BONUS_ODIR) $(BONUS_OBJ) $(LIBFT) $(B_INCLUDES)
