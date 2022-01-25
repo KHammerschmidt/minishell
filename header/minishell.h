@@ -11,6 +11,11 @@
 # include <dirent.h>
 # include <curses.h>
 # include <term.h>
+# include <termios.h>
+# include <limits.h>
+# include <errno.h>
+# include <signal.h>
+# include <sys/ioctl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
@@ -134,6 +139,9 @@ typedef struct s_vars
 	char	*cmd_line;
 	// char	**execpath;
 
+	char	*cwd;
+	char	*new_wd;
+	int		fd_out;
 	// t_input	*input;
 	// char	**arr;
 	// char	*quoting;
@@ -157,21 +165,33 @@ int		read_line(t_vars *ms);
 int		get_start(char *cmd_line);
 int		get_end(char *cmd_line);
 
-/* envp init */
+/* envp */
 int		init_env(t_vars *ms, char **envp);	//arr + lst
 void	ft_lstadd_back_env(t_env **lst, t_env *new);
 t_env	*ft_lstlast_env(t_env *lst);
 t_env	*ft_lstnew_env(char *content);
+t_env	*get_env_var(t_vars *ms, char *var_name);
 
 /* builtins */
 void	init_builtin(t_vars *ms);				//arr + lst
 void	add_builtin(t_vars *ms, char *builtin);
+int		builtin_cd(t_vars *ms, char *dir);
+void	builtin_echo(t_vars *ms, char *str, int no_nl_flag);
+void	builtin_pwd(t_vars *ms);
+void	builtin_env(t_vars *ms);
+int		builtin_unset(t_vars *ms, char *var_name);
+int		builtin_export(t_vars *ms, char *var_name, char *var_value);
 
 /* utils */
 void	ft_free_lst(t_list **lst);
 void	ft_free_lst_env(t_env **lst);
 void	ft_free_arr(char **arr);
+int		compare_str(char *s1, char *s2);
 
+/* prompt */
+char	*get_user(t_vars *ms);
+char	*get_pwd(t_vars *ms);
+char	*create_prompt(t_vars *ms);
 
 int		create_cmd_table(t_vars *ms);
 

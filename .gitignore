@@ -2,3 +2,4 @@ a.out
 readline_test.c
 parser_characters.c
 input_lst.c
+leaks.txt
