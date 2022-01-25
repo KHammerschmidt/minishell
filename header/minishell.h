@@ -20,23 +20,23 @@
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
 
-#define PIPE			0
-// #define	AMPERCENT		1
-// #define SEMICOLON		2
-#define	LESS			3
-#define	GREATER			4
-#define	OPEN_BRACKET	5
-#define	CLOSING_BRACKET	6
-#define	DOLLAR			7
-#define	APOSTROPHE		8
-#define BACKSLASH		9
-#define	DOUBLE_QUOTES	10
-#define	SINGLE_QUOTES	11
-#define	SPACE			12
-#define	TAB				13
-#define NEWLINE			14
-#define	LESSLESS		15
-#define	GREATERGREATER	16
+// #define PIPE			0
+// // #define	AMPERCENT		1
+// // #define SEMICOLON		2
+// #define	LESS			3
+// #define	GREATER			4
+// #define	OPEN_BRACKET	5
+// #define	CLOSING_BRACKET	6
+// #define	DOLLAR			7
+// #define	APOSTROPHE		8
+// #define BACKSLASH		9
+// #define	DOUBLE_QUOTES	10
+// #define	SINGLE_QUOTES	11
+// #define	SPACE			12
+// #define	TAB				13
+// #define NEWLINE			14
+// #define	LESSLESS		15
+// #define	GREATERGREATER	16
 
 /* **************************************************************** */
 /*							STRUCTS									*/

@@ -2,4 +2,5 @@ a.out
 readline_test.c
 parser_characters.c
 input_lst.c
+minishell
 leaks.txt

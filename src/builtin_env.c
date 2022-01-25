@@ -1,26 +1,17 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin_env.c                                      :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/18 17:53:34 by mortmeie          #+#    #+#             */
-/*   Updated: 2022/01/18 18:05:35 by mortmeie         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../header/minishell.h"
 
-void	builtin_env(t_ms_vars *ms)
+/* Writes envar list to corresponding output. */
+void	builtin_env(t_vars *ms)
 {
-	int		i;
+	t_env	*current;
 
-	i = 0;
-	while (ms->env[i] != NULL)
+	current = ms->env;
+	while (current != NULL)
 	{
-		write(ms->fd_out, ms->env[i], ft_strlen(ms->env[i]));		// Achtung: Hier muessen aktualisierte VALUES geprintet werden! Muss in builtin_cd() eingefuegt werden!
+		write(ms->fd_out, current->name, ft_strlen(current->name));
+		write(ms->fd_out, "=", 1);
+		write(ms->fd_out, current->content, ft_strlen(current->content));
 		write(ms->fd_out, "\n", 1);
-		i++;
+		current = current->next;
 	}
 }
