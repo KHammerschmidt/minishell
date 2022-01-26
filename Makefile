@@ -25,7 +25,8 @@ SRC_LIST	=	main.c	\
 				get_env_var.c			\
 				create_prompt.c			\
 				cmd_execution.c			\
-				utilities.c				
+				utilities.c			    \
+				cmd_validity.c
 
 # BONUS_LIST	=	minishell_bonus.c
 

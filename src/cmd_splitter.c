@@ -33,20 +33,59 @@ void	fill_table_2(t_cmd *element, int pipe_marker)
 	// free(str);
 }
 
-void	fill_table(t_cmd *cmd, char *str, int pipe_marker)
+char	*copy_str_without_quotes(char *str)				//INFO: $sign has to work
+{
+	char	*tmp;
+	char	*argument;
+
+	tmp = "\"\\";
+	argument = ft_strtrim(str, tmp);					//if no command -> access wirft command not found aus!
+	return (argument);
+}
+
+/* Handles new list element initialisation. If ms->cmd is empty, the new
+element becomes the first one, otherwise it is appended to the end of
+ms->cmd. */
+t_cmd	*init_cmd_lst(t_vars *ms)
+{
+	t_cmd	*node;
+	t_cmd	*last;
+
+	node = ft_lstnew_cmd();
+	if (ms->cmd == NULL)
+		ms->cmd = node;
+	else
+	{
+		last = ft_lstlast_cmd(ms->cmd);
+		last->next = node;
+	}
+	return (node);
+}
+
+void	fill_table(t_vars *ms, char *str, int pipe_marker)
 {
 	t_cmd	*element;
 	int		pos;
 	char	*command;
 	char	*args;
+	// int		quotes;
 
 	args = NULL;
 	command = NULL;
-	element = cmd;
+	element = NULL;
 	pos = ft_strchr_pos(str, ' ');
-	element = ft_lstnew_cmd();
-	ft_lstadd_back_cmd(&cmd, element);
-	if (pos != -1)							//pos == -1 --> no space has been found, e.g. command only consists of one word
+	// quotes = cmd_validity(str);
+	element = init_cmd_lst(ms);
+
+	// element = ft_lstnew_cmd();
+	// if (ms->cmd == NULL)
+	// 	ms->cmd = element;
+	// else
+	// 	ft_lstadd_back_cmd(ms->cmd, element);
+	// printf("HERE\n");
+	// if (quotes == 0)								// no quotes
+	// {
+	if (pos != -1)								//pos == -1 --> no space has been found, e.g. command only consists of one word
 	{
 		command = ft_substr(str, 0, pos);
 		args = ft_substr(str, pos, ft_strlen(str) - pos);
@@ -55,6 +94,14 @@ void	fill_table(t_cmd *cmd, char *str, int pipe_marker)
 	else
 		command = ft_substr(str, 0, ft_strlen(str));
 	element->command = ft_strdup(command);
+	// }
+	// else if (quotes == 1)							//quotes and other text, split cmd und args
+	// {
+
+	// }
+	// else if (quotes == 2)							// only quotes (one long string, e.g. no command()
+	// 	element->args = copy_str_without_quotes(str);
+// else if	(quotes == 3)							//open quotes: es gibt normale Fehlermeldungen die dann aufkommen (erstmal auslassen)
 	fill_table_2(element, pipe_marker);
 }
 
@@ -63,11 +110,11 @@ void	print_lst(t_vars *ms)
 	t_cmd *tmp;
 
 	tmp = ms->cmd;
-		printf("\nSimple Command Table\n");
-		printf("COMMAND			ARGS	LESS=3, LESSLESS=4, GREAT=5, GREATGREAT=6	pipe		NULL\n");
-	while (tmp->next != NULL)
+	printf("\nSimple Command Table\n");
+	printf("COMMAND			ARGS	LESS=3, LESSLESS=4, GREAT=5, GREATGREAT=6	pipe		NULL\n");
+	while (tmp != NULL)
 	{
-		printf("%s			%s		%d			  	 	 %d\n", tmp->next->command, tmp->next->args, tmp->next->op, tmp->next->pipe);
+		printf("%s			%s		%d			  	 	 %d\n", tmp->command, tmp->args, tmp->op, tmp->pipe);
 		tmp = tmp->next;
 	}
 }
@@ -81,16 +128,15 @@ int	create_cmd_table(t_vars *ms)
 	i = 0;
 	while (1)
 	{
-		i = ft_strchr_pos(ms->cmd_line, '|');						//find position of pipe
-		if (i == -1)												// no pipe was found
+		i = ft_strchr_pos(ms->cmd_line, '|');
+		if (i == -1)
 		{
 			if (ms->cmd_line != NULL)
-				fill_table(ms->cmd, ms->cmd_line, i);
-			// ft_free_string(ms->cmd_line);						// Mio: error (free before allocated), why??
+				fill_table(ms, ms->cmd_line, i);
 			break ;
 		}
-		tmp = ft_substr(ms->cmd_line, 0, i);						//create substring from start of line until pipe
-		fill_table(ms->cmd, tmp, i);								//put content in list
+		tmp = ft_substr(ms->cmd_line, 0, i);
+		fill_table(ms, tmp, i);
 		ft_free_string(tmp);
 		while (ms->cmd_line[i] == ' ' || ms->cmd_line[i] == '|')
 			i++;
