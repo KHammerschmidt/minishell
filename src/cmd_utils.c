@@ -25,13 +25,24 @@ t_cmd	*ft_lstlast_cmd(t_cmd *lst)			//mio
 	return (last);
 }
 
-// void	ft_lstadd_back_cmd(t_cmd *lst, t_cmd *new)
-// {
-// 	t_cmd	*last;
+/* Handles new list element initialisation. If ms->cmd is empty, the new
+element becomes the first one, otherwise it is appended to the end of
+ms->cmd. */
+t_cmd	*init_cmd_lst(t_vars *ms)
+{
+	t_cmd	*last;
+	t_cmd	*node;
 
-// 	last = ft_lstlast_cmd(lst);
-// 	last->next = new;
-// }
+	node = ft_lstnew_cmd();
+	if (ms->cmd == NULL)
+		ms->cmd = node;
+	else
+	{
+		last = ft_lstlast_cmd(ms->cmd);
+		last->next = node;
+	}
+	return (node);
+}
 
 t_cmd	*ft_lstnew_cmd(void)
 {

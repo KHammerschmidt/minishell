@@ -216,5 +216,6 @@ int		ft_strchr_pos(const char *s, int c);
 
 int	cmd_validity(char *str);
 int	ft_strrchr_pos(const char *s, int c);
+t_cmd	*init_cmd_lst(t_vars *ms);
 
 #endif

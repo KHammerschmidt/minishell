@@ -43,65 +43,42 @@ char	*copy_str_without_quotes(char *str)				//INFO: $sign has to work
 	return (argument);
 }
 
-/* Handles new list element initialisation. If ms->cmd is empty, the new
-element becomes the first one, otherwise it is appended to the end of
-ms->cmd. */
-t_cmd	*init_cmd_lst(t_vars *ms)
-{
-	t_cmd	*node;
-	t_cmd	*last;
-
-	node = ft_lstnew_cmd();
-	if (ms->cmd == NULL)
-		ms->cmd = node;
-	else
-	{
-		last = ft_lstlast_cmd(ms->cmd);
-		last->next = node;
-	}
-	return (node);
-}
-
 void	fill_table(t_vars *ms, char *str, int pipe_marker)
 {
 	t_cmd	*element;
 	int		pos;
 	char	*command;
 	char	*args;
-	// int		quotes;
+	int		quotes;
 
 	args = NULL;
 	command = NULL;
 	element = NULL;
 	pos = ft_strchr_pos(str, ' ');
-	// quotes = cmd_validity(str);
+	quotes = cmd_validity(str);
 	element = init_cmd_lst(ms);
-
-	// element = ft_lstnew_cmd();
-	// if (ms->cmd == NULL)
-	// 	ms->cmd = element;
-	// else
-	// 	ft_lstadd_back_cmd(ms->cmd, element);
-	// printf("HERE\n");
-	// if (quotes == 0)								// no quotes
-	// {
-	if (pos != -1)								//pos == -1 --> no space has been found, e.g. command only consists of one word
+	if (quotes == 0)								// no quotes
+	{
+		if (pos != -1)								//pos != -1 --> spaces have been found, e.g. comamnd consists of cmd & args
+		{
+			command = ft_substr(str, 0, pos);
+			args = ft_substr(str, pos, ft_strlen(str) - pos);
+			element->args = ft_strdup(args);
+		}
+		else										//pos == -1 ---> no space has been found, e.g. command only consists of one word
+			command = ft_substr(str, 0, ft_strlen(str));
+		element->command = ft_strdup(command);
+	}
+	else if (quotes == 1)							//quotes and other text, split cmd und args
 	{
 		command = ft_substr(str, 0, pos);
+		element->command = ft_strdup(command);
 		args = ft_substr(str, pos, ft_strlen(str) - pos);
-		element->args = ft_strdup(args);
+		element->args = copy_str_without_quotes(args);
 	}
-	else
-		command = ft_substr(str, 0, ft_strlen(str));
-	element->command = ft_strdup(command);
-	// }
-	// else if (quotes == 1)							//quotes and other text, split cmd und args
-	// {
-
-	// }
-	// else if (quotes == 2)							// only quotes (one long string, e.g. no command()
-	// 	element->args = copy_str_without_quotes(str);
-// else if	(quotes == 3)							//open quotes: es gibt normale Fehlermeldungen die dann aufkommen (erstmal auslassen)
+	else if (quotes == 2)							// only quotes (one long string, e.g. no command()
+		element->command = copy_str_without_quotes(str);
+	// else if	(quotes == 3)							//open quotes: es gibt normale Fehlermeldungen die dann aufkommen (erstmal auslassen)
 	fill_table_2(element, pipe_marker);
 }
 
