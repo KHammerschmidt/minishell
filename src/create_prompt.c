@@ -43,7 +43,7 @@ char	*create_prompt(t_vars *ms)
 			ft_strlcat(prompt, user, ft_strlen(user) + 1);
 			ft_strlcat(prompt, "@", ft_strlen(prompt) + 2);
 			ft_strlcat(prompt, pwd, ft_strlen(prompt) + ft_strlen(pwd) + 2);
-			ft_strlcat(prompt, " #  ", ft_strlen(prompt) + ft_strlen(pwd) + 6);
+			ft_strlcat(prompt, " ॐ  ", ft_strlen(prompt) + ft_strlen(pwd) + 6);
 		}
 	}
 	if (user)
