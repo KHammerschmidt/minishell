@@ -58,6 +58,6 @@ int	parsing(t_vars *ms)
 	read_line(ms);
 	if (create_cmd_table(ms) != 0)
 		return (1);
-	print_lst(ms);
+	// print_lst(ms);
 	return (0);
 }
