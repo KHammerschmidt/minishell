@@ -86,7 +86,7 @@ int	create_cmd_table(t_vars *ms)
 		{
 			if (ms->cmd_line != NULL)
 				fill_table(ms->cmd, ms->cmd_line, i);
-			ft_free_string(ms->cmd_line);
+			// ft_free_string(ms->cmd_line);						// Mio: error (free before allocated), why??
 			break ;
 		}
 		tmp = ft_substr(ms->cmd_line, 0, i);						//create substring from start of line until pipe

@@ -193,6 +193,13 @@ char	*get_user(t_vars *ms);
 char	*get_pwd(t_vars *ms);
 char	*create_prompt(t_vars *ms);
 
+/* readline init */
+void	rl_init(void);
+void	rl_reset(void);
+
+/* signal handling */
+void	signal_handler(int signum);
+
 int		create_cmd_table(t_vars *ms);
 
 void	print_lst(t_vars *ms);

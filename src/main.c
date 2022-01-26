@@ -36,7 +36,8 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc < 1 || argv[1])
 		return (-1);
-	ft_memset(&ms, 0, sizeof(t_vars));
+	// ft_memset(&ms, 0, sizeof(t_vars));
+	ms = (t_vars) {0};
 	init_struct(&ms, argc, argv, envp);
 	while (1)
 	{
