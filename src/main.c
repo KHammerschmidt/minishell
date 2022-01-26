@@ -5,6 +5,7 @@ int	init_struct(t_vars *ms, int argc, char **argv, char **envp)
 {
 	ms->argc = argc;
 	ms->argv = argv;
+	ms->fd_out = 1;						// Mio: for testing purposes only. 
 	if (init_env(ms, envp) != 0)
 		return (1);
 	init_builtin(ms);

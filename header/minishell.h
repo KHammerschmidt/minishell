@@ -176,7 +176,8 @@ t_env	*get_env_var(t_vars *ms, char *var_name);
 void	init_builtin(t_vars *ms);				//arr + lst
 void	add_builtin(t_vars *ms, char *builtin);
 int		builtin_cd(t_vars *ms, char *dir);
-void	builtin_echo(t_vars *ms, char *str, int no_nl_flag);
+// void	builtin_echo(t_vars *ms, char *str, int no_nl_flag);
+void	builtin_echo(t_vars *ms, char **arg_str)
 void	builtin_pwd(t_vars *ms);
 void	builtin_env(t_vars *ms);
 int		builtin_unset(t_vars *ms, char *var_name);
