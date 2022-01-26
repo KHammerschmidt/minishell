@@ -86,26 +86,26 @@
 // }	t_smple_cmd;
 
 
-// typedef struct s_input
-// {
-// 	// int	quoting;
-// 	// int	special_char;
-// 	// int	pipe;
-// 	// int	less;
-// 	// int	greater;
-// 	// int	dollar;
-// 	int	single_quotes_counter;
-// 	int	double_quote_counter;
-// 	int	open_quotes;
-// 	// int	space;
-// 	// int	newline;
-// 	// int lessless;
-// 	// int	greatergreater;
-// 	// int	bracket_counter_open;
-// 	// int	bracket_counter_closed;
-// 	// int	bracket_counter;
-// 	// int	valid;
-// }	t_input;
+typedef struct s_input
+{
+	// int	quoting;
+	// int	special_char;
+	// int	pipe;
+	// int	less;
+	// int	greater;
+	// int	dollar;
+	int	single_quotes_counter;
+	int	double_quote_counter;
+	int	open_quotes;
+	// int	space;
+	// int	newline;
+	// int lessless;
+	// int	greatergreater;
+	// int	bracket_counter_open;
+	// int	bracket_counter_closed;
+	// int	bracket_counter;
+	// int	valid;
+}	t_input;
 
 typedef struct s_cmd
 {
@@ -133,6 +133,7 @@ typedef struct s_vars
 	t_env	*env;
 	t_list	*builtins;
 	t_cmd	*cmd;
+	t_input	*input;
 
 	int		argc;
 	char	**argv;
@@ -142,7 +143,7 @@ typedef struct s_vars
 	char	*cwd;
 	char	*new_wd;
 	int		fd_out;
-	// t_input	*input;
+
 	// char	**arr;
 	// char	*quoting;
 	// char	**envp;
@@ -204,10 +205,16 @@ int		create_cmd_table(t_vars *ms);
 
 void	print_lst(t_vars *ms);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
-void	ft_lstadd_back_cmd(t_cmd **lst, t_cmd *new);
+void	ft_lstadd_back_cmd(t_cmd *lst, t_cmd *new);
 t_cmd	*ft_lstnew_cmd(void);
 
 void	ft_free_string(char *str);
 int		ft_strchr_pos(const char *s, int c);
+
+
+
+
+int	cmd_validity(char *str);
+int	ft_strrchr_pos(const char *s, int c);
 
 #endif

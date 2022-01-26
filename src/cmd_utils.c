@@ -25,26 +25,20 @@ t_cmd	*ft_lstlast_cmd(t_cmd *lst)			//mio
 	return (last);
 }
 
-void	ft_lstadd_back_cmd(t_cmd **lst, t_cmd *new)
-{
-	t_cmd	*last;
+// void	ft_lstadd_back_cmd(t_cmd *lst, t_cmd *new)
+// {
+// 	t_cmd	*last;
 
-	if (!lst || !new)
-		return ;
-	if (*lst == NULL)
-		*lst = new;
-	else
-	{
-		last = ft_lstlast_cmd(*lst);
-		last->next = new;
-	}
-}
+// 	last = ft_lstlast_cmd(lst);
+// 	last->next = new;
+// }
 
 t_cmd	*ft_lstnew_cmd(void)
 {
 	t_cmd	*new_element;
 
 	new_element = malloc(sizeof(t_cmd));
+	// new_element = &(t_cmd){0};
 	if (new_element == NULL)
 		return (NULL);
 	init_cmd(new_element);
