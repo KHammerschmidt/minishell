@@ -21,12 +21,7 @@ int	read_line(t_vars *ms)
 	// ms->cmd_line = ft_strdup(tmp);
 	// free(tmp);
 
-	prompt =  NULL;
-	if (prompt)
-	{
-		free (prompt);
-		prompt = NULL;
-	}
+	prompt = NULL;
 	prompt = create_prompt(ms);
 	if (ms->cmd_line)
 	{
