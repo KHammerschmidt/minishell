@@ -22,6 +22,8 @@ int	compare_str(char *s1, char *s2)
 	return (0);
 }
 
+#include "../header/minishell.h"
+
 /* Intercepts SIGINT (CTRL+C) and prevents minishell from quitting, prints */
 /* empty new line instead. Does nothing for SIGQUIT (CTRL+/).              */
 void	signal_handler(int signum)
