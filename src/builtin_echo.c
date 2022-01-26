@@ -3,7 +3,7 @@
 /* Writes given string to correponding output, omitting the new line if -n */
 /* is given as option.                                                     */
 // void	builtin_echo(t_vars *ms, char *str, int no_nl_flag)
-void	builtin_echo(t_vars *ms, char **arg_str)
+int	builtin_echo(t_vars *ms, char **arg_str)
 {
 	int	i;
 	int	j;
@@ -17,7 +17,7 @@ void	builtin_echo(t_vars *ms, char **arg_str)
 		write(ms->fd_out, "\n\n", 2);
 		return (0);					// set exit code and back to pipe or STDIN
 	}
-	else if (i = 1)
+	else if (i == 1)
 	{
 		if (compare_str(arg_str[0], "-n") == 0)
 		{
@@ -26,7 +26,7 @@ void	builtin_echo(t_vars *ms, char **arg_str)
 		}
 		ft_putstr_fd(arg_str[0], ms->fd_out);
 		ft_putchar_fd('\n', ms->fd_out);
-		return (0);
+		return (0);					// set exit code and back to pipe or STDIN
 	}
 	else if (i > 1)
 	{
@@ -40,6 +40,10 @@ void	builtin_echo(t_vars *ms, char **arg_str)
 				i--;
 			}
 		}
-		
+		else
+		{
+			ft_putstr_fd(arg_str[j], ms->fd_out);
+		}
 	}
+	return (1);
 }
