@@ -19,7 +19,6 @@ int	execute_cmd(t_vars *ms, char *cmd, char *args)
 	char	**arg_str;
 
 	arg_str = NULL;
-	printf("MS1\n");
 	if (is_builtin(ms, cmd) == 0)
 	{
 		arg_str = ft_split(args, ' ');
@@ -43,32 +42,3 @@ int	execute_cmd(t_vars *ms, char *cmd, char *args)
 	}
 	return (0);
 }
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_vars	ms;
-// 	t_cmd	*current;
-// 	int		i;
-
-// 	i = 0;
-
-// 	if (argc < 1 || argv[1])
-// 		return (-1);
-// 	// ft_memset(&ms, 0, sizeof(t_vars));
-// 	ms = (t_vars) {0};
-// 	init_struct(&ms, argc, argv, envp);
-// 	current = ms.cmd;
-// 	while (1)
-// 	{
-// 		if (parsing(&ms) != 0)
-// 			break ;
-// 		printf("cmd: %s   args: %s\n", current->next->command, current->next->args);
-// 		execute_cmd(&ms, current->command, current->args);
-// 		printf("MS00\n");
-// 		// free(ms.cmd_line);
-// 	}
-// 	// if (ms.cmd_line)
-// 	// 	free(ms.cmd_line);
-// 	// system("leaks minishell");
-// 	return (0);
-// }

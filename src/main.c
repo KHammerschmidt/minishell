@@ -39,14 +39,15 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc < 1 || argv[1])
 		return (-1);
-	// ft_memset(&ms, 0, sizeof(t_vars));
+	current = NULL;
 	ms = (t_vars){0};
 	init_struct(&ms, argc, argv, envp);
-	current = ms.cmd;
 	while (1)
 	{
 		if (parsing(&ms) != 0)
 			break ;
+		current = ms.cmd;
+		execute_cmd(&ms, current->command, current->args);
 		// printf("cmd: %s   args: %s\n", current->next->command, current->next->args);
 		// execute_cmd(&ms, current->command, current->args);
 		// printf("MS00\n");
