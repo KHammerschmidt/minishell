@@ -5,7 +5,7 @@ void	add_builtin(t_vars *ms, char *builtin)		//lst
 	t_list	*element;
 
 	element = ft_lstnew(builtin);
-	ft_lstadd_back(&ms->lst, element);
+	ft_lstadd_back(&ms->builtins, element);
 	// printf("%s\n", element->content);
 }
 
