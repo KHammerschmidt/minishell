@@ -5,17 +5,17 @@ int	init_struct(t_vars *ms, int argc, char **argv, char **envp)
 {
 	ms->argc = argc;
 	ms->argv = argv;
-	ms->fd_out = 1;						// Mio: for testing purposes only. 
+	ms->fd_out = 1;						// Mio: for testing purposes only.
 	if (init_env(ms, envp) != 0)
 		return (1);
 	init_builtin(ms);
-	// ms->lst = NULL;
+	ms->lst = NULL;
 	ms->lst = ft_calloc(1, sizeof(t_list));
-	ms->cmd = NULL;													// (loeschen!!!)
-	// ms->cmd = ft_calloc(1, sizeof(t_cmd));
+	ms->input = NULL;
 	ms->input = ft_calloc(1, sizeof(t_input));
-	// ft_memset(&ms->cmd, 0, sizeof(t_cmd));
-	// init_cmd(ms);												//necessary???
+	// ms->cmd = NULL;													// (loeschen!!!)
+	ms->cmd = ft_calloc(1, sizeof(t_cmd));
+	// ft_memset(&ms->cmd, 0, sizeof(t_cmd));						//necessary???
 
 	// ms->input = ft_calloc(1, sizeof(t_input));
 	// if (!ms->input)
@@ -47,9 +47,9 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (parsing(&ms) != 0)
 			break ;
-		printf("cmd: %s   args: %s\n", current->next->command, current->next->args);
-		execute_cmd(&ms, current->command, current->args);
-		printf("MS00\n");
+		// printf("cmd: %s   args: %s\n", current->next->command, current->next->args);
+		// execute_cmd(&ms, current->command, current->args);
+		// printf("MS00\n");
 		// free(ms.cmd_line);
 	}
 	// if (ms.cmd_line)
