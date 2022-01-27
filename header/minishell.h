@@ -109,11 +109,9 @@ typedef struct s_input
 
 typedef struct s_cmd
 {
-	int				index;
-	char			*command;
-	char			*args;
-	char			*outfile;				//NULL if no redirection
-	char			*infile;				//NULL if no redirection
+	char			**command;
+	char			*outfile;
+	char			*infile;
 	char			*errfile;
 	int				op;
 	int				pipe;
@@ -138,12 +136,12 @@ typedef struct s_vars
 	int		argc;
 	char	**argv;
 	char	*cmd_line;
-	// char	**execpath;
 
 	char	*cwd;
 	char	*new_wd;
 	int		fd_out;
 
+	// char	**execpath;
 	// char	**arr;
 	// char	*quoting;
 	// char	**envp;
@@ -209,7 +207,7 @@ int		create_cmd_table(t_vars *ms);
 void	print_lst(t_vars *ms);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
 void	ft_lstadd_back_cmd(t_cmd *lst, t_cmd *new);
-t_cmd	*ft_lstnew_cmd(void);
+t_cmd	*ft_lstnew_cmd(int size);
 
 void	ft_free_string(char *str);
 int		ft_strchr_pos(const char *s, int c);
@@ -219,6 +217,6 @@ int		ft_strchr_pos(const char *s, int c);
 
 int	cmd_validity(char *str);
 int	ft_strrchr_pos(const char *s, int c);
-t_cmd	*init_cmd_lst(t_vars *ms);
+t_cmd	*init_cmd_lst(t_vars *ms, int size);
 
 #endif
