@@ -43,56 +43,128 @@ char	*copy_str_without_quotes(char *str)				//INFO: $sign has to work
 	return (argument);
 }
 
+void	ft_free_arr(char **arr)
+{
+	int		i;
+
+	i = 0;
+	while (arr[i] != '\0' && arr)
+	{
+		if (arr[i])
+		{
+			free(arr[i]);
+			arr[i] = NULL;
+		}
+		i++;
+	}
+	if (arr)
+	{
+		free(arr);
+		arr = NULL;
+	}
+}
+
 void	fill_table(t_vars *ms, char *str, int pipe_marker)
 {
 	t_cmd	*element;
-	int		pos;
-	char	*command;
-	char	*args;
-	int		quotes;
+	char **arr;
+	int	i;
 
-	args = NULL;
-	command = NULL;
-	element = NULL;
-	pos = ft_strchr_pos(str, ' ');
-	quotes = cmd_validity(str);
-	element = init_cmd_lst(ms);
-	if (quotes == 0)								// no quotes
+	i = 0;
+	arr = ft_split(str, ' ');											// 1) split str by spaces
+	while (arr[i] != NULL)												// 2) count substrings
+		i++;
+	element = init_cmd_lst(ms, i);										// 3) allocate memory for struct arr
+	i = 0;
+	while (arr[i])														// 4) copy splitted string into struct
 	{
-		if (pos != -1)								//pos != -1 --> spaces have been found, e.g. comamnd consists of cmd & args
-		{
-			command = ft_substr(str, 0, pos);
-			args = ft_substr(str, pos, ft_strlen(str) - pos);
-			element->args = ft_strdup(args);
-		}
-		else										//pos == -1 ---> no space has been found, e.g. command only consists of one word
-			command = ft_substr(str, 0, ft_strlen(str));
-		element->command = ft_strdup(command);
+		element->command[i] = arr[i];
+		printf("element->command[i]: %s\n", element->command[i]);
+		i++;
 	}
-	else if (quotes == 1)							//quotes and other text, split cmd und args
+	free(arr);
+
+
+	element->command[i] = NULL;
+
+	i = 0;
+	// printf("here:%s 		\n", element->command[0]);
+	// printf("here:%s 		\n", element->command[1]);
+	while (element->command[i])
 	{
-		command = ft_substr(str, 0, pos);
-		element->command = ft_strdup(command);
-		args = ft_substr(str, pos, ft_strlen(str) - pos);
-		element->args = copy_str_without_quotes(args);
+		printf("%s 		", element->command[i]);
+		i++;
 	}
-	else if (quotes == 2)							// only quotes (one long string, e.g. no command()
-		element->command = copy_str_without_quotes(str);
-	// else if	(quotes == 3)							//open quotes: es gibt normale Fehlermeldungen die dann aufkommen (erstmal auslassen)
-	fill_table_2(element, pipe_marker);
+	printf("\n");
+	if (!pipe_marker)
+		printf("\n");
 }
+
+// void	fill_table(t_vars *ms, char *str, int pipe_marker)
+// {
+// 	t_cmd	*element;
+// 	char	**args;
+// 	char	*command;
+// 	int		pos;
+// 	int		i;
+// 	int		j;
+
+// 	j = 0;
+// 	i = 0;
+// 	args = NULL;
+// 	command = NULL;
+// 	element = NULL;
+// 	pos = ft_strchr_pos(str, 32);
+// 	element = init_cmd_lst(ms);
+// 	// element->command = ft_calloc(sizeof(char **), 1);
+// 	if (pos == -1)
+// 		element->command[i] = ft_strdup(str);
+// 	else
+// 	{
+// 		command = ft_substr(str, 0, pos);
+// 		element->command[i] = ft_strdup(command);
+// 		args = ft_split(&str[pos], 32);
+// 		while (args[i] != NULL)
+// 		{
+// 			element->command[i + 1] = ft_strdup(args[j]);
+// 			i++;
+// 			j++;
+// 		}
+// 		ft_free_arr(args);
+// 	}
+// 	element->command[i + 1] = NULL;
+// 	if (!pipe_marker)
+// 		printf("\n");
+// 	i = 0;
+// 	while (element->command[i] != NULL)
+// 	{
+// 		printf("%s	\n", element->command[i]);
+// 		i++;
+// 	}
+// 	printf("\n");
+// 	// fill_table_2(element, pipe_marker);
+// }
 
 void	print_lst(t_vars *ms)
 {
 	t_cmd *tmp;
+	int		i;
 
+	i = 0;
 	tmp = ms->cmd;
 	printf("\nSimple Command Table\n");
-	printf("COMMAND			ARGS	LESS=3, LESSLESS=4, GREAT=5, GREATGREAT=6	pipe		NULL\n");
 	while (tmp != NULL)
 	{
-		printf("%s			%s		%d			  	 	 %d\n", tmp->command, tmp->args, tmp->op, tmp->pipe);
+		printf("command: %s		", tmp->command[i]);
+		while (tmp->command[i] != NULL && tmp != NULL)
+		{
+			i++;
+			if (tmp->command[i])
+				printf("args: %s		", tmp->command[i++]);
+		}
+		printf("\n");
 		tmp = tmp->next;
+		i = 0;
 	}
 }
 
@@ -124,39 +196,10 @@ int	create_cmd_table(t_vars *ms)
 		i = 0;
 	}
 	return (0);
-	// print_lst(ms);
 }
 
 // ______________________________________________________________________________________________________________________________________________________
 
-// int	chop_input_in_cmds(t_vars *ms)
-// {
-// 	// char	*line;
-// 	// line = readline("");
-// 	// if (line == NULL)
-// 	// 	return (1);
-// 	// create_cmd_table(ms->cmd, ms->cmd_line);
-// 	// print_lst(ms->cmd);
-// 	return (0);
-// }
-
-// char	*split_cmds(char *line, t_cmd *cmd)
-// {
-// 	char	*command;
-// 	char	*args;
-// 	int		i;
-// 	int		j;
-
-// 	i = 0;
-// 	j = ft_strchr_pos(line, " ");
-// 	if (j != 0)
-// 	{
-// 		command = ft_substr(line, 0, j);
-// 		args = ft_substr(line, j, ft_strlen(line) - j);
-// 		printf("command: %s | args: \n", command, args);
-// 	}
-
-// }
 
 // int	count_pipes(char *line)
 // {
@@ -175,7 +218,6 @@ int	create_cmd_table(t_vars *ms)
 // 	// 	counter++;
 // 	return (counter);
 // }
-
 
 
 // int	create_cmd_table(t_cmd *cmd, char *line)
@@ -242,4 +284,45 @@ int	create_cmd_table(t_vars *ms)
 // 		current = current->next;
 // 	}
 // 	// printf("HUHUHHU: %p, ", current->command);
+// }
+
+
+
+// void	fill_table(t_vars *ms, char *str, int pipe_marker)
+// {
+// 	t_cmd	*element;
+// 	int		pos;
+// 	char	**command;
+// 	char	**args;
+// 	int		quotes;
+
+// 	args = NULL;
+// 	command = NULL;
+// 	element = NULL;
+// 	pos = ft_strchr_pos(str, ' ');
+// 	quotes = cmd_validity(str);
+// 	element = init_cmd_lst(ms);
+// 	if (quotes == 0)								// no quotes
+// 	{
+// 		if (pos != -1)								//pos != -1 --> spaces have been found, e.g. comamnd consists of cmd & args
+// 		{
+// 			command = ft_substr(str, 0, pos);
+// 			args = ft_substr(str, pos, ft_strlen(str) - pos);
+// 			element->args = ft_strdup(args);
+// 		}
+// 		else										//pos == -1 ---> no space has been found, e.g. command only consists of one word
+// 			command = ft_substr(str, 0, ft_strlen(str));
+// 		element->command = ft_strdup(command);
+// 	}
+// 	else if (quotes == 1)							//quotes and other text, split cmd und args
+// 	{
+// 		command = ft_substr(str, 0, pos);
+// 		element->command = ft_strdup(command);
+// 		args = ft_substr(str, pos, ft_strlen(str) - pos);
+// 		element->args = copy_str_without_quotes(args);
+// 	}
+// 	else if (quotes == 2)							// only quotes (one long string, e.g. no command()
+// 		element->command = copy_str_without_quotes(str);
+// 	// else if	(quotes == 3)							//open quotes: es gibt normale Fehlermeldungen die dann aufkommen (erstmal auslassen)
+// 	fill_table_2(element, pipe_marker);
 // }

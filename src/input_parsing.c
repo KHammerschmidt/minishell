@@ -8,10 +8,7 @@ int	read_line(t_vars *ms)
 	prompt = NULL;
 	prompt = create_prompt(ms);
 	if (ms->cmd_line)
-	{
-		free (ms->cmd_line);
-		ms->cmd_line = NULL;
-	}
+		ft_free_string(ms->cmd_line);
 	rl_init();
 	if (prompt)
 		ms->cmd_line = readline(prompt);
@@ -26,8 +23,7 @@ int	read_line(t_vars *ms)
 	return (0);
 }
 
-/* Function reads input with read_line()
-PROMPT HAS TO BE ADDED */
+/* Function reads input with read_line() */
 int	parsing(t_vars *ms)
 {
 	read_line(ms);
