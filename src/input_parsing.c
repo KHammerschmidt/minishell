@@ -15,8 +15,8 @@ int	read_line(t_vars *ms)
 	else
 		ms->cmd_line = readline("minishell ॐ  ");
 	rl_reset();
-	if (ms->cmd_line == NULL)						// (x) Makes CTRL+D work.
-		exit(EXIT_SUCCESS);							// NOTE: replace exit() by own function incl. free() etc.
+	if (ms->cmd_line == NULL)							// (x) Makes CTRL+D work.
+		exit(EXIT_SUCCESS);								// NOTE: replace exit() by own function incl. free() etc.
 	if (ms->cmd_line && *ms->cmd_line)
 		add_history (ms->cmd_line);
 	free(prompt);
@@ -29,6 +29,7 @@ int	parsing(t_vars *ms)
 	read_line(ms);
 	if (create_cmd_table(ms) != 0)
 		return (1);
-	// print_lst(ms);
+	// save_commands(ms);
+	print_cmd_lst(ms);
 	return (0);
 }

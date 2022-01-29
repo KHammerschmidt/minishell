@@ -1,4 +1,38 @@
-#include "../header/minishell.h"
+void	search_redirections(char *str, t_cmd *element)
+{
+	int	op;
+	int	i;
+
+	i =0 ;
+	op = 0;
+	while (str[i] != '\0')					//what happens when there are more redirections?
+	{
+		if (ft_strnstr(str, "<", ft_strlen(str)) != 0)
+		{
+
+		}
+			element->op = LESS;
+		if (ft_strnstr(str, "<<", ft_strlen(str)) != 0)
+			element->op = LESSLESS;
+		if (ft_strnstr(str, ">", ft_strlen(str)) != 0)
+			element->op = GREATER;
+		if (ft_strnstr(str, ">>", ft_strlen(str)) != 0)
+			element->op = GREATERGREATER;
+		i++;
+	}
+}
+
+// void	fill_table_2(t_cmd *element, int pipe_marker)
+// {
+// 	if (pipe_marker == -1)
+// 		element->pipe = 0;
+// 	else
+// 		element->pipe = 1;
+// 	// fill_operators(str, element);
+// 	// free(command);
+// 	// free(args);
+// 	// free(str);
+// }
 
 char	*copy_str_without_quotes(char *str)				//INFO: $sign has to work
 {
@@ -31,7 +65,82 @@ void	ft_free_arr(char **arr)
 	}
 }
 
-/* Creates the simple command table for the execution part. */
+
+
+int	check_expressions(t_vars *ms)
+{
+	int		i;
+	//open quotes
+	// "" && $
+	//open single quotes or open double quotes
+	// pipe in quotes
+	//quotes at all -->which will tell me how to split the command
+
+	//missing: redirections (how to handle fds)
+
+	i = 0;
+	while (ms->cmd_line[i] != '\0')
+	{
+		if (ms->cmd_line[i] == 34)
+			ms->double_quote_counter++;
+		if (ms->cmd_line[i] == 39)
+			ms->single_quote_counter++;
+		if (ms->cmd_line[i] == '|' && ms->double_quote_counter == 1
+			|| ms->cmd_line[i] == '|' && ms->single_quote_couner == 1)		//when | within double quote
+			{
+				ms->info->open_quotes++;
+				ms->info->pipe = 0;
+			}
+		if (ms->cmd_line[i] == '$' && ms->double_quote_counter == 1)
+				ms->info->dollar++;												//is there a dollar sign in between ""
+		i++;
+	}
+	return (0);
+}
+
+void	init_info(t_info *info)
+{
+	info = calloc(sizeof(t_info), 1);
+	memset(info, 0, sizeof(t_info));
+}
+
+char *handle_input(t_vars *ms, char *str, int pipe_marker)		//there are pipes in this input!
+{
+	char		*split;
+	char		*tmp;
+	int			i = 0;
+	int			j = 0;
+
+	char		**command;
+
+	init_init(&(ms->info));
+	check_expressions(ms);
+	if (pipe_marker == -1)
+	{
+		info->pipe = 0;								//no pipe
+		search_redirection(ms->cmd_line, ms, info);	//search for any redirections to set infile, outfile or stderr
+	}
+	else
+	{
+		check_expressions(ms);
+		// if (check_pipe_in_quotes(ms) == 0)
+		// 	info->pipe = 0;					//pipe within quotes --> it means that there is no valid pipe
+		// else
+		// 	info->pipe = 1;					//valid pipe
+	}
+
+																	//check for quotes
+																	//split by spaces ( cut out pipes)
+																	//check for redirections
+																	//pipe_marker
+
+
+	split = ft_split(ms->cmd_line, ' ');
+	tmp = ft_substr(ms->cmd_line, j, i);
+	return (command);						//input is in info struct for ft_lstnew_cmd().
+}
+
+/* Splits the input line by it's pipes and fills the simple command table command by command. */
 int	create_cmd_table(t_vars *ms)
 {
 	int		i;
@@ -46,6 +155,7 @@ int	create_cmd_table(t_vars *ms)
 	i = ft_strchr_pos(ms->cmd_line, '|');
 	if (i == -1)
 	{
+		// handle_input(ms, ms->cmd_line, i);
 		new = ft_lstnew_cmd(ft_split(ms->cmd_line, ' '));
 		ft_lstadd_back_cmd(&ms->cmd, new);
 	}
@@ -53,6 +163,7 @@ int	create_cmd_table(t_vars *ms)
 	{
 		while (i != -1)
 		{
+			// handle_input(ms, ms->cmd_line, i);
 			i = ft_strchr_pos(&ms->cmd_line[j], '|');
 			tmp = ft_substr(ms->cmd_line, j, i);
 			split = ft_split(tmp, ' ');
@@ -60,82 +171,13 @@ int	create_cmd_table(t_vars *ms)
 			ft_lstadd_back_cmd(&ms->cmd, new);
 			free(tmp);
 			j = (j + i + 1);										//open issues, deleting white spaces
+																	//KATHI: solved by ft_split()
 		}
 	}
 	return (0);
 }
 
 // ______________________________________________________________________________________________________________________________________________________
-
-
-
-// /* Splits the input line by it's pipes and fills the simple command table command by command. */
-// void	handle_input(t_vars *ms, int pipe_marker)
-// {
-// 	t_info		*info;
-// 	char		*split;
-// 	char		*tmp;
-// 	int			i = 0;
-// 	int			j = 0;
-
-// 	init_init(&info);
-// 	split = ft_split(ms->cmd_line, ' ');
-// 	tmp = ft_substr(ms->cmd_line, j, i);
-// 	if (pipe_marker == -1)
-// 	{
-// 		info->pipe = 0;			//no pipe
-
-// 	}
-// 	else
-// 	{
-// 		if (check_pipe_quotes() != 0)
-// 			info->pipe = 0;					//no pipe as pipe is within quotes
-// 		else
-// 			info->pipe = 1;					//valid pipe
-// 	}
-
-// 																	//check for quotes
-// 								//split by spaces ( cut out pipes)
-// 																	//check for redirections
-// 																	//pipe_marker
-
-// }
-
-
-// void	fill_operators(char *str, t_cmd *element)
-// {
-// 	int	op;
-// 	int	i;
-
-// 	i =0 ;
-// 	op = 0;
-// 	while (str[i] != '\0')					//what happens when there are more redirections?
-// 	{
-// 		if (ft_strnstr(str, "<", ft_strlen(str)) != 0)
-// 			element->op = LESS;
-// 		if (ft_strnstr(str, "<<", ft_strlen(str)) != 0)
-// 			element->op = LESSLESS;
-// 		if (ft_strnstr(str, ">", ft_strlen(str)) != 0)
-// 			element->op = GREATER;
-// 		if (ft_strnstr(str, ">>", ft_strlen(str)) != 0)
-// 			element->op = GREATERGREATER;
-// 		i++;
-// 	}
-// }
-
-// void	fill_table_2(t_cmd *element, int pipe_marker)
-// {
-// 	if (pipe_marker == -1)
-// 		element->pipe = 0;
-// 	else
-// 		element->pipe = 1;
-// 	// fill_operators(str, element);
-// 	// free(command);
-// 	// free(args);
-// 	// free(str);
-// }
-
-
 
 	// tmp = ft_substr(ms->cmd_line, 0, i);
 	// // fill_table(ms, tmp, i);
@@ -149,6 +191,22 @@ int	create_cmd_table(t_vars *ms)
 	// i = 0;
 	// print_lst(ms);
 
+// void	num_brackets(char *str, t_ms *ms)
+// {
+// 	int		i;
+
+// 	i = 0;
+// 	while (str[i] != '\0')
+// 	{
+// 		if (str[i] == 42)
+// 			ms->bracket_counter_open++;
+// 		if (str[i] == 41)
+// 			ms->bracket_counter_closed++;
+// 		i++;
+// 	}
+// 	ms->bracket_counter = ms->bracket_counter_open + ms->bracket_counter_closed;
+// 	printf("counter: %d | open: %d | closed: %d \n", ms->bracket_counter, ms->bracket_counter_open, ms->bracket_counter_closed);
+// }
 
 
 
@@ -418,3 +476,18 @@ int	create_cmd_table(t_vars *ms)
 // 	printf("\n");
 // 	// fill_table_2(element, pipe_marker);
 // }
+
+
+int	main(void)
+{
+	t_vars	ms;
+
+	t_cmd	*current;
+	current = NULL;
+
+	ms = (t_vars){0};
+
+	ms.cmd_line = readline("minishell ॐ  ");
+	create_cmd_table(&ms);
+	return (0);
+}
