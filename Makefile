@@ -11,11 +11,13 @@ OBJ_DIR		=	./obj/
 BONUS_DIR	=	./src/bonus/
 BONUS_ODIR	=	./obj/bonus/
 
-SRC_LIST	=	main.c	\
-				input_parsing.c	\
-				builtin_init.c	env_init.c env_lst_utils.c \
-				utils.c	\
-				cmd_splitter.c	cmd_utils.c \
+SRC_LIST	=	main.c					\
+				input_parsing.c			\
+				builtin_init.c 			\
+				env_init.c env_lst_utils.c \
+				cmd_splitter.c			\
+				utils.c					\
+				cmd_utils.c 			\
 				builtin_echo.c			\
 				builtin_cd.c			\
 				builtin_pwd.c			\
@@ -26,7 +28,8 @@ SRC_LIST	=	main.c	\
 				create_prompt.c			\
 				cmd_execution.c			\
 				utilities.c			    \
-				cmd_validity.c
+				cmd_quote_handling.c	\
+				save_command.c
 
 # BONUS_LIST	=	minishell_bonus.c
 

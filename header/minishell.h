@@ -31,7 +31,7 @@
 // #define	APOSTROPHE		8
 // #define BACKSLASH		9
 // #define	DOUBLE_QUOTES	10
-// #define	SINGLE_QUOTES	11
+// #define	SINGLE_QUOTES	11i
 // #define	SPACE			12
 // #define	TAB				13
 // #define NEWLINE			14
@@ -94,9 +94,7 @@ typedef struct s_input
 	// int	less;
 	// int	greater;
 	// int	dollar;
-	int	single_quotes_counter;
-	int	double_quote_counter;
-	int	open_quotes;
+
 	// int	space;
 	// int	newline;
 	// int lessless;
@@ -115,6 +113,7 @@ typedef struct s_cmd
 	char			*errfile;
 	int				op;
 	int				pipe;
+	// int				fd_out;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -125,16 +124,27 @@ typedef struct	s_env
 	struct s_env	*next;
 } 	t_env;
 
+typedef struct s_info
+{
+	char			**command;
+	char			*outfile;
+	char			*infile;
+	char			*errfile;
+	int				op;
+	int				pipe;
+	int				single_quotes_counter;
+	int				double_quote_counter;
+	int				open_quotes;
+	int				dollar;
+} t_info;
+
 typedef struct s_vars
 {
-	t_list	*lst;
-	t_env	*env;
-	t_list	*builtins;
-	t_cmd	*cmd;
-	t_input	*input;
-
-	int		argc;
-	char	**argv;
+	t_env		*env;
+	t_list		*builtins;
+	t_cmd		*cmd;
+	t_info		*info;
+	// t_cmd_info	*cmd_info;
 	char	*cmd_line;
 
 	char	*cwd;
@@ -154,7 +164,7 @@ typedef struct s_vars
 /* **************************************************************** */
 
 int		main(int argc, char **argv, char **envp);
-int		init_struct(t_vars *ms, int argc, char **argv, char **envp);
+int		init_struct(t_vars *ms, char **envp);
 
 int		parsing(t_vars *ms);
 int		read_line(t_vars *ms);
@@ -206,15 +216,18 @@ int		create_cmd_table(t_vars *ms);
 
 void	print_lst(t_vars *ms);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
-void	ft_lstadd_back_cmd(t_cmd *lst, t_cmd *new);
-t_cmd	*ft_lstnew_cmd(int size);
+void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *element);
+t_cmd	*ft_lstnew_cmd(char **command);
 
 void	ft_free_string(char *str);
 int		ft_strchr_pos(const char *s, int c);
 
 
 
+void	save_commands(t_vars *ms);
 
+void	print_cmd_lst(t_vars *ms);
+void	save_commands(t_vars *ms);
 int	cmd_validity(char *str);
 int	ft_strrchr_pos(const char *s, int c);
 t_cmd	*init_cmd_lst(t_vars *ms, int size);
