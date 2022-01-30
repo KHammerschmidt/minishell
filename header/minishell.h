@@ -115,6 +115,7 @@ typedef struct s_cmd
 	char			*errfile;
 	int				op;
 	int				pipe;
+	int				fd_out;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -132,14 +133,11 @@ typedef struct s_vars
 	t_list	*builtins;
 	t_cmd	*cmd;
 	t_input	*input;
-
 	int		argc;
 	char	**argv;
 	char	*cmd_line;
-
 	char	*cwd;
 	char	*new_wd;
-	int		fd_out;
 
 	// char	**execpath;
 	// char	**arr;
@@ -175,13 +173,12 @@ t_env	*get_env_var(t_vars *ms, char *var_name);
 void	init_builtin(t_vars *ms);				//arr + lst
 void	add_builtin(t_vars *ms, char *builtin);
 int		builtin_cd(t_vars *ms, char *dir);
-// void	builtin_echo(t_vars *ms, char *str, int no_nl_flag);
-int		builtin_echo(t_vars *ms, char **arg_str);
+int		builtin_echo(t_vars *ms);
 void	builtin_pwd(t_vars *ms);
 void	builtin_env(t_vars *ms);
 int		builtin_unset(t_vars *ms, char *var_name);
 int		builtin_export(t_vars *ms, char *var_name, char *var_value);
-int		execute_cmd(t_vars *ms, char *cmd, char *args);
+int		execute_cmd(t_vars *ms);
 int		is_builtin(t_vars *ms, char *cmd);
 
 /* utils */
@@ -212,7 +209,8 @@ t_cmd	*ft_lstnew_cmd(int size);
 void	ft_free_string(char *str);
 int		ft_strchr_pos(const char *s, int c);
 
-
+// Mio: For testing purposes only
+void	save_commands(t_vars *ms);
 
 
 int	cmd_validity(char *str);

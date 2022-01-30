@@ -79,7 +79,7 @@ void	fill_table(t_vars *ms, char *str, int pipe_marker)
 	while (arr[i])														// 4) copy splitted string into struct
 	{
 		element->command[i] = arr[i];
-		printf("element->command[i]: %s\n", element->command[i]);
+		// printf("element->command[i]: %s\n", element->command[i]);
 		i++;
 	}
 	free(arr);
@@ -181,7 +181,10 @@ int	create_cmd_table(t_vars *ms)
 		if (i == -1)
 		{
 			if (ms->cmd_line != NULL)
+			{	
 				fill_table(ms, ms->cmd_line, i);
+				printf("MS0\n");
+			}
 			break ;
 		}
 		tmp = ft_substr(ms->cmd_line, 0, i);

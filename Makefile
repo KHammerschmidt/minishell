@@ -15,7 +15,7 @@ SRC_LIST	=	main.c	\
 				input_parsing.c	\
 				builtin_init.c	env_init.c env_lst_utils.c \
 				utils.c	\
-				cmd_splitter.c	cmd_utils.c \
+				cmd_utils.c				\
 				builtin_echo.c			\
 				builtin_cd.c			\
 				builtin_pwd.c			\
@@ -26,7 +26,8 @@ SRC_LIST	=	main.c	\
 				create_prompt.c			\
 				cmd_execution.c			\
 				utilities.c			    \
-				cmd_validity.c
+				cmd_validity.c			\
+				structs_arrays.c
 
 # BONUS_LIST	=	minishell_bonus.c
 

@@ -27,8 +27,10 @@ int	read_line(t_vars *ms)
 int	parsing(t_vars *ms)
 {
 	read_line(ms);
-	if (create_cmd_table(ms) != 0)
-		return (1);
+	save_commands(ms);
+	// if (create_cmd_table(ms) != 0)
+	// 	return (1);
+	// printf("MS3\n");
 	// print_lst(ms);
 	return (0);
 }
