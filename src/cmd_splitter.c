@@ -151,7 +151,6 @@ int	create_cmd_table(t_vars *ms)
 
 
 
-
 // int	count_pipes(char *line)
 // {
 // 	int	i;
