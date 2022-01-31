@@ -182,7 +182,7 @@ t_env	*get_env_var(t_vars *ms, char *var_name);
 /* builtins */
 void	init_builtin(t_vars *ms);				//arr + lst
 void	add_builtin(t_vars *ms, char *builtin);
-int		builtin_cd(t_vars *ms, char *dir);
+int		builtin_cd(t_vars *ms);
 int		builtin_echo(t_vars *ms);
 void	builtin_pwd(t_vars *ms);
 void	builtin_env(t_vars *ms);

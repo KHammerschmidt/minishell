@@ -21,7 +21,7 @@ int	execute_cmd(t_vars *ms)					// command table has to be cleared after each it
 		if (compare_str(ms->cmd->command[0], "echo") == 0)		// ms->cmd->command[0] to be replaced by subsequent commands
 			builtin_echo(ms);
 		if (compare_str(ms->cmd->command[0], "cd") == 0)
-			builtin_cd(ms, ms->cmd->command[1]);
+			builtin_cd(ms);
 		if (compare_str(ms->cmd->command[0], "pwd") == 0)
 			builtin_pwd(ms);
 		if (compare_str(ms->cmd->command[0], "env") == 0)

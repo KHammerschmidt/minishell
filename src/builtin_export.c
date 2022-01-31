@@ -7,14 +7,14 @@ static int	validate_arg(char *command)
 	i = 0;
 	if (ft_isdigit(command[0]) == 1)
 	{
-		printf("minishell: export: %s: not a valid identifier\n", command);
+		printf("minishell: export: `%s': not a valid identifier\n", command);
 		return (1);
 	}
 	while (command[i] != '\0')
 	{
 		if (ft_isalpha(command[i]) == 0 && command[i] != '=' && ft_isdigit(command[i]) == 0)
 		{
-			printf("minishell: export: %s: not a valid identifier\n", command);
+			printf("minishell: export: `%s': not a valid identifier\n", command);
 			return (1);
 		}
 		i++;
