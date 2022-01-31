@@ -10,7 +10,7 @@ static t_cmd	*new_element(char **command)
 	if (new_element == NULL)
 		return (NULL);
 	new_element->command = command;
-	// new_element->fd_out = 1;					// Mio: For testing purposes only.
+	new_element->fd_out = 1;					// Mio: For testing purposes only.
 	new_element->next = NULL;
 	return (new_element);
 }

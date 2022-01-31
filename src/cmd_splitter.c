@@ -59,6 +59,7 @@ int	create_cmd_table(t_vars *ms)
 			new = ft_lstnew_cmd(split);
 			ft_lstadd_back_cmd(&ms->cmd, new);
 			free(tmp);
+			free(split);
 			j = (j + i + 1);										//open issues, deleting white spaces
 		}
 	}

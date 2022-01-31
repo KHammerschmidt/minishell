@@ -28,8 +28,6 @@ SRC_LIST	=	main.c					\
 				create_prompt.c			\
 				cmd_execution.c			\
 				utilities.c			    \
-				cmd_validity.c			\
-				structs_arrays.c
 				cmd_quote_handling.c	\
 				save_command.c
 

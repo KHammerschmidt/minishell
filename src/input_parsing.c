@@ -30,6 +30,6 @@ int	parsing(t_vars *ms)
 	if (create_cmd_table(ms) != 0)
 		return (1);
 	// save_commands(ms);
-	print_cmd_lst(ms);
+	// print_cmd_lst(ms);
 	return (0);
 }

@@ -1,40 +1,46 @@
 #include "../header/minishell.h"
 
 /* Looks for var_name in envar list and deletes the respective node if found. */
-int	builtin_unset(t_vars *ms, char *var_name)
+int	builtin_unset(t_vars *ms)
 {
 	t_env	*current;
 	t_env	*prev;
+	int		i;
 
-	current = ms->env;
-	prev = NULL;
-	if (current == NULL)
+	i = 1;
+	while (ms->cmd->command[i] != NULL)
 	{
-		write(2, "Error. No environment variables found.\n", 39);
-		return (1);
-	}
-	if (compare_str(current->name, var_name) == 0)
-	{
-		ms->env = current->next;
-		free(current->name);
-		free(current->content);
-		free(current);
-		return (0);
-	}
-	prev = current;
-	current = current->next;
-	while (current != NULL)
-	{
-		if (compare_str(current->name, var_name) == 0)
+		current = ms->env;
+		prev = NULL;
+		if (current == NULL)
 		{
-			prev->next = current->next;
+			write(2, "Error. No environment variables found.\n", 39);
+			return (1);
+		}
+		if (compare_str(current->name, ms->cmd->command[i]) == 0)
+		{
+			ms->env = current->next;
 			free(current->name);
 			free(current->content);
 			free(current);
-			return (0);
+			continue ;
 		}
 		prev = current;
 		current = current->next;
+		while (current != NULL)
+		{
+			if (compare_str(current->name, ms->cmd->command[i]) == 0)
+			{
+				prev->next = current->next;
+				free(current->name);
+				free(current->content);
+				free(current);
+				break ;
+			}
+			prev = current;
+			current = current->next;
+		}
+		i++;
 	}
 	return (0);
 }
