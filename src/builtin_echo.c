@@ -1,66 +1,41 @@
 #include "../header/minishell.h"
 
+int	find_n_flag(t_vars *ms)
+{
+	if (ms->cmd->command[1] != NULL)
+	{
+		if (ft_strncmp(ms->cmd->command[1], "-n", ft_strlen(ms->cmd->command[1])) == 0)
+			return (1);
+		else
+			return (0);
+	}
+	else
+		return (0);
+}
+
 /* Writes given string to correponding output, omitting the new line if -n */
 /* is given as option.                                                     */
 int	builtin_echo(t_vars *ms)
 {
 	int	i;
-	int	j;
+	int	n_flag;
 
 	i = 1;
-	j = 0; 
-
+	n_flag = 0;
+	if ((n_flag = find_n_flag(ms)) == 1)
+		i++;
+	if (ms->cmd->command[1] != NULL)
+	{
+		if (n_flag == 1 && ms->cmd->command[2] == NULL)
+			return (0);
+	}
 	while (ms->cmd->command[i] != NULL)
 	{
 		ft_putstr_fd(ms->cmd->command[i], ms->cmd->fd_out);
 		ft_putchar_fd(' ', ms->cmd->fd_out);
 		i++;
 	}
-	ft_putchar_fd('\n', ms->cmd->fd_out);
-
-	// if (ms->cmd->command[1] != NULL)
-	// {
-	// 	while (ms->cmd->command[i] != NULL)
-	// 		i++;
-	// }
-	// if (ms->cmd->command[1] == NULL)
-	// {
-	// 	write(ms->fd_out, "\n", 1);
-	// 	return (0);					// set exit code and back to pipe or STDIN
-	// }
-	// if (i == 1)
-	// {
-	// 	if (compare_str(arg_str[0], "-n") == 0)
-	// 	{
-	// 		return (0);
-	// 	}
-	// 	ft_putstr_fd(arg_str[0], ms->fd_out);
-	// 	ft_putchar_fd('\n', ms->fd_out);
-	// 	return (0);					// set exit code and back to pipe or STDIN
-	// }
-	// else if (i > 1)
-	// {
-	// 	if (compare_str(arg_str[0], "-n") == 0)
-	// 	{
-	// 		while (i > 0)
-	// 		{
-	// 			ft_putstr_fd(arg_str[j + 1], ms->fd_out);
-	// 			ft_putchar_fd(' ', ms->fd_out);
-	// 			j++;
-	// 			i--;
-	// 		}
-	// 	}
-	// 	else
-	// 	{
-	// 		while (i > 0)
-	// 		{
-	// 			ft_putstr_fd(arg_str[j], ms->fd_out);
-	// 			ft_putchar_fd(' ', ms->fd_out);
-	// 			j++;
-	// 			i--;
-	// 		}
-	// 		ft_putchar_fd('\n', ms->fd_out);
-	// 	}
-	// }
+	if (n_flag == 0)
+		ft_putchar_fd('\n', ms->cmd->fd_out);
 	return (0);
 }

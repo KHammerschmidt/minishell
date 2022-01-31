@@ -75,6 +75,7 @@ t_cmd	*ft_lstnew_cmd(char **command)
 		return (NULL);
 	// init_cmd(node, size, command);
 	node->command = command;
+	node->fd_out = 1;					// Mio: For testing purposes only.
 	node->next = NULL;
 	// node->outfile = NULL;
 	// node->infile = NULL;
@@ -82,7 +83,6 @@ t_cmd	*ft_lstnew_cmd(char **command)
 	// node->next = NULL;
 	// node->op = 0;
 	// node->pipe = 0;
-	// node->command = NULL;
 	return (node);
 }
 

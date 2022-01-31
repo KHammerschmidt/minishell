@@ -8,13 +8,15 @@ int	builtin_cd(t_vars *ms, char *dir)
 	char	*start_wd;
 	char	*new_path;
 	char	*home;
+	int		flag;
 
 	current = ms->env;
+	flag = 0;
 	if ((start_wd = getcwd(NULL, PATH_MAX)) == NULL)
 		perror("cwd");
 	new_path = NULL;
-	home = ft_strdup((get_env_var(ms, "HOME"))->content);
-	printf("%s\n", home);
+	// home = ft_strdup((get_env_var(ms, "HOME"))->content);
+	home = get_env_var(ms, "HOME")->content;
 	if (dir == NULL && home == NULL)
 	{
 		write(2, "No directory given\n", 19);
@@ -25,7 +27,10 @@ int	builtin_cd(t_vars *ms, char *dir)
 	if (ft_strncmp(dir, "/", 1) == 0 || ft_strncmp(dir, ".", 1) == 0)
 		new_path = dir;
 	else
+	{
 		new_path = ft_strjoin("./", dir);
+		flag = 1;
+	}
 	if (access(new_path, F_OK) != 0)
 	{
 			perror("cd");
@@ -46,7 +51,7 @@ int	builtin_cd(t_vars *ms, char *dir)
 		}
 		current = current->next;
 	}
-	if (new_path)
+	if (flag == 1)
 		free(new_path);
 	if (start_wd)
 		free(start_wd);

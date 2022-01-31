@@ -186,8 +186,8 @@ int		builtin_cd(t_vars *ms, char *dir);
 int		builtin_echo(t_vars *ms);
 void	builtin_pwd(t_vars *ms);
 void	builtin_env(t_vars *ms);
-int		builtin_unset(t_vars *ms, char *var_name);
-int		builtin_export(t_vars *ms, char *var_name, char *var_value);
+int		builtin_unset(t_vars *ms);
+int		builtin_export(t_vars *ms);
 int		execute_cmd(t_vars *ms);
 int		is_builtin(t_vars *ms, char *cmd);
 

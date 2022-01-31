@@ -14,26 +14,24 @@ int	is_builtin(t_vars *ms, char *cmd)
 	return (1);
 }
 
-int	execute_cmd(t_vars *ms)
+int	execute_cmd(t_vars *ms)					// command table has to be cleared after each iteration/execution (i.e. new line).
 {
-	printf("MS1\n");
-	printf("%s\n", ms->cmd->command[1]);
-	printf("%d\n", ms->cmd->pipe);
-	printf("MS33\n");
 	if (is_builtin(ms, ms->cmd->command[0]) == 0)
 	{
-		if (compare_str(ms->cmd->command[0], "echo") == 0)
-		{
+		if (compare_str(ms->cmd->command[0], "echo") == 0)		// ms->cmd->command[0] to be replaced by subsequent commands
 			builtin_echo(ms);
-		}
-		// if (compare_str(cmd, "cd") == 0)
-		// 	builtin_cd(ms, ms->cmd->args);
-		// if (compare_str(cmd, "env") == 0)
-		// 	builtin_env(ms);
+		if (compare_str(ms->cmd->command[0], "cd") == 0)
+			builtin_cd(ms, ms->cmd->command[1]);
+		if (compare_str(ms->cmd->command[0], "pwd") == 0)
+			builtin_pwd(ms);
+		if (compare_str(ms->cmd->command[0], "env") == 0)
+			builtin_env(ms);
+		if (compare_str(ms->cmd->command[0], "export") == 0)
+			builtin_export(ms);
+		if (compare_str(ms->cmd->command[0], "unset") == 0)
+			builtin_unset(ms);
 		// if (compare_str(cmd, "exit") == 0)
 		// 	builtin_exit(ms);
-		// if (compare_str(cmd, "export") == 0)
-		// 	builtin_export(ms, );
 	}
 	else
 	{
