@@ -15,10 +15,11 @@ int	init_struct(t_vars *ms, char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	t_vars	ms;
-
 	t_cmd	*current;
+	int		i;
+	
 	current = NULL;
-
+	i = 0;
 	if (argc < 1 || argv[1])
 		return (-1);
 	ms = (t_vars){0};
@@ -32,9 +33,6 @@ int	main(int argc, char **argv, char **envp)
 		// create_cmd_table(&ms);
 		// print_cmd_lst(&ms);
 		execute_cmd(&ms);
-		// printf("cmd: %s   args: %s\n", current->next->command, current->next->args);
-		// execute_cmd(&ms, current->command, current->args);
-		// printf("MS00\n");
 		// free(ms.cmd_line);
 		while (current != NULL)								// Mio: Delete command table after each execution.
 		{

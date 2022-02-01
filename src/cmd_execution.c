@@ -14,11 +14,11 @@ int	is_builtin(t_vars *ms, char *cmd)
 	return (1);
 }
 
-int	execute_cmd(t_vars *ms)					// command table has to be cleared after each iteration/execution (i.e. new line).
+int	execute_cmd(t_vars *ms)
 {
 	if (is_builtin(ms, ms->cmd->command[0]) == 0)
 	{
-		if (compare_str(ms->cmd->command[0], "echo") == 0)		// ms->cmd->command[0] to be replaced by subsequent commands
+		if (compare_str(ms->cmd->command[0], "echo") == 0)
 			builtin_echo(ms);
 		if (compare_str(ms->cmd->command[0], "cd") == 0)
 			builtin_cd(ms);
@@ -30,12 +30,12 @@ int	execute_cmd(t_vars *ms)					// command table has to be cleared after each it
 			builtin_export(ms);
 		if (compare_str(ms->cmd->command[0], "unset") == 0)
 			builtin_unset(ms);
-		// if (compare_str(cmd, "exit") == 0)
-		// 	builtin_exit(ms);
+		if (compare_str(ms->cmd->command[0], "exit") == 0)
+			builtin_exit(ms);
 	}
 	else
 	{
-		// check if valid command, then execute or return error
+		// check if valid ms->cmd->command, then execute or return error
 	}
 	return (0);
 }

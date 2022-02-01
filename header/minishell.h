@@ -146,8 +146,8 @@ typedef struct s_vars
 	t_info		*info;
 	// t_cmd_info	*cmd_info;
 	char	*cmd_line;
-	char	*cwd;
-	char	*new_wd;
+	// char	*cwd;
+	// char	*new_wd;
 
 	// char	**execpath;
 	// char	**arr;
@@ -184,10 +184,11 @@ void	init_builtin(t_vars *ms);				//arr + lst
 void	add_builtin(t_vars *ms, char *builtin);
 int		builtin_cd(t_vars *ms);
 int		builtin_echo(t_vars *ms);
-void	builtin_pwd(t_vars *ms);
 void	builtin_env(t_vars *ms);
-int		builtin_unset(t_vars *ms);
+int		builtin_exit(t_vars *ms);
 int		builtin_export(t_vars *ms);
+void	builtin_pwd(t_vars *ms);
+int		builtin_unset(t_vars *ms);
 int		execute_cmd(t_vars *ms);
 int		is_builtin(t_vars *ms, char *cmd);
 
@@ -222,7 +223,8 @@ int		ft_strchr_pos(const char *s, int c);
 // Mio: For testing purposes only
 void	save_commands(t_vars *ms);
 
-void	save_commands(t_vars *ms);
+// free and exit
+void	free_and_exit(t_vars *ms, int e_flag, int e_code);
 
 void	print_cmd_lst(t_vars *ms);
 void	save_commands(t_vars *ms);
