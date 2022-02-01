@@ -1,42 +1,10 @@
 #include "../header/minishell.h"
 
-/* Gets home directory from envar list, concatenates and changes path. */
-/* Changes OLDPWD and PWD in envar list.                               */
-int	builtin_cd(t_vars *ms, char *dir)
+static void	adjust_envar_list(t_vars *ms, char *start_wd)
 {
 	t_env	*current;
-	char	*start_wd;
-	char	*new_path;
-	char	*home;
-	int		flag;
 
 	current = ms->env;
-	flag = 0;
-	if ((start_wd = getcwd(NULL, PATH_MAX)) == NULL)
-		perror("cwd");
-	new_path = NULL;
-	// home = ft_strdup((get_env_var(ms, "HOME"))->content);
-	home = get_env_var(ms, "HOME")->content;
-	if (dir == NULL && home == NULL)
-	{
-		write(2, "No directory given\n", 19);
-		return (1);
-	}
-	if (dir == NULL && home != NULL)
-		dir = home;
-	if (ft_strncmp(dir, "/", 1) == 0 || ft_strncmp(dir, ".", 1) == 0)
-		new_path = dir;
-	else
-	{
-		new_path = ft_strjoin("./", dir);
-		flag = 1;
-	}
-	if (access(new_path, F_OK) != 0)
-	{
-			perror("cd");
-			return (errno);
-	}
-	chdir(new_path);
 	while (current != NULL)
 	{
 		if (compare_str(current->name, "OLDPWD") == 0)
@@ -51,9 +19,62 @@ int	builtin_cd(t_vars *ms, char *dir)
 		}
 		current = current->next;
 	}
+}
+
+int	validate_and_change_path(t_vars *ms, char *new_path, char *start_wd)
+{
+	char	*tmp;
+	int		flag;
+
+	tmp = NULL;
+	flag = 0;
+	if (!(ft_strncmp(new_path, "/", 1) == 0) \
+			&& !(ft_strncmp(new_path, ".", 1) == 0))
+	{
+		tmp = malloc(ft_strlen(new_path) + 3);
+		ft_strlcat(tmp, "./", 3);
+		ft_strlcat(tmp, new_path, ft_strlen(new_path) + 3);
+		flag = 1;
+	}
+	if (access(new_path, F_OK) != 0)
+	{
+		printf("minishell: cd: %s: No such file or directory\n", new_path);
+		return (1);
+	}
+	chdir(new_path);
+	adjust_envar_list(ms, start_wd);
 	if (flag == 1)
-		free(new_path);
+		free(tmp);
 	if (start_wd)
 		free(start_wd);
+	return (0);
+}
+
+/* Gets home directory from envar list, concatenates and changes path. */
+/* Changes OLDPWD and PWD in envar list.                               */
+int	builtin_cd(t_vars *ms)
+{
+	char	*start_wd;
+	char	*new_path;
+	char	*home;
+
+	start_wd = getcwd(NULL, PATH_MAX);
+	if (start_wd == NULL)
+	{
+		perror("cwd");
+		return (1);
+	}
+	new_path = NULL;
+	new_path = ms->cmd->command[1];
+	home = get_env_var(ms, "HOME")->content;
+	if (new_path == NULL && home == NULL)
+	{
+		printf("minishell: cd: HOME not set\n");
+		return (1);
+	}
+	if (new_path == NULL && home != NULL)
+		new_path = home;
+	if (validate_and_change_path(ms, new_path, start_wd) == 1)
+		return (1);
 	return (0);
 }
