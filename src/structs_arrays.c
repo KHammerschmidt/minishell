@@ -22,9 +22,7 @@ static t_cmd	*lastelement(t_cmd *lst)
 
 	last = lst;
 	if (last == NULL)
-	{
 		return (NULL);
-	}
 	while (last->next != NULL)
 		last = last->next;
 	return (last);
@@ -44,12 +42,13 @@ static void	add_back(t_cmd **lst, t_cmd *new)
 	last->next = new;
 }
 
-void	save_commands(t_vars *ms)						//mios lst functions
+void	save_commands(t_vars *ms)
 {
 	int		i;
 	int		j;
 	char	*tmp;
 	t_cmd	*new;
+	// t_cmd	*current;
 
 	i = 0;
 	j = 0;
@@ -64,14 +63,24 @@ void	save_commands(t_vars *ms)						//mios lst functions
 		{
 			i = ft_strchr_pos(&ms->cmd_line[j], '|');
 			tmp = ft_substr(ms->cmd_line, j, i);
-			char **split;
-			split = ft_split(tmp, ' ');
 			new = new_element(ft_split(tmp, ' '));
 			add_back(&ms->cmd, new);
 			free(tmp);
 			j += i + 1;
-													// open issue: delete white spaces
+			// open issue: delete white spaces
 		}
 	}
-	// print_cmd_lst(ms);
+	i = 0;
+	// current = ms->cmd;
+	// while (current != NULL)
+	// {
+	// 	i = 0;
+	// 	printf("New command\n");						// Mio: For testing purposes only.
+	// 	while (current->command[i] != NULL)
+	// 	{
+	// 		printf("%s\n", current->command[i]);
+	// 		i++;
+	// 	}
+	// 	current = current->next;
+	// }
 }

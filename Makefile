@@ -17,18 +17,20 @@ SRC_LIST	=	main.c					\
 				cmd_splitter.c			\
 				utils.c					\
 				cmd_utils.c 			\
-				builtin_echo.c			\
 				builtin_cd.c			\
-				builtin_pwd.c			\
+				builtin_echo.c			\
 				builtin_env.c			\
-				builtin_unset.c			\
+				builtin_exit.c		\
 				builtin_export.c		\
+				builtin_pwd.c			\
+				builtin_unset.c			\
 				get_env_var.c			\
 				create_prompt.c			\
 				cmd_execution.c			\
 				utilities.c			    \
 				cmd_quote_handling.c	\
-				save_command.c
+				save_command.c			\
+				free_memory.c
 
 # BONUS_LIST	=	minishell_bonus.c
 

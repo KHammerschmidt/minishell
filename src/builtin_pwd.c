@@ -11,7 +11,7 @@ void	builtin_pwd(t_vars *ms)
 		perror("pwd");
 		return ;
 	}
-	write(ms->fd_out, cwd, ft_strlen(cwd));
-	write(ms->fd_out, "\n", 1);
+	write(ms->cmd->fd_out, cwd, ft_strlen(cwd));
+	write(ms->cmd->fd_out, "\n", 1);
 	free(cwd);
 }

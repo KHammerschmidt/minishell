@@ -17,7 +17,6 @@ int	main(int argc, char **argv, char **envp)
 	t_vars	ms;
 	t_cmd	*current;
 	int		i;
-
 	current = NULL;
 	i = 0;
 	if (argc < 1 || argv[1])

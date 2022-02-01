@@ -14,31 +14,28 @@ int	is_builtin(t_vars *ms, char *cmd)
 	return (1);
 }
 
-int	execute_cmd(t_vars *ms, char *cmd, char *args)
+int	execute_cmd(t_vars *ms)
 {
-	char	**arg_str;
-
-	arg_str = NULL;
-	if (is_builtin(ms, cmd) == 0)
+	if (is_builtin(ms, ms->cmd->command[0]) == 0)
 	{
-		arg_str = ft_split(args, ' ');
-		if (compare_str(cmd, "echo") == 0)
-		{
-			builtin_echo(ms, arg_str);
-		}
-		// if (compare_str(cmd, "cd") == 0)
-		// 	builtin_cd(ms, ms->cmd->args);
-		// if (compare_str(cmd, "env") == 0)
-		// 	builtin_env(ms);
-		// if (compare_str(cmd, "exit") == 0)
-		// 	builtin_exit(ms);
-		// if (compare_str(cmd, "export") == 0)
-		// 	builtin_export(ms, );
-		free(args);
+		if (compare_str(ms->cmd->command[0], "echo") == 0)
+			builtin_echo(ms);
+		if (compare_str(ms->cmd->command[0], "cd") == 0)
+			builtin_cd(ms);
+		if (compare_str(ms->cmd->command[0], "pwd") == 0)
+			builtin_pwd(ms);
+		if (compare_str(ms->cmd->command[0], "env") == 0)
+			builtin_env(ms);
+		if (compare_str(ms->cmd->command[0], "export") == 0)
+			builtin_export(ms);
+		if (compare_str(ms->cmd->command[0], "unset") == 0)
+			builtin_unset(ms);
+		if (compare_str(ms->cmd->command[0], "exit") == 0)
+			builtin_exit(ms);
 	}
 	else
 	{
-		// check if valid command, then execute or return error
+		// check if valid ms->cmd->command, then execute or return error
 	}
 	return (0);
 }

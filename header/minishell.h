@@ -113,7 +113,7 @@ typedef struct s_cmd
 	char			*errfile;
 	int				op;
 	int				pipe;
-	// int				fd_out;
+	int				fd_out;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -140,16 +140,14 @@ typedef struct s_info
 
 typedef struct s_vars
 {
-	t_env		*env;
-	t_list		*builtins;
-	t_cmd		*cmd;
+	t_env	*env;
+	t_list	*builtins;
+	t_cmd	*cmd;
 	t_info		*info;
 	// t_cmd_info	*cmd_info;
 	char	*cmd_line;
-
-	char	*cwd;
-	char	*new_wd;
-	int		fd_out;
+	// char	*cwd;
+	// char	*new_wd;
 
 	// char	**execpath;
 	// char	**arr;
@@ -184,14 +182,14 @@ t_env	*get_env_var(t_vars *ms, char *var_name);
 /* builtins */
 void	init_builtin(t_vars *ms);				//arr + lst
 void	add_builtin(t_vars *ms, char *builtin);
-int		builtin_cd(t_vars *ms, char *dir);
-// void	builtin_echo(t_vars *ms, char *str, int no_nl_flag);
-int		builtin_echo(t_vars *ms, char **arg_str);
-void	builtin_pwd(t_vars *ms);
+int		builtin_cd(t_vars *ms);
+int		builtin_echo(t_vars *ms);
 void	builtin_env(t_vars *ms);
-int		builtin_unset(t_vars *ms, char *var_name);
-int		builtin_export(t_vars *ms, char *var_name, char *var_value);
-int		execute_cmd(t_vars *ms, char *cmd, char *args);
+int		builtin_exit(t_vars *ms);
+int		builtin_export(t_vars *ms);
+void	builtin_pwd(t_vars *ms);
+int		builtin_unset(t_vars *ms);
+int		execute_cmd(t_vars *ms);
 int		is_builtin(t_vars *ms, char *cmd);
 
 /* utils */
@@ -222,9 +220,11 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *element);
 void	ft_free_string(char *str);
 int		ft_strchr_pos(const char *s, int c);
 
-
-
+// Mio: For testing purposes only
 void	save_commands(t_vars *ms);
+
+// free and exit
+void	free_and_exit(t_vars *ms, int e_flag, int e_code);
 
 void	print_cmd_lst(t_vars *ms);
 void	save_commands(t_vars *ms);
