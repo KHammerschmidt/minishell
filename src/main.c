@@ -54,28 +54,6 @@ int	main(int argc, char **argv, char **envp)
 		read_line(&ms);
 		create_cmd_table(&ms);
 		reset_info_struct(ms.info);
-		current = ms.cmd;
-		int	i = 0;
-		while (current && current->command != NULL)
-		{
-			i = 0;
-			printf("New command\n");						// Mio: For testing purposes only.
-			while (current->command[i] != NULL)
-			{
-				printf("...%s...\n", current->command[i]);
-				i++;
-			}
-				current = current->next;
-		}
-		// while (current != NULL)								// Mio: Delete command table after each execution.
-		// {
-		// 	ft_free_strarray(current->command);				// Mio: Replace by function to empty and free the complete list
-		// 	current = current->next;
-		// }
-		// ms.cmd = NULL;					// Mio: Leaks?!
-		// 	print_cmd_lst(ms);
-
-
 		// execute_cmd(&ms, current->command, current->args);
 		// printf("cmd: %s   args: %s\n", current->next->command, current->next->args);
 		// execute_cmd(&ms, current->command, current->args);
@@ -86,3 +64,25 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
+
+
+		// current = ms.cmd;
+		// int	i = 0;
+		// while (current && current->command != NULL)
+		// {
+		// 	i = 0;
+		// 	printf("New command\n");						// Mio: For testing purposes only.
+		// 	while (current->command[i] != NULL)
+		// 	{
+		// 		printf("...%s...\n", current->command[i]);
+		// 		i++;
+		// 	}
+		// 		current = current->next;
+		// }
+		// while (current != NULL)								// Mio: Delete command table after each execution.
+		// {
+		// 	ft_free_strarray(current->command);				// Mio: Replace by function to empty and free the complete list
+		// 	current = current->next;
+		// }
+		// ms.cmd = NULL;					// Mio: Leaks?!
+		// 	print_cmd_lst(ms);

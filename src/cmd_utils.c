@@ -78,7 +78,7 @@ void	pass_on_infos_node(t_info *info, t_cmd *node)
 	printf("HERE\n");
 }
 
-// t_cmd	*ft_lstnew_cmd(t_info *info)
+// t_cmd	*ft_lstnew_cmd(t_info *info)				//das hier wieder rein (neue lst_new)
 // {
 // 	t_cmd	*node;
 
