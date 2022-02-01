@@ -1,70 +1,164 @@
 #include "../header/minishell.h"
 
-char    *copy_str_without_quotes(char *str)             //INFO: $sign has to work
+void	ft_free_arr(char **arr)
 {
-    char    *tmp;
-    char    *argument;
+	int		i;
 
-    tmp = "\"\\";
-    argument = ft_strtrim(str, tmp);                    //if no command -> access wirft command not found aus!
-    return (argument);
+	i = 0;
+	while (arr[i] != '\0' && arr)
+	{
+		if (arr[i])
+		{
+			free(arr[i]);
+			arr[i] = NULL;
+		}
+		i++;
+	}
+	if (arr)
+	{
+		free(arr);
+		arr = NULL;
+	}
 }
 
-void    ft_free_arr(char **arr)
+void	reset_info_struct(t_info *info)
 {
-    int     i;
-
-    i = 0;
-    while (arr[i] != '\0' && arr)
-    {
-        if (arr[i])
-        {
-            free(arr[i]);
-            arr[i] = NULL;
-        }
-        i++;
-    }
-    if (arr)
-    {
-        free(arr);
-        arr = NULL;
-    }
+	info->command = NULL;
+	info->outfile = NULL;
+	info->infile = NULL;
+	info->errfile = NULL;
+	info->op = 0;
+	info->pipe = 0;
+	info->single_quote_counter = 0;
+	info->double_quote_counter = 0;
+	info->open_quotes = 0;
+	info->dollar = 0;
 }
 
-/* Creates the simple command table for the execution part. */
-int create_cmd_table(t_vars *ms)
-{
-    int     i;
-    int     j;
-    char    *tmp;
-    char    **split;
-    t_cmd   *new;
+// void	pass_on_infos(t_vars *ms)
+// {
+// 	// ms->cmd->command = ms->info->command;
+// 	printf("%d \n", ms->info->pipe);
+// 	printf("%d \n", ms->cmd->pipe);
+// 	ms->cmd->pipe = ms->info->pipe;
+// 	// ms->cmd->op = ms->info->op;
+// 	// ms->cmd->infile = ms->info->infile;
+// 	// ms->cmd->outfile = ms->info->outfile;
+// 	// ms->cmd->errfile = ms->info->errfile;
+// 	printf("HERE\n");
+// 	reset_info_struct(ms->info);
+// }
 
-    i = 0;
-    j = 0;
-    split = NULL;
-    i = ft_strchr_pos(ms->cmd_line, '|');
-    if (i == -1)
-    {
-        new = ft_lstnew_cmd(ft_split(ms->cmd_line, ' '));
-        ft_lstadd_back_cmd(&ms->cmd, new);
-    }
-    else
-    {
-        while (i != -1)
-        {
-            i = ft_strchr_pos(&ms->cmd_line[j], '|');
-            tmp = ft_substr(ms->cmd_line, j, i);
-            split = ft_split(tmp, ' ');
-            new = ft_lstnew_cmd(split);
-            ft_lstadd_back_cmd(&ms->cmd, new);
-            free(tmp);
-            free(split);
-            j = (j + i + 1);                                        //open issues, deleting white spaces
-        }
-    }
-    return (0);
+
+
+
+void	print_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i] != '\0')
+	{
+		printf("||||||..%s\n", arr[i]);
+		i++;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+// char	*copy_str_without_quotes(char *str)				//INFO: $sign has to work
+// {
+// 	char	*tmp;
+// 	char	*argument;
+
+// 	tmp = "\"\\";
+// 	argument = ft_strtrim(str, tmp);					//if no command -> access wirft command not found aus!
+// 	return (argument);
+// }
+
+
+
+
+
+
+
+
+
+
+// ------------------------------------------------------------------------------------------------------------------------------
+// char    *copy_str_without_quotes(char *str)             //INFO: $sign has to work
+// {
+//     char    *tmp;
+//     char    *argument;
+
+//     tmp = "\"\\";
+//     argument = ft_strtrim(str, tmp);                    //if no command -> access wirft command not found aus!
+//     return (argument);
+// }
+
+// void    ft_free_arr(char **arr)
+// {
+//     int     i;
+
+//     i = 0;
+//     while (arr[i] != '\0' && arr)
+//     {
+//         if (arr[i])
+//         {
+//             free(arr[i]);
+//             arr[i] = NULL;
+//         }
+//         i++;
+//     }
+//     if (arr)
+//     {
+//         free(arr);
+//         arr = NULL;
+//     }
+// }
+
+// /* Creates the simple command table for the execution part. */
+// int create_cmd_table(t_vars *ms)
+// {
+//     int     i;
+//     int     j;
+//     char    *tmp;
+//     char    **split;
+//     t_cmd   *new;
+
+//     i = 0;
+//     j = 0;
+//     split = NULL;
+//     i = ft_strchr_pos(ms->cmd_line, '|');
+//     if (i == -1)
+//     {
+//         new = ft_lstnew_cmd(ft_split(ms->cmd_line, ' '));
+//         ft_lstadd_back_cmd(&ms->cmd, new);
+//     }
+//     else
+//     {
+//         while (i != -1)
+//         {
+//             i = ft_strchr_pos(&ms->cmd_line[j], '|');
+//             tmp = ft_substr(ms->cmd_line, j, i);
+//             split = ft_split(tmp, ' ');
+//             new = ft_lstnew_cmd(split);
+//             ft_lstadd_back_cmd(&ms->cmd, new);
+//             free(tmp);
+//             free(split);
+//             j = (j + i + 1);                                        //open issues, deleting white spaces
+//         }
+//     }
+//     return (0);
+// }
 
 // ______________________________________________________________________________________________________________________________________________________
 
@@ -418,28 +512,30 @@ int create_cmd_table(t_vars *ms)
 //  printf("\n");
 //  // fill_table_2(element, pipe_marker);
 // }
-5:23
-#include "../header/minishell.h"
 
-/* Prints the char **command in every element of the list. */
-void	print_cmd_lst(t_vars *ms)				//meins
-{
-	t_cmd *current;
 
-	current = ms->cmd;
-	int	i = 0;
-	while (current != NULL)
-	{
-		i = 0;
-		printf("New command\n");						// Mio: For testing purposes only.
-		while (current->command[i] != NULL)
-		{
-			printf("...%s...\n", current->command[i]);
-			i++;
-		}
-		current = current->next;
-	}
-}
+// 5:23
+// #include "../header/minishell.h"
+
+// /* Prints the char **command in every element of the list. */
+// void	print_cmd_lst(t_vars *ms)				//meins
+// {
+// 	t_cmd *current;
+
+// 	current = ms->cmd;
+// 	int	i = 0;
+// 	while (current != NULL)
+// 	{
+// 		i = 0;
+// 		printf("New command\n");						// Mio: For testing purposes only.
+// 		while (current->command[i] != NULL)
+// 		{
+// 			printf("...%s...\n", current->command[i]);
+// 			i++;
+// 		}
+// 		current = current->next;
+// 	}
+// }
 
 // /* Initialises the variables of t_cmd, allocates memory for the
 // **command variable as the size of size + 1. */
@@ -460,52 +556,52 @@ void	print_cmd_lst(t_vars *ms)				//meins
 // 		printf("\n");
 // }
 
-/* Returns last node in a list. */
-t_cmd	*ft_lstlast_cmd(t_cmd *lst)
-{
-	t_cmd	*last;
+// /* Returns last node in a list. */
+// t_cmd	*ft_lstlast_cmd(t_cmd *lst)
+// {
+// 	t_cmd	*last;
 
-	last = lst;
-	if (last == NULL)
-		return (NULL);
-	while (last->next != NULL)
-		last = last->next;
-	return (last);
-}
+// 	last = lst;
+// 	if (last == NULL)
+// 		return (NULL);
+// 	while (last->next != NULL)
+// 		last = last->next;
+// 	return (last);
+// }
 
-/* Adds item to the back of a list. */
-void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
-{
-	t_cmd *last;
+// /* Adds item to the back of a list. */
+// void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
+// {
+// 	t_cmd *last;
 
-	if (*cmd == NULL)
-		*cmd = node;
-	else
-	{
-		last = ft_lstlast_cmd(*cmd);
-		last->next = node;
-	}
-}
+// 	if (*cmd == NULL)
+// 		*cmd = node;
+// 	else
+// 	{
+// 		last = ft_lstlast_cmd(*cmd);
+// 		last->next = node;
+// 	}
+// }
 
-t_cmd	*ft_lstnew_cmd(char **command)
-{
-	t_cmd	*node;
+// t_cmd	*ft_lstnew_cmd(char **command)
+// {
+// 	t_cmd	*node;
 
-	node = malloc(sizeof(t_cmd));
-	if (node == NULL)
-		return (NULL);
-	// init_cmd(node, size, command);
-	node->command = command;
-	node->fd_out = 1;					// Mio: For testing purposes only.
-	node->next = NULL;
-	// node->outfile = NULL;
-	// node->infile = NULL;
-	// node->errfile = NULL;
-	// node->next = NULL;
-	// node->op = 0;
-	// node->pipe = 0;
-	return (node);
-}
+// 	node = malloc(sizeof(t_cmd));
+// 	if (node == NULL)
+// 		return (NULL);
+// 	// init_cmd(node, size, command);
+// 	node->command = command;
+// 	node->fd_out = 1;					// Mio: For testing purposes only.
+// 	node->next = NULL;
+// 	// node->outfile = NULL;
+// 	// node->infile = NULL;
+// 	// node->errfile = NULL;
+// 	// node->next = NULL;
+// 	// node->op = 0;
+// 	// node->pipe = 0;
+// 	return (node);
+// }
 
 
 

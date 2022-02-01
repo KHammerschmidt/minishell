@@ -66,17 +66,17 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 	}
 }
 
-void	pass_on_infos_node(t_info *info, t_cmd *node)
-{
-	node->command = info->command;
-	node->pipe = info->pipe;
-	node->op = info->op;
-	node->infile = info->infile;
-	node->outfile = info->outfile;
-	node->errfile = info->errfile;
-	reset_info_struct(info);
-	printf("HERE\n");
-}
+// void	pass_on_infos_node(t_info *info, t_cmd *node)
+// {
+// 	node->command = info->command;
+// 	node->pipe = info->pipe;
+// 	node->op = info->op;
+// 	node->infile = info->infile;
+// 	node->outfile = info->outfile;
+// 	node->errfile = info->errfile;
+// 	reset_info_struct(info);
+// 	printf("HERE\n");
+// }
 
 // t_cmd	*ft_lstnew_cmd(t_info *info)				//das hier wieder rein (neue lst_new)
 // {

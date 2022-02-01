@@ -163,14 +163,7 @@ typedef struct s_vars
 
 int		main(int argc, char **argv, char **envp);
 int		init_struct(t_vars *ms, char **envp);
-
-int		parsing(t_vars *ms);
 int		read_line(t_vars *ms);
-
-// int		detect_cmds(t_vars *ms);
-// int		init_cmd_list(t_vars *ms, char *cmd_line);
-int		get_start(char *cmd_line);
-int		get_end(char *cmd_line);
 
 /* envp */
 int		init_env(t_vars *ms, char **envp);	//arr + lst
@@ -198,6 +191,10 @@ void	ft_free_lst_env(t_env **lst);
 void	ft_free_arr(char **arr);
 int		compare_str(char *s1, char *s2);
 
+/* main utils (später woanders einfügen) */
+void	print_lst(t_vars *ms);
+void	free_cmd_struct(t_vars *ms);
+
 /* prompt */
 char	*get_user(t_vars *ms);
 char	*get_pwd(t_vars *ms);
@@ -210,15 +207,36 @@ void	rl_reset(void);
 /* signal handling */
 void	signal_handler(int signum);
 
-int		create_cmd_table(t_vars *ms);
 
-void	print_lst(t_vars *ms);
+void	print_arr(char **arr);
+
+/* input parsing, command table development */
+int		create_cmd_table(t_vars *ms);
+char	*handle_input(t_vars *ms);
+int		check_pipes_in_quote(t_vars *ms);
+char	**ft_split_quotes(char *str, t_vars *ms);
+void	reset_info_struct(t_info *info);
+int		check_quote_validity(char *str, t_vars *ms);
+int		quote_infos(t_vars *ms, char *str);
+int		check_pipe_validity(char *str);
+int		ft_strchr_pos(const char *s, int c);
+
+t_cmd	*init_cmd_lst(t_vars *ms, int size);
+void	reset_info_struct(t_info *info);
+void	pass_on_infos_node(t_info *info, t_cmd *node);
+
+/* cmd list utils */
+t_cmd	*ft_lstnew_cmd(t_info *info);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *element);
-// t_cmd	*ft_lstnew_cmd(char **command);
 
+
+/* Freeing utils */
 void	ft_free_string(char *str);
-int		ft_strchr_pos(const char *s, int c);
+
+/* Printing utils */
+void	print_lst(t_vars *ms);
+
 
 // Mio: For testing purposes only
 void	save_commands(t_vars *ms);
@@ -227,12 +245,11 @@ void	save_commands(t_vars *ms);
 void	free_and_exit(t_vars *ms, int e_flag, int e_code);
 
 void	print_cmd_lst(t_vars *ms);
-void	save_commands(t_vars *ms);
-int		cmd_validity(char *str);
-int		ft_strrchr_pos(const char *s, int c);
-t_cmd	*init_cmd_lst(t_vars *ms, int size);
-void	reset_info_struct(t_info *info);
-void	pass_on_infos_node(t_info *info, t_cmd *node);
-t_cmd	*ft_lstnew_cmd(t_info *info);
+// void	save_commands(t_vars *ms);
+// int		cmd_validity(char *str);
+
+
+
+
 
 #endif
