@@ -23,7 +23,6 @@ int	read_line(t_vars *ms)
 	return (0);
 }
 
-/* Function reads input with read_line() */
 int	parsing(t_vars *ms)
 {
 	read_line(ms);

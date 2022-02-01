@@ -132,7 +132,7 @@ typedef struct s_info
 	char			*errfile;
 	int				op;
 	int				pipe;
-	int				single_quotes_counter;
+	int				single_quote_counter;
 	int				double_quote_counter;
 	int				open_quotes;
 	int				dollar;
@@ -215,7 +215,7 @@ int		create_cmd_table(t_vars *ms);
 void	print_lst(t_vars *ms);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *element);
-t_cmd	*ft_lstnew_cmd(char **command);
+// t_cmd	*ft_lstnew_cmd(char **command);
 
 void	ft_free_string(char *str);
 int		ft_strchr_pos(const char *s, int c);
@@ -228,8 +228,11 @@ void	free_and_exit(t_vars *ms, int e_flag, int e_code);
 
 void	print_cmd_lst(t_vars *ms);
 void	save_commands(t_vars *ms);
-int	cmd_validity(char *str);
-int	ft_strrchr_pos(const char *s, int c);
+int		cmd_validity(char *str);
+int		ft_strrchr_pos(const char *s, int c);
 t_cmd	*init_cmd_lst(t_vars *ms, int size);
+void	reset_info_struct(t_info *info);
+void	pass_on_infos_node(t_info *info, t_cmd *node);
+t_cmd	*ft_lstnew_cmd(t_info *info);
 
 #endif
