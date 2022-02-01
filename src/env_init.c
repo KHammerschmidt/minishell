@@ -1,6 +1,6 @@
 #include "../header/minishell.h"
 
-int	init_env(t_vars *ms, char **envp)
+int	init_env(t_vars *ms, char **envp)					//Kathi: this is the right version, correct? then delete the one below
 {
 	int		i;
 	char	*tmp;

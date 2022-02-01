@@ -21,7 +21,6 @@ SRC_LIST	=	builtin_cd.c			\
 				builtin_unset.c			\
 				cmd_execution.c			\
 				cmd_pipes.c				\
-				cmd_quote_handling.c	\
 				cmd_quotes.c			\
 				cmd_splitter.c			\
 				cmd_splitting.c			\

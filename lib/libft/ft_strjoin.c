@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/14 14:43:21 by mortmeie          #+#    #+#             */
-/*   Updated: 2022/01/31 15:21:44 by mortmeie         ###   ########.fr       */
+/*   Updated: 2022/02/01 20:04:10 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	j = 0;
 	while (s2[j] != '\0')
 	{
-		ptr[i] = s2[j];
+		ptr[i] = s2[j];			//Kathi: ptr[i++] = s2[j++];
 		i++;
 		j++;
 	}

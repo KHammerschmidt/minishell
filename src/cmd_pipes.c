@@ -1,6 +1,6 @@
 #include "../header/minishell.h"
 
-int	check_pipes_in_quote(t_vars *ms)
+int	check_pipes_in_quote(t_vars *ms)			//Kathi: not finished
 {
 	int	i;
 	int	flag;
@@ -37,4 +37,3 @@ int	check_pipe_validity(char *str)
 		return (1);					//pipe is no valid pipe, it is in between quotes
 	return (0);						//valid pipe
 }
-
