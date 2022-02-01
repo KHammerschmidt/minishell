@@ -12,7 +12,6 @@ BONUS_DIR	=	./src/bonus/
 BONUS_ODIR	=	./obj/bonus/
 
 SRC_LIST	=	main.c					\
-				input_parsing.c			\
 				builtin_init.c 			\
 				env_init.c env_lst_utils.c \
 				cmd_splitter.c			\

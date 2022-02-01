@@ -31,39 +31,345 @@ void	ft_free_arr(char **arr)
 	}
 }
 
+int	check_pipe_validity(char *str)
+{
+	int	i;
+	int	double_quote;
+	int	single_quote;
+
+	i = 0;
+	double_quote = 0;
+	single_quote = 0;
+	while (str[i] != '|')
+	{
+		if (str[i] == 34)			//double quote
+			double_quote++;
+		if (str[i] == 39)			//single quote
+			single_quote++;
+		i++;
+	}
+	if ((double_quote % 2) != 0 || (single_quote % 2) != 0)
+		return (1);					//pipe is no valid pipe, it is in between quotes
+	return (0);						//valid pipe
+}
+
+int	quote_infos(t_vars *ms, char *str)
+{
+	if (ms->info->single_quote_counter == 0 && ms->info->double_quote_counter != 0)			//only double quotes in string
+	{
+		ms->info->double_quote_counter = 1;
+		printf("ONLY DOUBLE QUOTES\n");
+		return (1);
+	}
+	else if (ms->info->double_quote_counter == 0 && ms->info->single_quote_counter != 0)	//only single quotes in string
+	{
+		ms->info->single_quote_counter = 1;
+		printf("ONLY SINGLE QUOTES\n");
+		return (1);
+	}
+	if (ft_strchr_pos(str, 34) < ft_strchr_pos(str, 39))	//pos double quotes < pos single quotes, double quotes are surrounding
+	{
+		ms->info->double_quote_counter = 1;					// double quotes are activated (can be trimmed afterwards)
+		ms->info->single_quote_counter = 0;					//single quotes are deactivated
+		printf("double quotes are outer quotes!\n");
+	}
+	else if (ft_strchr_pos(str, 34) > ft_strchr_pos(str, 39))	//pos single quotes < pos double quotes, single quotes are surrounding
+	{
+		ms->info->single_quote_counter = 1;					//single quotes activated (can be trimmed afterwards)
+		ms->info->double_quote_counter = 0;					//double quotes deactivated
+		printf("single quotes are outer quotes!\n");
+	}
+	printf("HERE 2\n");
+	return (1);
+}
+
+int	check_quote_validity(char *str, t_vars *ms)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == 34)						//double_quotes
+			ms->info->double_quote_counter++;
+		if (str[i] == 39)						//single quotes
+			ms->info->single_quote_counter++;
+		if (ms->info->double_quote_counter != 0 && str[i] == '$')			//valid quotes and $ sign in there
+			ms->info->dollar++;
+		i++;
+	}
+	printf("double:[%d]   single[%d]\n", ms->info->double_quote_counter, ms->info->single_quote_counter);
+	if (ms->info->double_quote_counter == 0 && ms->info->single_quote_counter == 0)						//no quotes
+	{
+		printf("no quotes!\n");
+		return (0);
+	}
+	if ((ms->info->double_quote_counter % 2) != 0 || (ms->info->single_quote_counter % 2) != 0)			//open quotes
+	{
+		printf("open quotes!\n");
+		return (-1);
+	}
+	return (quote_infos(ms, str));
+}
+
+void	reset_info_struct(t_info *info)
+{
+	info->command = NULL;
+	info->outfile = NULL;
+	info->infile = NULL;
+	info->errfile = NULL;
+	info->op = 0;
+	info->pipe = 0;
+	info->single_quote_counter = 0;
+	info->double_quote_counter = 0;
+	info->open_quotes = 0;
+	info->dollar = 0;
+}
+
+// void	pass_on_infos(t_vars *ms)
+// {
+// 	// ms->cmd->command = ms->info->command;
+// 	printf("%d \n", ms->info->pipe);
+// 	printf("%d \n", ms->cmd->pipe);
+// 	ms->cmd->pipe = ms->info->pipe;
+// 	// ms->cmd->op = ms->info->op;
+// 	// ms->cmd->infile = ms->info->infile;
+// 	// ms->cmd->outfile = ms->info->outfile;
+// 	// ms->cmd->errfile = ms->info->errfile;
+// 	printf("HERE\n");
+// 	reset_info_struct(ms->info);
+// }
+
+char	**ft_split_quotes(char *str, t_vars *ms)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		quote;
+	char	**split;
+	char	*temp;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	// if (ms->info->dollar != 0)
+	// 		check_dollar_sign(str, ms);					//is there a dollar sign outside the quotes
+	split = ft_calloc(1, sizeof(*(split)));
+	if (!split)
+		printf("MEM ALLOC ERROR\n");
+	temp = NULL;
+	if (ms->info->double_quote_counter == 1)
+		quote = 34;									//double quotes are the outer quotes or are the only quotes
+	else if (ms->info->single_quote_counter == 1)
+		quote = 39;									//single quotes are the dominant one
+
+	while (str[i] != '\0')
+	{
+		while (str[i] != quote)						//while no quote has been found we split by spaces
+		{
+			if (str[i] == ' ')						//iterate until space is found (create substring & save in char **)
+			{
+				temp = ft_substr(str, j, i);
+				split[k] = temp;
+				printf("split[%d]: ..%s..\n", k, split[k]);
+				free(temp);
+				j = j + i + 1;
+				i--;
+			}
+			i++;
+		}
+		if (str[i] == quote)					//quote has been found, we leave the quotes part in one string
+		{
+			temp = ft_substr(str, j, i);
+			split[k] = temp;
+			printf("split[%d]: ..%s..\n", k, split[k]);
+			k++;
+			free(temp);
+			j = j + i + 1;
+		}
+	i++;
+	}
+	return (split);
+}
+
+int	check_pipes_in_quote(t_vars *ms)
+{
+	int	i;
+	int	flag;
+
+	i = 0;
+	flag = 0;
+	while (ms->cmd_line[i] != '|')
+	{
+		if (ms->cmd_line[i] == 34 || ms->cmd_line[i] == 39)
+			flag++;
+		i++;
+	}
+	return (i);
+}
+
+
+void	print_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr[i] != '\0')
+	{
+		printf("||||||..%s\n", arr[i]);
+		i++;
+	}
+}
+
+char	*handle_input(t_vars *ms)
+{
+	int		pipe_marker;
+	char	*new_cmd_line;
+	char	*command_line;
+	int		quotes;
+
+	new_cmd_line = NULL;
+	command_line = NULL;
+	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');//finds position of pipe, is -1 if no pipe exists
+	quotes = check_quote_validity(ms->cmd_line, ms);//checks for: open quotes, active outside quotes, double quotes and $ sign
+	if (pipe_marker == -1 && quotes == 0)									//no pipe & no quotes
+	{
+		//redirections //dollar sign etc.
+		ms->info->command = ft_split(ms->cmd_line, ' ');
+		return (NULL);
+	}
+	if (pipe_marker != -1 && check_pipe_validity(ms->cmd_line) == 0)		//valid pipe (not within quotes) split by pipe first
+	{
+		//redirections //dollar sign etc.
+		ms->info->pipe = 1;
+		command_line = ft_substr(ms->cmd_line, 0, pipe_marker);
+		while (ms->cmd_line[pipe_marker] == ' ' || ms->cmd_line[pipe_marker] == '|')
+			pipe_marker++;
+		new_cmd_line = ft_strdup(&ms->cmd_line[pipe_marker]);
+		if (quotes == 0)					//no quotes, split by '
+			ms->info->command = ft_split(command_line, ' ');					// split by quotes () //ms->info->command = ft_split_pipe(command_line);
+		else if (quotes == -1)				//open quotes (ERROR)
+		{
+			printf("ERROR: Open quotes\n");
+			free(new_cmd_line);
+			new_cmd_line = NULL;
+			free(command_line);// return (NULL);
+		}
+		else								// valid quotes (any kind saved in info)
+			ms->info->command = ft_split_quotes(command_line, ms);		//quotes
+	}
+	else
+	{
+	if (quotes == 0)			//no quotes, split by '
+		ms->info->command = ft_split(ms->cmd_line, ' ');					// split by quotes () //ms->info->command = ft_split_pipe(command_line);
+	else if (quotes == -1)				//open quotes (ERROR)
+	{
+		printf("ERROR: Open quotes\n");
+		free(new_cmd_line);
+		new_cmd_line = NULL;
+	}
+	else								// valid quotes (any kind saved in info)
+	{
+		printf("%s\n", ms->cmd_line);
+		ms->info->command = ft_split_quotes(ms->cmd_line, ms);		//quotes
+		print_arr(ms->info->command);
+	}
+
+	// }
+	// pass_on_infos(ms);
+	printf("new_cmd >>> %s\n", new_cmd_line);
+	return (new_cmd_line);
+}
+
 /* Creates the simple command table for the execution part. */
 int	create_cmd_table(t_vars *ms)
 {
 	int		i;
-	int		j;
+	// int		j;
 	char	*tmp;
 	char	**split;
 	t_cmd	*new;
 
 	i = 0;
-	j = 0;
+	// j = 0;
 	split = NULL;
-	i = ft_strchr_pos(ms->cmd_line, '|');
-	if (i == -1)
+	tmp = (char *)malloc(sizeof(ms->cmd_line) + 1);
+	if (!tmp)
+		printf("MEM ALLOC ERROR!\n");			//exit function einbauen
+	while (1)									// as long as there is no command to handle anymore
 	{
-		new = ft_lstnew_cmd(ft_split(ms->cmd_line, ' '));
+		tmp = handle_input(ms);					//handle pipes, quotes, dollar signs, split string and put info into struct
+		new = ft_lstnew_cmd(ms->info);
 		ft_lstadd_back_cmd(&ms->cmd, new);
-	}
-	else
-	{
-		while (i != -1)
-		{
-			i = ft_strchr_pos(&ms->cmd_line[j], '|');
-			tmp = ft_substr(ms->cmd_line, j, i);
-			split = ft_split(tmp, ' ');
-			new = ft_lstnew_cmd(split);
-			ft_lstadd_back_cmd(&ms->cmd, new);
-			free(tmp);
-			j = (j + i + 1);										//open issues, deleting white spaces
-		}
+		if (tmp == NULL)
+			break ;
+		free(ms->cmd_line);						//free here?
+		ms->cmd_line = ft_strdup(tmp);
+		printf("ms->cmd_line>> %s\n", ms->cmd_line);
+		free(tmp);
 	}
 	return (0);
 }
+
+	// if (i == -1)										//no pipes
+	// {
+	// 	handle_input(ms, ms->cmd_line, i);
+	// 	new = ft_lstnew_cmd(ft_split(ms->cmd_line, ' '));
+	// 	ft_lstadd_back_cmd(&ms->cmd, new);
+	// }
+	// else
+	// {
+	// 	while (i != -1)									//pipes
+	// 	{
+	// 		handle_input(ms, tmp, i);
+	// 		// i = ft_strchr_pos(&ms->cmd_line[j], '|');
+	// 		// tmp = ft_substr(ms->cmd_line, j, i);
+	// 		// split = ft_split(tmp, ' ');
+	// 		new = ft_lstnew_cmd(split);
+	// 		ft_lstadd_back_cmd(&ms->cmd, new);
+	// 		free(tmp);
+	// 		j = (j + i + 1);
+	// 	}
+	// }
+
+
+
+
+
+
+// char	**split_string(char *str, t_vars *ms, int pipe_marker)
+// {
+// 	char		*split;
+// 	char		*tmp;
+// 	int			i;
+// 	int			j;
+// 	char		**command;
+
+// 	i = 0;
+// 	j = 0;
+// 	if (ms->info->pipe == 0)															//keine pipe
+// 	{
+// 		if (ms->info->double_quote_counter == 0 && ms->info->single_quote_counter == 0)	//keine quotes
+// 			command = ft_split(str, ' ');												//split by spaces (check $ sign)
+// 		else
+// 			command = ft_split_quotes(str, ms);
+// 	}
+// 	// else
+// 	// {
+
+// 	// }
+
+
+// 	// i = ft_strchr_pos(&ms->cmd_line[j], '|');
+// 	// tmp = ft_substr(ms->cmd_line, j, i);
+// 	// split = ft_split(tmp, ' ');
+// 	// j = (j + i + 1);
+
+// 	return (command);
+// }
+
+	// if (pipe_marker != -1 && check_pipe_validity(str) == 0)		//there is a pipe and it is valid
+	// 	ms->info->pipe = 1;
 
 // ______________________________________________________________________________________________________________________________________________________
 
@@ -189,6 +495,7 @@ int	create_cmd_table(t_vars *ms)
 // 			ft_free_string(line);
 // 			break ;
 // 		}
+
 // 		tmp = ft_substr(line, 0, pipe_marker);				//create substring from start of line until pipe
 // 		fill_table(cmd, tmp, pipe_marker);					//put content in list
 // 		ft_free_string(tmp);
@@ -268,6 +575,7 @@ int	create_cmd_table(t_vars *ms)
 // 		printf("\n");
 // }
 
+
 // void	print_lst(t_vars *ms)
 // {
 // 	t_cmd *tmp;
@@ -295,14 +603,7 @@ int	create_cmd_table(t_vars *ms)
 
 
 
-// void	split_line(char *str, char *command, char *args)
-// {
-// 	int	pos;
 
-// 	pos = ft_strchr_pos(str, ' ');
-// 	command = ft_substr(str, 0, pos);
-// 	args = ft_substr(str, pos, ft_strlen(str) - pos);
-// }
 
 // t_cmd	*init_cmd_element(t_cmd *cmd)
 // {
@@ -374,7 +675,7 @@ int	create_cmd_table(t_vars *ms)
 
 
 
-// void	fill_table(t_vars *ms, char *str, int pipe_marker)
+// void	fill_table(t_vars *ms, char *str, int pipe_marker)				//ursprüngliche Version
 // {
 // 	t_cmd	*element;
 // 	char	**args;
