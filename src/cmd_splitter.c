@@ -299,7 +299,8 @@ int	create_cmd_table(t_vars *ms)
 	while (1)									// as long as there is no command to handle anymore
 	{
 		tmp = handle_input(ms);					//handle pipes, quotes, dollar signs, split string and put info into struct
-		new = ft_lstnew_cmd(ms->info);
+		// new = ft_lstnew_cmd(ms->info);
+		new = ft_lstnew_cmd(ms->info->command);
 		ft_lstadd_back_cmd(&ms->cmd, new);
 		if (tmp == NULL)
 			break ;
