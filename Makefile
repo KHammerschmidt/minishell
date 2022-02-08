@@ -19,9 +19,11 @@ SRC_LIST	=	builtin_cd.c			\
 				builtin_init.c 			\
 				builtin_pwd.c			\
 				builtin_unset.c			\
+				cmd_execpath.c			\
 				cmd_execution.c			\
 				cmd_pipes.c				\
 				cmd_quotes.c			\
+				cmd_redirections.c		\
 				cmd_splitter.c			\
 				cmd_splitting.c			\
 				cmd_table_creation.c	\

@@ -54,7 +54,7 @@ int	main(int argc, char **argv, char **envp)
 		print_lst(&ms);
 		free_cmd_struct(&ms);
 		// execute_cmd(&ms);
+		// system("leaks minishell");
 	}
-	// system("leaks minishell");
 	return (0);
 }

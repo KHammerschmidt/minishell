@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+         #
+#    By: khammers <khammers@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 14:46:00 by mortmeie          #+#    #+#              #
-#    Updated: 2022/01/17 15:34:48 by mortmeie         ###   ########.fr        #
+#    Updated: 2022/02/07 17:59:17 by khammers         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,8 @@ SRC_LIST	=	ft_atoi.c			\
 				ft_lstnew.c			\
 				ft_lstsize.c		\
 				ft_get_next_line.c	\
-				ft_free_strarray.c
+				ft_free_strarray.c	\
+				ft_strnjoin.c
 
 SRC_DIR		=	./
 OBJ_DIR		=	./obj/

@@ -1,5 +1,55 @@
 #include "../header/minishell.h"
 
+/* Counts amount of substrings by counting spaces except for when there are quotes, then it counts the part
+in quotes as one substring. */
+int	ft_count_substrings(char *str)
+{
+	int	i;
+	int	counter;
+	int	quote_on;
+	int	quote;
+
+	i = 0;
+	quote= 0;
+	counter = 0;
+	quote_on = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == 34 && quote_on == 0)							//if no quote is active & str[i] matched double quotes
+			quote = 34;
+		if (str[i] == 39 && quote_on == 0)							//if no quote is active & str[i] matched single quotes
+			quote = 39;
+		if (str[i] == ' ' && quote_on == 0)
+			counter++;
+		if (str[i] == quote)
+			quote_on++;
+		if (quote_on == 2)
+			quote_on = 0;
+		i++;
+	}
+	return (counter + 1);
+}
+
+/* Counts the characters of a string for memory allocation, every character
+except for quotes it being counted. */
+int	ft_count_chars(char *str, t_vars *ms)
+{
+	int	i;
+	int	counter;
+
+	i = 0;
+	counter = 0;
+	while (str[i] != '\0')
+	{
+		if (ms->info->double_quote_counter == 1 && str[i] != 34)
+			counter++;
+		if (ms->info->single_quote_counter == 1 && str[i] != 39)
+			counter++;
+		i++;
+	}
+	return (counter);
+}
+
 /* Prints the char **command in every element of the list. */
 void	print_cmd_lst(t_vars *ms)				//meins
 {
@@ -75,7 +125,6 @@ void	pass_on_infos_node(t_info *info, t_cmd *node)
 	node->outfile = info->outfile;
 	node->errfile = info->errfile;
 	reset_info_struct(info);
-	printf("HERE\n");
 }
 
 t_cmd	*ft_lstnew_cmd(t_info *info)				//das hier wieder rein (neue lst_new)
