@@ -74,16 +74,6 @@ void	print_arr(char **arr)
 
 
 
-// char	*copy_str_without_quotes(char *str)				//INFO: $sign has to work
-// {
-// 	char	*tmp;
-// 	char	*argument;
-
-// 	tmp = "\"\\";
-// 	argument = ft_strtrim(str, tmp);					//if no command -> access wirft command not found aus!
-// 	return (argument);
-// }
-
 
 
 

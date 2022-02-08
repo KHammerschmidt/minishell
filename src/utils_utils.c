@@ -46,7 +46,6 @@ void	print_lst(t_vars *ms)
 	while (current && current->command != NULL)
 	{
 		i = 0;
-		printf("New command\n");						// Mio: For testing purposes only.
 		while (current->command[i] != NULL)
 		{
 			printf("...%s...\n", current->command[i]);

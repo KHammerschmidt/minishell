@@ -1,35 +1,38 @@
 #include "../header/minishell.h"
 
+/* Compares the number of double and single quotes to find out which one are the
+active ones, e.g. surrounding the other ones. Thereby the number of both quote types
+is compared before the location of the quotes is compared. The unactive quote type is
+set to 0 again while the active quote type is set to 1. */
 int	quote_infos(t_vars *ms, char *str)
 {
 	if (ms->info->single_quote_counter == 0 && ms->info->double_quote_counter != 0)			//only double quotes in string
 	{
-		ms->info->double_quote_counter = 1;
-		printf("ONLY DOUBLE QUOTES\n");
+		ms->info->double_quote_counter = 1;	// printf("ONLY DOUBLE QUOTES\n");
 		return (1);
 	}
 	else if (ms->info->double_quote_counter == 0 && ms->info->single_quote_counter != 0)	//only single quotes in string
 	{
-		ms->info->single_quote_counter = 1;
-		printf("ONLY SINGLE QUOTES\n");
+		ms->info->single_quote_counter = 1;	// printf("ONLY SINGLE QUOTES\n");
 		return (1);
 	}
 	if (ft_strchr_pos(str, 34) < ft_strchr_pos(str, 39))	//pos double quotes < pos single quotes, double quotes are surrounding
 	{
 		ms->info->double_quote_counter = 1;					// double quotes are activated (can be trimmed afterwards)
 		ms->info->single_quote_counter = 0;					//single quotes are deactivated
-		printf("double quotes are outer quotes!\n");
 	}
 	else if (ft_strchr_pos(str, 34) > ft_strchr_pos(str, 39))	//pos single quotes < pos double quotes, single quotes are surrounding
 	{
 		ms->info->single_quote_counter = 1;					//single quotes activated (can be trimmed afterwards)
 		ms->info->double_quote_counter = 0;					//double quotes deactivated
-		printf("single quotes are outer quotes!\n");
 	}
-	printf("HERE 2\n");
 	return (1);
 }
 
+/* Counts the number of quotes in the input string and counts the number of dollar signs.
+If there is no even number of the same quote types it means that there are open quotes
+and therefore an error should occur. If there are no quotes 0 is returned, otherwise
+quote_infos() is called and returned. */
 int	check_quote_validity(char *str, t_vars *ms)
 {
 	int	i;
@@ -45,17 +48,9 @@ int	check_quote_validity(char *str, t_vars *ms)
 			ms->info->dollar++;
 		i++;
 	}
-	printf("double:[%d]   single[%d]\n", ms->info->double_quote_counter, ms->info->single_quote_counter);
-	if (ms->info->double_quote_counter == 0 && ms->info->single_quote_counter == 0)						//no quotes
-	{
-		printf("no quotes!\n");
+	if (ms->info->double_quote_counter == 0 && ms->info->single_quote_counter == 0)					//no quotes
 		return (0);
-	}
-	if ((ms->info->double_quote_counter % 2) != 0 || (ms->info->single_quote_counter % 2) != 0)			//open quotes
-	{
-		printf("open quotes!\n");
+	if ((ms->info->double_quote_counter % 2) != 0 || (ms->info->single_quote_counter % 2) != 0)		//open quotes
 		return (-1);
-	}
 	return (quote_infos(ms, str));
 }
-

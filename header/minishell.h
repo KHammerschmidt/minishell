@@ -59,7 +59,10 @@ typedef struct s_info
 typedef struct s_cmd
 {
 	char			**command;
+	// char			*execpath;				//we need the execpath of the command if its a command
 	char			*outfile;
+	// int				fd_out;
+	// int				fd_in;
 	char			*infile;
 	char			*errfile;
 	int				op;
@@ -135,12 +138,15 @@ void	signal_handler(int signum);
 int		create_cmd_table(t_vars *ms);
 char	*handle_input(t_vars *ms);
 int		check_pipes_in_quote(t_vars *ms);
-char	**ft_split_quotes(char *str, t_vars *ms);
+char	**ft_split_quotes(char *str);
 void	reset_info_struct(t_info *info);
 int		check_quote_validity(char *str, t_vars *ms);
 int		quote_infos(t_vars *ms, char *str);
 int		check_pipe_validity(char *str);
 int		ft_strchr_pos(const char *s, int c);
+char	*cut_quotes(char *str);
+int	ft_count_substrings(char *str);
+int		ft_count_chars(char *str, t_vars *ms);
 
 t_cmd	*init_cmd_lst(t_vars *ms, int size);
 void	reset_info_struct(t_info *info);
@@ -169,4 +175,13 @@ void	ft_free_arr(char **arr);
 int		compare_str(char *s1, char *s2);
 void	free_cmd_struct(t_vars *ms);
 
+
+/* Redirections */
+void 	ft_cut_infile_redirections(char **string, t_vars *ms);
+void 	ft_cut_outfile_redirections(char **string, t_vars *ms);
+void 	infile_redirection(char **string, t_vars *ms);
+void 	outfile_redirection(char **string, t_vars *ms);
+void	check_redirections(char **string, int pipe_marker, t_vars *ms);
+
+void	ft_get_exec_path(t_vars *ms);
 #endif

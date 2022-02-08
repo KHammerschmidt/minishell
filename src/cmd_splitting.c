@@ -1,53 +1,118 @@
 #include "../header/minishell.h"
 
-char	**ft_split_quotes(char *str, t_vars *ms)
+/* Function returns the end of the substring that should be created. */
+int	ft_get_stop(char *str, int start)
+{
+	int	stop;
+	int	within_quotes;
+	int	quote;
+
+	stop = start;															//continuing from the current postion in str
+	quote = 0;
+	within_quotes = 0;
+	while (str[stop] != ' ' && str[stop] != '\0' && within_quotes == 0) 	//loop until next space if there is no quote yet
+	{
+		if (str[stop] == 34 && within_quotes == 0)							//if no quote is active & str[i] matched double quotes
+			quote = 34;
+		if (str[stop] == 39 && within_quotes == 0)							//if no quote is active & str[i] matched single quotes
+			quote = 39;
+		if (str[stop] == quote)												//if there is a quote increase quote counter and loop over the found quote
+			within_quotes++;
+		stop++;
+	}
+	while (within_quotes == 0 && str[stop] != ' ' && str[stop] != '\0')		//loop through str until next space
+		stop++;
+	while (within_quotes != 0 && str[stop] != '\0')							//while other matching quote has not been found loop through string
+	{
+		if (str[stop] == quote)												//if quote has been found, reset quote counter to 0
+			within_quotes = 0;
+		stop++;
+	}
+	while ((str[stop] != ' ' || str[stop] == quote) && str[stop] != '\0')	//while there is no space or quote loop through string
+		stop++;
+	return (stop);
+}
+
+/* Functions returns the start of the substring that is to be created. */
+int	ft_get_start(char *str, int stop)
+{
+	int	start;
+
+	start = stop;
+	while (str[start] == ' ' && str[start] != '\0')							//loop over spaces at the beginning of str
+		start++;
+	return (start);
+}
+
+/* Cuts the quotes out of the string. */
+char	*cut_quotes(char *str)
 {
 	int		i;
-	int		j;
-	int		k;
-	int		quote;
-	char	**split;
-	char	*temp;
+	int		quote_on;
+	int		quote_type;
+	char	*line;
 
 	i = 0;
-	j = 0;
-	k = 0;
-	// if (ms->info->dollar != 0)
-	// 		check_dollar_sign(str, ms);					//is there a dollar sign outside the quotes
-	split = ft_calloc(1, sizeof(*(split)));
-	if (!split)
-		printf("MEM ALLOC ERROR\n");
-	temp = NULL;
-	if (ms->info->double_quote_counter == 1)
-		quote = 34;									//double quotes are the outer quotes or are the only quotes
-	else if (ms->info->single_quote_counter == 1)
-		quote = 39;									//single quotes are the dominant one
-
+	quote_type = 0;
+	quote_on = 0;
+	line = NULL;
 	while (str[i] != '\0')
 	{
-		while (str[i] != quote)						//while no quote has been found we split by spaces
+		if (str[i] == 34 && quote_on == 0)		//if no quote is active & str[i] matched double quotes
+			quote_type = 34;
+		if (str[i] == 39 && quote_on == 0)		//if no quote is active & str[i] matched single quotes
+			quote_type = 39;
+		if (str[i] == quote_type)				// check if quotes are active (quote_on > 0) increase quote_on to active quotes
 		{
-			if (str[i] == ' ')						//iterate until space is found (create substring & save in char **)
-			{
-				temp = ft_substr(str, j, i);
-				split[k] = temp;
-				printf("split[%d]: ..%s..\n", k, split[k]);
-				free(temp);
-				j = j + i + 1;
-				i--;
-			}
+			if (quote_on == 1)
+				quote_on = -1;
+			quote_on++;
 			i++;
 		}
-		if (str[i] == quote)					//quote has been found, we leave the quotes part in one string
-		{
-			temp = ft_substr(str, j, i);
-			split[k] = temp;
-			printf("split[%d]: ..%s..\n", k, split[k]);
-			k++;
-			free(temp);
-			j = j + i + 1;
-		}
-	i++;
+		line = ft_strnjoin(line, str[i++], 1);	//join the new character to line while overlooping the active quotes
 	}
-	return (split);
+	return (line);
+}
+
+char	*get_substring(int *start, int *stop, char *str)
+{
+	char	*tmp;
+
+	tmp = NULL;
+	*start = ft_get_start(str, *stop);
+	*stop = ft_get_stop(str, *start);
+	if (*start == *stop)
+		return (NULL);
+	tmp = ft_substr(str, *start, *stop - *start);
+	return (tmp);
+}
+
+/* Split the input string by its spaces and groups together input in quotes. */
+char	**ft_split_quotes(char *str)
+{
+	int		start;
+	int		stop;
+	char	**string;
+	char	*tmp;
+	int		k;
+
+	stop = 0;
+	start = 0;
+	k = ft_count_substrings(str);										//count number of substrings for memory allocation
+	string = (char **)ft_calloc(sizeof(char *), k + 1);
+	if (string == NULL)
+		printf("MEM ALLOC ERROR\n");//create exit function
+	k = 0;
+	while (str[start] != '\0')
+	{
+		tmp = get_substring(&start, &stop, str);						//get start, stop of the temporary string
+		if (tmp == NULL) //start == stop || tmp == NULL)
+			break ;
+		if (ft_strchr(tmp, 34) != NULL || ft_strchr(tmp, 39) != NULL)	//if quotes are found in the string
+			string[k++] = cut_quotes(tmp);								//split by quotes otherwise
+		else
+			string[k++] = tmp;											//tmp has been splitted by spaces and becomes the command
+	}
+	string[k] = 0;
+	return (string);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/14 14:45:50 by mortmeie          #+#    #+#             */
-/*   Updated: 2021/11/19 11:30:29 by mortmeie         ###   ########.fr       */
+/*   Updated: 2022/02/07 17:59:09 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ int		ft_tolower(int c);
 int		ft_toupper(int c);
 char	*get_next_line(int fd);
 void	ft_free_strarray(char **arr);
+char	*ft_strnjoin(char *s1, char s2, ssize_t bytes);
 
 #endif
