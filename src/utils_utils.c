@@ -48,9 +48,11 @@ void	print_lst(t_vars *ms)
 		i = 0;
 		while (current->command[i] != NULL)
 		{
-			printf("...%s...\n", current->command[i]);
+			// printf("...%s...\n", current->command[i]);
+			printf("command...%s... ", current->command[i]);
 			i++;
 		}
+		printf("pipe: %d     infile: %s      outfile: %s\n", current->pipe, current->infile, current->outfile);
 		current = current->next;
 	}
 }
@@ -60,7 +62,6 @@ void	free_cmd_struct(t_vars *ms)
 	t_cmd	*current;
 
 	current = NULL;
-
 	while (current != NULL)								// Mio: Delete command table after each execution.
 	{
 		ft_free_strarray(current->command);				// Mio: Replace by function to empty and free the complete list

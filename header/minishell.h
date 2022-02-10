@@ -66,7 +66,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*errfile;
 	int				op;
-	int				pipe;
+	int				pipe;					//pipe_in && pipe_out
 	int				fd_out;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -164,7 +164,6 @@ void	ft_free_string(char *str);
 /* Printing utils */
 void	print_lst(t_vars *ms);
 void	print_arr(char **arr);
-void	print_cmd_lst(t_vars *ms);
 // void	save_commands(t_vars *ms);
 // int		cmd_validity(char *str);
 
@@ -182,6 +181,8 @@ void 	ft_cut_outfile_redirections(char **string, t_vars *ms);
 void 	infile_redirection(char **string, t_vars *ms);
 void 	outfile_redirection(char **string, t_vars *ms);
 void	check_redirections(char **string, int pipe_marker, t_vars *ms);
+void	check_redirections(char **string, int pipe_marker, t_vars *ms);
 
 void	ft_get_exec_path(t_vars *ms);
+char	*copy_str_without_spaces(char *str);
 #endif

@@ -1,5 +1,33 @@
 #include "../header/minishell.h"
 
+//heredocs werden vor allem anderen ausgeführt, nicht nur pro command sondern in der ganzen input zeile
+//redirections for pipes
+//die letzte redirection zählt
+
+// '>>'
+// Appending Redirected Output
+// Redirection of output in this fashion causes the file whose name results from the expansion of word to be opened for appending on file descriptor n,
+// or the standard output (file descriptor 1) if n is not specified. If the file does not exist it is created.
+// The general format for appending output is:
+// [n]>>word
+
+
+// '<<'
+//3.6.6 Here Documents
+// This type of redirection instructs the shell to read input from the current source until a line containing only word (with no trailing blanks) i
+// s seen. All of the lines read up to that point are then used as the standard input (or file descriptor n if n is specified) for a command.
+// The format of here-documents is:
+// [n]<<[-]word
+//         here-document
+// delimiter
+// No parameter and variable expansion, command substitution, arithmetic expansion, or filename expansion is performed on word. If any part of word is
+// quoted, the delimiter is the result of quote removal on word, and the lines in the here-document are not expanded. If word is unquoted, all lines
+// of the here-document are subjected to parameter expansion, command substitution, and arithmetic expansion, the character sequence \newline is ignored,
+// and ‘\’ must be used to quote the characters ‘\’, ‘$’, and ‘`’.
+// If the redirection operator is ‘<<-’, then all leading tab characters are stripped from input lines and the line containing delimiter. This allows
+// here-documents within shell scripts to be indented in a natural fashion.
+
+
 /* Cuts out the redirections associated with the infile from the cmd_line. */
 void	ft_cut_infile_redirections(char **string, t_vars *ms)
 {
@@ -25,10 +53,8 @@ void	ft_cut_infile_redirections(char **string, t_vars *ms)
 	while ((*string)[i] == ' ' && (*string)[i] != '\0')
 		i++;
 	while ((*string)[i] != '\0')
-		tmp = ft_strnjoin(tmp, *string[i++], 1);
-	free(*string);
-	*string = NULL;
-	*string = tmp;
+		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
+	free(*string);	*string = NULL; *string = tmp;			//Kathi: LEAKS necessary?
 	ms->cmd_line = tmp;
 }
 
@@ -41,20 +67,18 @@ void	infile_redirection(char **string, t_vars *ms)
 
 	k = 0;
 	j = ft_strchr_pos(*string, '<');
-	while ((*string[j] == '<' || *string[j] == ' ') && *string[j] != '\0')
+	while (((*string)[j] == '<' || (*string)[j] == ' ') && (*string)[j] != '\0')
 		j++;
 	k = j;
 	while ((*string)[k] != ' ' && (*string)[k] != '\0')
 		k++;
 	tmp = ft_substr(*string, j, k - j);
 	ms->info->infile = tmp;
-	printf("infile: ..%s..\n", ms->info->infile);
-	free(tmp);
 	ft_cut_infile_redirections(string, ms);
 }
 
 /* Cuts out the redirections associated with the outfile from the cmd_line. */
-void	ft_cut_outfile_redirections(char **string, t_vars *ms)
+void	ft_cut_outfile_redirections(char **string, t_vars *ms)				//he isn't allowed to jump in here!
 {
 	char	*tmp;
 	int		i;
@@ -63,22 +87,23 @@ void	ft_cut_outfile_redirections(char **string, t_vars *ms)
 	i = 0;
 	p = 0;
 	tmp = NULL;
-	while (*string[i] != '>')
-		tmp = ft_strnjoin(tmp, *string[i++], 1);
-	if (*string[i] == '>')
+	while ((*string)[i] != '>')
+	{
+		tmp = ft_strnjoin(tmp, (*string)[i], 1);
 		i++;
-	while (*string[i] == ' ' && *string[i] != '\0')
+	}
+	while ((*string)[i] == '>')
+		i++;
+	while ((*string)[i] == ' ' && (*string)[i] != '\0')
 		i++;
 	i++;
-	while (*string[i] != ' ' && *string[i] != '\0')
+	while ((*string)[i] != ' ' && (*string)[i] != '\0')
 		i++;
-	while (*string[i] == ' ' && *string[i] != '\0')
+	while ((*string)[i] == ' ' && (*string)[i] != '\0')
 		i++;
-	while (*string[i] != '\0')
-		tmp = ft_strnjoin(tmp, *string[i++], 1);
-	free(*string);
-	*string = NULL;
-	*string = tmp;
+	while ((*string)[i] != '\0')
+		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
+	free(*string); *string = NULL; *string = tmp;					//Kathi: LEAKS necessary
 	ms->cmd_line = tmp;
 }
 
@@ -90,171 +115,41 @@ void outfile_redirection(char **string, t_vars *ms)
 	char	*tmp;
 
 	k = 0;
-	j = ft_strchr_pos(*string, '>');
-	while ((*string[j] == '>' || *string[j] == ' ') && *string[j] != '\0')
+	j = ft_strchr_pos((*string), '>');
+	while (((*string)[j] == '>' || (*string)[j] == ' ') && (*string)[j] != '\0')
 		j++;
 	k = j;
-	while (*string[k] != ' ' && *string[k] != '\0')
+	while ((*string)[k] != ' ' && (*string)[k] != '\0')
 		k++;
-	tmp = ft_substr(*string, j, k - j);
+	tmp = ft_substr((*string), j, k - j);
 	ms->info->outfile = tmp;
-	free(tmp);
-	printf("outfile: ..%s..\n", ms->info->outfile);
 	ft_cut_outfile_redirections(string, ms);
 }
 
-
-
-void	check_redirections(char **string, int pipe_marker, t_vars *ms)		//*string = ms->cmd_line;
+/* Funktion compares the position of a redirection, first '<' then '>' and tests
+if '<<' or '>>' are called. It then tests further if the pipe comes before				//necessary?
+the redirection. */
+void	check_redirections(char **string, int pipe_marker, t_vars *ms)
 {
-	int		pos;
+	int		redirection_in;
+	int		redirection_out;
 
-	printf("*string: %s\n", *string);
-	pos = ft_strchr_pos(*string, '<');													//returns -1 if no redirection has been found or the position of the redirection
-	while (pos != -1 && (pos <= ft_strchr_pos(*string, '|') || pipe_marker == -1))		// check if redirection is before the next pipe
+	redirection_in = ft_strchr_pos((*string), '<');
+	if (redirection_in != -1)
 	{
-		if (*string[pos] == '<' && *string[pos + 1] == '<')						//check for '<<'
+		if ((*string)[redirection_in] == '<' && (*string)[redirection_in + 1] == '<')		//check for '<<'
 			printf("READ INPUT FROM THE CURRENT SOURCE\n");
-		else																				//single '<'
+		else																			//single '<'
 			infile_redirection(string, ms);
-		pos = ft_strchr_pos(*string, '<');												//check for multiple redirections
 	}
-	pos = ft_strchr_pos(*string, '>');
-	while (pos != -1 && (pos <= ft_strchr_pos(*string, '|') || pipe_marker == -1))		// check if redirection is before the next pipe
+	redirection_out = ft_strchr_pos(*string, '>');
+	if (redirection_out != -1)
 	{
-		if (*string[pos] == '>' && *string[pos + 1] == '>')
+		if ((*string)[redirection_out] == '>' && (*string)[redirection_out + 1] == '>')
 			printf("REDIRECTS OUTPUT WITH APPEND MODE\n");
 		else
 			outfile_redirection(string, ms);
-		pos = ft_strchr_pos(*string, '>');
 	}
+	if (ft_strchr_pos(*string, '<') != -1 && ft_strchr_pos(*string, '>') != -1)			// in case there are multiple redirections in there (how are they overwriting each other, but calling the here_doc for example?)
+		check_redirections((&*string), pipe_marker, ms);
 }
-
-
-//---------------------------------------------------------------------------------------------------------------------------------------
-
-// /* Cuts out the redirections associated with the infile from the cmd_line. */
-// void	ft_cut_infile_redirections(t_vars *ms)
-// {
-// 	char	*tmp;
-// 	int		i;
-// 	int		p;
-
-// 	i = 0;
-// 	p = 0;
-// 	tmp = NULL;
-// 	while (ms->cmd_line[i] != '<')
-// 		tmp = ft_strnjoin(tmp, ms->cmd_line[i++], 1);
-// 	if (ms->cmd_line[i] == '<')
-// 		i++;
-// 	while (ms->cmd_line[i] == ' ' && ms->cmd_line[i] != '\0')
-// 		i++;
-// 	i++;
-// 	while (ms->cmd_line[i] != ' ' && ms->cmd_line[i] != '\0')
-// 		i++;
-// 	while (ms->cmd_line[i] == ' ' && ms->cmd_line[i] != '\0')
-// 		i++;
-// 	while (ms->cmd_line[i] != '\0')
-// 		tmp = ft_strnjoin(tmp, ms->cmd_line[i++], 1);
-// 	free(ms->cmd_line);
-// 	ms->cmd_line = NULL;
-// 	ms->cmd_line = tmp;
-// }
-
-// /* Saves the infile in the t_info struct. */
-// void	infile_redirection(t_vars *ms)
-// {
-// 	int		k;
-// 	int		j;
-// 	char	*tmp;
-
-// 	k = 0;
-// 	j = ft_strchr_pos(ms->cmd_line, '<');
-// 	while ((ms->cmd_line[j] == '<' || ms->cmd_line[j] == ' ')
-// 		&& ms->cmd_line[j] != '\0')
-// 		j++;
-// 	k = j;
-// 	while (ms->cmd_line[k] != ' ' && ms->cmd_line[k] != '\0')
-// 		k++;
-// 	tmp = ft_substr(ms->cmd_line, j, k - j);
-// 	ms->info->infile = tmp;
-// 	// printf("infile: ..%s..\n", ms->info->infile);
-// 	free(tmp);
-// 	ft_cut_infile_redirections(ms);
-// }
-
-// /* Cuts out the redirections associated with the outfile from the cmd_line. */
-// void	ft_cut_outfile_redirections(t_vars *ms)
-// {
-// 	char	*tmp;
-// 	int		i;
-// 	int		p;
-
-// 	i = 0;
-// 	p = 0;
-// 	tmp = NULL;
-// 	while (ms->cmd_line[i] != '>')
-// 		tmp = ft_strnjoin(tmp, ms->cmd_line[i++], 1);
-// 	if (ms->cmd_line[i] == '>')
-// 		i++;
-// 	while (ms->cmd_line[i] == ' ' && ms->cmd_line[i] != '\0')
-// 		i++;
-// 	i++;
-// 	while (ms->cmd_line[i] != ' ' && ms->cmd_line[i] != '\0')
-// 		i++;
-// 	while (ms->cmd_line[i] == ' ' && ms->cmd_line[i] != '\0')
-// 		i++;
-// 	while (ms->cmd_line[i] != '\0')
-// 		tmp = ft_strnjoin(tmp, ms->cmd_line[i++], 1);
-// 	free(ms->cmd_line);
-// 	ms->cmd_line = NULL;
-// 	ms->cmd_line = tmp;
-// }
-
-// /* Saves the outfile in the t_info struct. */
-// void outfile_redirection(t_vars *ms)
-// {
-// 	int	k;
-// 	int	j;
-// 	char *tmp;
-
-// 	k = 0;
-// 	j = ft_strchr_pos(ms->cmd_line, '>');
-// 	while ((ms->cmd_line[j] == '>' || ms->cmd_line[j] == ' ') && ms->cmd_line[j] != '\0')
-// 		j++;
-// 	k = j;
-// 	while (ms->cmd_line[k] != ' ' && ms->cmd_line[k] != '\0')
-// 		k++;
-// 	tmp = ft_substr(ms->cmd_line, j, k - j);
-// 	ms->info->outfile = tmp;
-// 	free(tmp);
-// 	// printf("outfile: ..%s..\n", ms->info->outfile);
-// 	ft_cut_outfile_redirections(ms);
-// }
-
-/* Searches for redirection symbols in the part of the *string and fills the relevant
-content into the info struct. If there are multiple redirections in the part of the
-input, they are being overwritten and only the last one is saved in the struct.*/
-// void	check_redirections(t_vars *ms, int pipe_marker)
-// {
-// 	int		pos;
-
-// 	pos = ft_strchr_pos(ms->cmd_line, '<');													//returns -1 if no redirection has been found or the position of the redirection
-// 	while (pos != -1 && (pos <= ft_strchr_pos(ms->cmd_line, '|') || pipe_marker == -1))		// check if redirection is before the next pipe
-// 	{
-// 		if (ms->cmd_line[pos] == '<' && ms->cmd_line[pos + 1] == '<')						//check for '<<'
-// 			printf("READ INPUT FROM THE CURRENT SOURCE\n");
-// 		else																				//single '<'
-// 			infile_redirection(ms);
-// 		pos = ft_strchr_pos(ms->cmd_line, '<');												//check for multiple redirections
-// 	}
-// 	pos = ft_strchr_pos(ms->cmd_line, '>');
-// 	while (pos != -1 && (pos <= ft_strchr_pos(ms->cmd_line, '|') || pipe_marker == -1))		// check if redirection is before the next pipe
-// 	{
-// 		if (ms->cmd_line[pos] == '>' && ms->cmd_line[pos + 1] == '>')
-// 			printf("REDIRECTS OUTPUT WITH APPEND MODE\n");
-// 		else
-// 			outfile_redirection(ms);
-// 		pos = ft_strchr_pos(ms->cmd_line, '>');
-// 	}
-// }

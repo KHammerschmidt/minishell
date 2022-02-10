@@ -1,7 +1,7 @@
 #include "../header/minishell.h"
 
-/* Counts amount of substrings by counting spaces except for when there are quotes, then it counts the part
-in quotes as one substring. */
+/* Counts amount of substrings by counting spaces except for when there are
+quotes, then it counts the part in quotes as one substring. */
 int	ft_count_substrings(char *str)
 {
 	int	i;
@@ -10,7 +10,7 @@ int	ft_count_substrings(char *str)
 	int	quote;
 
 	i = 0;
-	quote= 0;
+	quote = 0;
 	counter = 0;
 	quote_on = 0;
 	while (str[i] != '\0')
@@ -49,45 +49,6 @@ int	ft_count_chars(char *str, t_vars *ms)
 	}
 	return (counter);
 }
-
-/* Prints the char **command in every element of the list. */
-void	print_cmd_lst(t_vars *ms)				//meins
-{
-	t_cmd *current;
-
-	current = ms->cmd;
-	int	i = 0;
-	while (current != NULL)
-	{
-		i = 0;
-		printf("New command\n");						// Mio: For testing purposes only.
-		while (current->command[i] != NULL)
-		{
-			printf("...%s...\n", current->command[i]);
-			i++;
-		}
-		current = current->next;
-	}
-}
-
-// /* Initialises the variables of t_cmd, allocates memory for the
-// **command variable as the size of size + 1. */
-// void	init_cmd(t_cmd *node, int size, char **arr)
-// {
-// 	node->op = 0;
-// 	node->pipe = 0;
-// 	node->command = NULL;
-// 	// node->command = ft_calloc(sizeof(*(node->command)), size + 1);
-// 	// if (!node->command)
-// 	// 	return ;										//Fehler einbauen!
-// 	node->command = arr;
-// 	node->outfile = NULL;
-// 	node->infile = NULL;
-// 	node->errfile = NULL;
-// 	node->next = NULL;
-// 	if (!size)
-// 		printf("\n");
-// }
 
 /* Returns last node in a list. */
 t_cmd	*ft_lstlast_cmd(t_cmd *lst)
@@ -152,8 +113,15 @@ t_cmd	*ft_lstnew_cmd(t_info *info)				//das hier wieder rein (neue lst_new)
 
 
 
+char	*copy_str_without_quotes(char *str)			 //INFO: $sign has to work
+{
+	char	*tmp;
+	char	*argument;
 
-
+	tmp = "\"\\";
+	argument = ft_strtrim(str, tmp);				//if no command -> access wirft command not found aus!
+	return (argument);
+}
 
 
 
@@ -198,6 +166,25 @@ ms->cmd. */
 
 
 
+
+// /* Initialises the variables of t_cmd, allocates memory for the
+// **command variable as the size of size + 1. */
+// void	init_cmd(t_cmd *node, int size, char **arr)
+// {
+// 	node->op = 0;
+// 	node->pipe = 0;
+// 	node->command = NULL;
+// 	// node->command = ft_calloc(sizeof(*(node->command)), size + 1);
+// 	// if (!node->command)
+// 	// 	return ;										//Fehler einbauen!
+// 	node->command = arr;
+// 	node->outfile = NULL;
+// 	node->infile = NULL;
+// 	node->errfile = NULL;
+// 	node->next = NULL;
+// 	if (!size)
+// 		printf("\n");
+// }
 
 
 

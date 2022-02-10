@@ -52,20 +52,6 @@ void	reset_info_struct(t_info *info)
 
 
 
-void	print_arr(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i] != '\0')
-	{
-		printf("||||||..%s\n", arr[i]);
-		i++;
-	}
-}
-
-
-
 
 
 
