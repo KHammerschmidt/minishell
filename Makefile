@@ -25,7 +25,7 @@ SRC_LIST	=	builtin_cd.c			\
 				cmd_quotes.c			\
 				cmd_redirections.c		\
 				cmd_splitter.c			\
-				cmd_splitting.c			\
+				cmd_splitting_quotes.c	\
 				cmd_table_creation.c	\
 				cmd_utils.c 			\
 				env_get_env_var.c		\

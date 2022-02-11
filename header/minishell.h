@@ -137,10 +137,11 @@ void	signal_handler(int signum);
 /* input parsing, command table development */
 int		create_cmd_table(t_vars *ms);
 char	*handle_input(t_vars *ms);
+int		check_quote_status(char *str);
+
 int		check_pipes_in_quote(t_vars *ms);
 char	**ft_split_quotes(char *str);
 void	reset_info_struct(t_info *info);
-int		check_quote_validity(char *str, t_vars *ms);
 int		quote_infos(t_vars *ms, char *str);
 int		check_pipe_validity(char *str);
 int		ft_strchr_pos(const char *s, int c);

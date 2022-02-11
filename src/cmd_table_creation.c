@@ -52,6 +52,7 @@ char *handle_quotes(int quotes, t_vars *ms, char *command_line, char *new_cmd_li
 	{
 		ft_free_string(new_cmd_line);
 		ft_free_string(command_line);						// free(new_cmd_line); 	// new_cmd_line = NULL; // free(command_line); // command_line = NULL;
+		printf("OPEN QUOTE!\n");
 	}
 	else													//any types of quotes
 		ms->info->command = ft_split_quotes(ms->cmd_line);
@@ -68,7 +69,6 @@ char	*substring_pipe(t_vars *ms, char **command_line, int pipe_marker)
 	while (ms->cmd_line[pipe_marker] == ' ' || ms->cmd_line[pipe_marker] == '|')
 		pipe_marker++;
 	new_cmd_line = ft_substr(ms->cmd_line, pipe_marker, ft_strlen(ms->cmd_line) - pipe_marker);
-	// new_cmd_line = ft_strdup(&ms->cmd_line[pipe_marker]);
 	return (new_cmd_line);
 }
 
@@ -81,17 +81,8 @@ char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *command_line
 
 	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');
 	pipe_redirections_index = pos_pipe_redirection(&ms->cmd_line, pipe_marker);			//tests if pipe comes before redirection
-	if (pipe_redirections_index != 1)													//redirection comes before any redirection
-	{
-		check_redirections(&ms->cmd_line, pipe_marker, ms);
-		new_cmd_line = substring_pipe(ms, &command_line, pipe_marker);
-		printf("new_cmd_line: %s\n", new_cmd_line);
-	}
-	else																				//pipe come before pipes //ERROR!!!
-	{
-		new_cmd_line = substring_pipe(ms, &command_line, pipe_marker);
-		check_redirections(&command_line, pipe_marker, ms);
-	}
+	new_cmd_line = substring_pipe(ms, &command_line, pipe_marker);
+	check_redirections(&command_line, pipe_marker, ms);
 	ms->info->command = ft_split(command_line, ' ');
 	if (ms->info->double_quote_counter != 0 || ms->info->single_quote_counter != 0)
 		return (handle_quotes_pipe(quotes, ms, command_line, new_cmd_line));
@@ -113,7 +104,7 @@ char	*handle_input(t_vars *ms)
 	new_cmd_line = NULL;
 	//expand dollar sign (here) when they are in double quotes or without quotes
 	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');							//finds position of pipe, is -1 if no pipe exists
-	quotes = check_quote_validity(ms->cmd_line, ms);						//checks for: no quotes (== 0), open quotes (== -1), active outside quotes and $ sign
+	quotes = check_quote_status(ms->cmd_line);						//checks for: no quotes (== 0), open quotes (== -1), active outside quotes and $ sign
 	if (pipe_marker == -1 && quotes == 0)									//no pipe & no quotes
 	{
 		check_redirections(&ms->cmd_line, pipe_marker, ms);					//cuts out the redirections and saves them in t_info
@@ -153,3 +144,34 @@ int	create_cmd_table(t_vars *ms)
 	}
 	return (0);
 }
+
+
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//OLD
+// char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *command_line)
+// {
+// 	int	pipe_marker;
+// 	int	pipe_redirections_index;
+
+// 	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');
+// 	pipe_redirections_index = pos_pipe_redirection(&ms->cmd_line, pipe_marker);			//tests if pipe comes before redirection
+// 	// if (pipe_redirections_index != 1)													//redirection comes before any redirection
+// 	// {
+// 	// 	check_redirections(&ms->cmd_line, pipe_marker, ms);
+// 	// 	new_cmd_line = substring_pipe(ms, &command_line, pipe_marker);
+// 	// 	printf("new_cmd_line: %s\n", new_cmd_line);
+// 	// }
+// 	// else																				//pipe come before pipes //ERROR!!!
+// 	// {
+// 	new_cmd_line = substring_pipe(ms, &command_line, pipe_marker);
+// 	check_redirections(&command_line, pipe_marker, ms);
+// 	// }
+// 	ms->info->command = ft_split(command_line, ' ');
+// 	if (ms->info->double_quote_counter != 0 || ms->info->single_quote_counter != 0)
+// 		return (handle_quotes_pipe(quotes, ms, command_line, new_cmd_line));
+// 	return (new_cmd_line);
+// }

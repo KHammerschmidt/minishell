@@ -55,7 +55,8 @@ char	*cut_quotes(char *str)
 	i = 0;
 	quote_type = 0;
 	quote_on = 0;
-	line = NULL;
+	line = ft_strdup("");
+	printf("str: %s\n", str);
 	while (str[i] != '\0')
 	{
 		if (str[i] == 34 && quote_on == 0)		//if no quote is active & str[i] matched double quotes
@@ -69,8 +70,14 @@ char	*cut_quotes(char *str)
 			quote_on++;
 			i++;
 		}
-		line = ft_strnjoin(line, str[i++], 1);	//join the new character to line while overlooping the active quotes
+		// // line = ft_strnjoin(line, str[i++], 1);	//join the new character to line while overlooping the active quotes
+		char *tmp2;
+		tmp2 = ft_strdup(&str[i]);
+		tmp2[1] = '\0';
+		line = ft_strjoin(line,  tmp2);
+		i++;
 	}
+	printf("line: %s\n", line);
 	return (line);
 }
 
@@ -99,19 +106,34 @@ char	**ft_split_quotes(char *str)
 	stop = 0;
 	start = 0;
 	k = ft_count_substrings(str);										//count number of substrings for memory allocation
+	// split = (char **)ft_calloc(sizeof(char *));
 	string = (char **)ft_calloc(sizeof(char *), k + 1);
+	printf("k: %d\n", k);
+	// string = (char **)ft_calloc((sizeof(char *)), ft_strlen(str) + 1);
 	if (string == NULL)
 		printf("MEM ALLOC ERROR\n");//create exit function
 	k = 0;
+	// string = NULL;
 	while (str[start] != '\0')
 	{
 		tmp = get_substring(&start, &stop, str);						//get start, stop of the temporary string
-		if (tmp == NULL) //start == stop || tmp == NULL)
+		printf("tmp: %s\n", tmp);
+		if (tmp == NULL)
 			break ;
+		printf("HERE 1\n");
 		if (ft_strchr(tmp, 34) != NULL || ft_strchr(tmp, 39) != NULL)	//if quotes are found in the string
+		{
+			printf("HERE 2\n");
 			string[k++] = cut_quotes(tmp);								//split by quotes otherwise
+		}
 		else
+		{
+			printf("HERE 3\n");
+			printf("tmp: %s\n", tmp);
 			string[k++] = tmp;											//tmp has been splitted by spaces and becomes the command
+		}
+		printf("HERE 4\n");
+		// free(tmp);
 	}
 	string[k] = 0;
 	return (string);

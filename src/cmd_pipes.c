@@ -31,6 +31,7 @@ int	check_pipe_validity(char *str)
 			double_quote++;
 		if (str[i] == 39)			//single quote
 			single_quote++;
+		// printf("str[i] %c\n", str[i]);
 		i++;
 	}
 	if ((double_quote % 2) != 0 || (single_quote % 2) != 0)
