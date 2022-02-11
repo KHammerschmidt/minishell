@@ -81,10 +81,11 @@ char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *command_line
 
 	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');
 	pipe_redirections_index = pos_pipe_redirection(&ms->cmd_line, pipe_marker);			//tests if pipe comes before redirection
-	if (pipe_redirections_index != 1)													//redirections comes before any redirection
+	if (pipe_redirections_index != 1)													//redirection comes before any redirection
 	{
 		check_redirections(&ms->cmd_line, pipe_marker, ms);
 		new_cmd_line = substring_pipe(ms, &command_line, pipe_marker);
+		printf("new_cmd_line: %s\n", new_cmd_line);
 	}
 	else																				//pipe come before pipes //ERROR!!!
 	{

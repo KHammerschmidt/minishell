@@ -54,8 +54,9 @@ void	ft_cut_infile_redirections(char **string, t_vars *ms)
 		i++;
 	while ((*string)[i] != '\0')
 		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
-	free(*string);	*string = NULL; *string = tmp;			//Kathi: LEAKS necessary?
-	ms->cmd_line = tmp;
+	free(*string);	
+	*string = NULL; 
+	*string = tmp;
 }
 
 /* Saves the infile in the t_info struct. */
@@ -103,8 +104,9 @@ void	ft_cut_outfile_redirections(char **string, t_vars *ms)				//he isn't allowe
 		i++;
 	while ((*string)[i] != '\0')
 		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
-	free(*string); *string = NULL; *string = tmp;					//Kathi: LEAKS necessary
-	ms->cmd_line = tmp;
+	free(*string); 
+	*string = NULL; 
+	*string = tmp;
 }
 
 /* Saves the outfile in the t_info struct. */
