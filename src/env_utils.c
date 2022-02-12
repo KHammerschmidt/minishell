@@ -26,7 +26,7 @@ t_env	*ft_lstnew_env(char *content)
 	return (new_element);
 }
 
-static t_env	*ft_lstlast_env(t_env *lst)
+t_env	*ft_lstlast_env(t_env *lst)
 {
 	t_env	*last;
 
@@ -76,39 +76,4 @@ void	ft_free_lst_env(t_env **lst)
 		free(tmp->content);
 		free(tmp);
 	}
-}
-
-int	init_env(t_vars *ms, char **envp)
-{
-	int		i;
-	char	*tmp;
-	t_env	*node;
-
-	node = NULL;
-	i = 0;
-	if (!envp)
-		return (1);
-	while (envp[i] != '\0' && envp)
-	{
-		tmp = ft_strdup(envp[i]);
-		if (tmp == NULL)
-		{
-			printf("Error\n");
-			free(tmp);
-			ft_free_lst_env(&ms->env);
-			return (-1);
-		}
-		node = ft_lstnew_env(tmp);
-		if (node == NULL)
-		{
-			printf("Error\n");
-			free(tmp);
-			ft_free_lst_env(&ms->env);
-			return (-1);
-		}
-		ft_lstadd_back_env(&ms->env, node);
-		free(tmp);
-		i++;
-	}
-	return (0);
 }

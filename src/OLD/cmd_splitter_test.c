@@ -78,19 +78,19 @@ int	check_expressions(t_vars *ms)
 
 	//missing: redirections (how to handle fds)
 
-	i = 0;
-	while (ms->cmd_line[i] != '\0')
-	{
-		if (ms->cmd_line[i] == 34)
-			ms->double_quote_counter++;
-		if (ms->cmd_line[i] == 39)
-			ms->single_quote_counter++;
-		if (ms->cmd_line[i] == '|' && ms->double_quote_counter == 1
-			|| ms->cmd_line[i] == '|' && ms->single_quote_couner == 1)		//when | within double quote
-			{
-				ms->info->open_quotes++;
-				ms->info->pipe = 0;
-			}
+	// i = 0;
+	// while (ms->cmd_line[i] != '\0')
+	// {
+	// 	if (ms->cmd_line[i] == 34)
+	// 		ms->double_quote_counter++;
+	// 	if (ms->cmd_line[i] == 39)
+	// 		ms->single_quote_counter++;
+	// 	if (ms->cmd_line[i] == '|' && ms->double_quote_counter == 1
+	// 		|| ms->cmd_line[i] == '|' && ms->single_quote_couner == 1)		//when | within double quote
+	// 		{
+	// 			ms->info->open_quotes++;
+	// 			ms->info->pipe = 0;
+	// 		}
 		if (ms->cmd_line[i] == '$' && ms->double_quote_counter == 1)
 				ms->info->dollar++;												//is there a dollar sign in between ""
 		i++;
@@ -98,13 +98,35 @@ int	check_expressions(t_vars *ms)
 	return (0);
 }
 
-void	init_info(t_info *info)
-{
-	info = calloc(sizeof(t_info), 1);
-	memset(info, 0, sizeof(t_info));
-}
+// void	init_info(t_info *info)
+// {
+// 	info = calloc(sizeof(t_info), 1);
+// 	memset(info, 0, sizeof(t_info));
+// }
 
-char *handle_input(t_vars *ms, char *str, int pipe_marker)		//there are pipes in this input!
+// int	check_pipe_in_quotes(t_vars *ms, str)
+// {
+// 	int	i;
+// 	int	double_quote;
+// 	int	single_quote;
+
+// 	i = 0;
+// 	double_quote = 0;
+// 	single_quote = 0;
+// 	while (str[i] != '|')
+// 	{
+// 		if (str[i] == '"')
+// 			double_quote++;
+// 		if (str[i] == "'")
+// 			single_quote++;
+// 		i++;
+// 	}
+// 	if ((double_quote % 2) != 0 || (single_quote % 2) != 0)
+// 		return (1);				//pipe is no valid pipe, it is in between quotes
+// 	return (0);					//valid pipe
+// }
+
+int	handle_input(t_vars *ms, char *str, int pipe_marker)		//there are pipes in this input!
 {
 	char		*split;
 	char		*tmp;
@@ -113,11 +135,16 @@ char *handle_input(t_vars *ms, char *str, int pipe_marker)		//there are pipes in
 
 	char		**command;
 
-	init_init(&(ms->info));
+	// init_init(&(ms->info));
+	// if (check_pipe_in_quotes(ms, str) != 0)
+	// 	ms->info->pipe = 0;							//no valid pipe
+	// else
+	// 	ms->info->pipe = 1;							//valid pipe
+
 	check_expressions(ms);
 	if (pipe_marker == -1)
 	{
-		info->pipe = 0;								//no pipe
+		ms->info->pipe = 0;								//no pipe
 		search_redirection(ms->cmd_line, ms, info);	//search for any redirections to set infile, outfile or stderr
 	}
 	else
@@ -129,15 +156,16 @@ char *handle_input(t_vars *ms, char *str, int pipe_marker)		//there are pipes in
 		// 	info->pipe = 1;					//valid pipe
 	}
 
-																	//check for quotes
-																	//split by spaces ( cut out pipes)
-																	//check for redirections
-																	//pipe_marker
+																	check for quotes
+																	split by spaces ( cut out pipes)
+																	check for redirections
+																	pipe_marker
 
 
 	split = ft_split(ms->cmd_line, ' ');
 	tmp = ft_substr(ms->cmd_line, j, i);
 	return (command);						//input is in info struct for ft_lstnew_cmd().
+	return (0);
 }
 
 /* Splits the input line by it's pipes and fills the simple command table command by command. */
@@ -153,24 +181,24 @@ int	create_cmd_table(t_vars *ms)
 	j = 0;
 	split = NULL;
 	i = ft_strchr_pos(ms->cmd_line, '|');
-	if (i == -1)
+	if (i == -1)										//no pipes
 	{
-		// handle_input(ms, ms->cmd_line, i);
+		handle_input(ms, ms->cmd_line, i);
 		new = ft_lstnew_cmd(ft_split(ms->cmd_line, ' '));
 		ft_lstadd_back_cmd(&ms->cmd, new);
 	}
 	else
 	{
-		while (i != -1)
+		while (i != -1)									//pipes									// (1) check for pipe in quote
 		{
-			// handle_input(ms, ms->cmd_line, i);
-			i = ft_strchr_pos(&ms->cmd_line[j], '|');
-			tmp = ft_substr(ms->cmd_line, j, i);
-			split = ft_split(tmp, ' ');
-			new = ft_lstnew_cmd(split);
-			ft_lstadd_back_cmd(&ms->cmd, new);
-			free(tmp);
-			j = (j + i + 1);										//open issues, deleting white spaces
+			handle_input(ms, ms->cmd_line, i);
+			// i = ft_strchr_pos(&ms->cmd_line[j], '|');
+			// tmp = ft_substr(ms->cmd_line, j, i);
+			// split = ft_split(tmp, ' ');
+			// new = ft_lstnew_cmd(split);
+			// ft_lstadd_back_cmd(&ms->cmd, new);
+			// free(tmp);
+			// j = (j + i + 1);										//open issues, deleting white spaces
 																	//KATHI: solved by ft_split()
 		}
 	}
