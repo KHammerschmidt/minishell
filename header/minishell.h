@@ -84,7 +84,6 @@ typedef struct s_vars
 	t_list	*builtins;
 	t_cmd	*cmd;
 	t_info	*info;
-	// t_cmd_info	*cmd_info;
 	char	*cmd_line;
 	// char	*cwd;
 	// char	*new_wd;
@@ -139,6 +138,7 @@ int		create_cmd_table(t_vars *ms);
 char	*handle_input(t_vars *ms);
 int		check_quote_status(char *str);
 
+
 int		check_pipes_in_quote(t_vars *ms);
 char	**ft_split_quotes(char *str);
 void	reset_info_struct(t_info *info);
@@ -154,10 +154,13 @@ t_cmd	*init_cmd_lst(t_vars *ms, int size);
 void	reset_info_struct(t_info *info);
 void	pass_on_infos_node(t_info *info, t_cmd *node);
 
-/* cmd list utils */
+/* cmd utils */
 t_cmd	*ft_lstnew_cmd(t_info *info);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *element);
+char 	*ft_strjoin_2(char *line, char *str, int i);
+int		ft_count_substrings(char *str);
+void	pass_on_infos_node(t_info *info, t_cmd *node);
 
 /* Free and exit */
 void	free_and_exit(t_vars *ms, int e_flag, int e_code);
@@ -166,8 +169,6 @@ void	ft_free_string(char *str);
 /* Printing utils */
 void	print_lst(t_vars *ms);
 void	print_arr(char **arr);
-// void	save_commands(t_vars *ms);
-// int		cmd_validity(char *str);
 
 /* utils */
 void	ft_free_lst(t_list **lst);
@@ -175,7 +176,6 @@ void	ft_free_lst_env(t_env **lst);
 void	ft_free_arr(char **arr);
 int		compare_str(char *s1, char *s2);
 void	free_cmd_struct(t_vars *ms);
-
 
 /* Redirections */
 void 	ft_cut_infile_redirections(char **string, t_vars *ms);
@@ -185,6 +185,8 @@ void 	outfile_redirection(char **string, t_vars *ms);
 void	check_redirections(char **string, int pipe_marker, t_vars *ms);
 void	check_redirections(char **string, int pipe_marker, t_vars *ms);
 
-void	ft_get_exec_path(t_vars *ms);
-char	*copy_str_without_spaces(char *str);
+// void	ft_get_exec_path(t_vars *ms);
+// t_cmd	*init_cmd_lst(t_vars *ms, int size);
+// void	reset_info_struct(t_info *info);
+
 #endif
