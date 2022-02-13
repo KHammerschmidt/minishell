@@ -146,8 +146,9 @@ int		quote_infos(t_vars *ms, char *str);
 int		check_pipe_validity(char *str);
 int		ft_strchr_pos(const char *s, int c);
 char	*cut_quotes(char *str);
-int	ft_count_substrings(char *str);
+int		ft_count_substrings(char *str);
 int		ft_count_chars(char *str, t_vars *ms);
+char	*dollar_expansion(t_vars *ms);
 
 t_cmd	*init_cmd_lst(t_vars *ms, int size);
 void	reset_info_struct(t_info *info);
