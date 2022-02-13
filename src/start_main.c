@@ -50,10 +50,11 @@ int	main(int argc, char **argv, char **envp)
 	{
 		read_line(&ms);						//KATHI: potential new structure instead of parsing().
 		create_cmd_table(&ms);
-		// reset_info_struct(ms.info);
+		reset_info_struct(ms.info);
 		print_lst(&ms);
-		free_cmd_struct(&ms);
+		// printf("%s\n", dollar_expansion(&ms));
 		// execute_cmd(&ms);
+		free_cmd_struct(&ms);
 		// system("leaks minishell");
 	}
 	return (0);

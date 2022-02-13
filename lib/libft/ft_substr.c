@@ -6,7 +6,7 @@
 /*   By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/14 14:45:28 by mortmeie          #+#    #+#             */
-/*   Updated: 2021/07/14 15:43:58 by mortmeie         ###   ########.fr       */
+/*   Updated: 2022/02/13 14:23:07 by mortmeie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,14 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 	char			*ptr;
 	unsigned long	i;
 
-	if (s == 0)
-		return (0);
+	if (s == NULL)
+		return (NULL);
 	i = 0;
-	if (start >= ft_strlen(s))
-		ptr = malloc(1 * sizeof(char));
+	if (start > ft_strlen(s))
+	{
+		ptr = ft_calloc(1, 1);
+		return (ptr);
+	}
 	else if (len > ft_strlen(s) - start)
 		ptr = malloc((ft_strlen(s) - start) * sizeof(char) + 1);
 	else
