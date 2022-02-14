@@ -16,20 +16,20 @@ static char	*search_for_var(t_vars *ms, char *var)
 	return (NULL);
 }
 
-static void	replicate_text(char **ret, char *str, int *i, int *j)
+static void	replicate_text(t_vars *ms, int *i, int *j)
 {
 	char	*tmp;
 
 	tmp = NULL;
-	tmp = ft_substr(str, *j, *i - *j);
-	if (*ret == NULL)
-		*ret = ft_strdup(tmp);
+	tmp = ft_substr(ms->cmd_line, *j, *i - *j);
+	if (ms->line == NULL)
+		ms->line = ft_strdup(tmp);
 	else
-		*ret = ft_strjoin(*ret, tmp);
+		ms->line = ft_strjoin(ms->line, tmp);
 	free(tmp);
 }
 
-static void	add_expanded_var(t_vars *ms, char **ret, int *i, int *j)
+static void	add_expanded_var(t_vars *ms, int *i, int *j)
 {
 	char	*tmp;
 	char	*var;
@@ -40,40 +40,60 @@ static void	add_expanded_var(t_vars *ms, char **ret, int *i, int *j)
 	tmp = ft_strdup(search_for_var(ms, var));
 	if (tmp == NULL)
 	{
-		*ret = ft_strjoin(*ret, "$");
-		*ret = ft_strjoin(*ret, var);
+		ms->line = ft_strjoin(ms->line, "$");
+		ms->line = ft_strjoin(ms->line, var);
 	}
 	else
-		*ret = ft_strjoin(*ret, tmp);
+		ms->line = ft_strjoin(ms->line, tmp);
 	*j = *i;
 	free(var);
 	free(tmp);
 }
 
+/* Checks if the dollar sign stands within double or single quotes
+and returns the respective quote_type. */
+int	valid_dollar_sign(t_vars *ms, int i, int *quote_on, int quote_type)
+{
+	if (ms->cmd_line[i] == 34 || ms->cmd_line[i] == 39)
+	{
+		if (*quote_on == 0)
+			quote_type = ms->cmd_line[i];
+		if (*quote_on == 1 && ms->cmd_line[i] == quote_type)
+		{
+			*quote_on = -1;
+			quote_type = 0;
+		}
+		(*quote_on)++;
+	}
+	return (quote_type);
+}
+
 /* Looks for $-signs and expands if respective variable is found in envar list. */
-char	*dollar_expansion(t_vars *ms)
+void	dollar_expansion(t_vars *ms)
 {
 	int		i;
 	int		j;
-	char	*ret;
+	int		quote_on;
+	int		quote_type;
 
 	i = 0;
 	j = 0;
-	ret = NULL;
+	quote_on = 0;
+	quote_type = 0;
 	while (ms->cmd_line[i] != '\0')
 	{
-		if (ms->cmd_line[i] == '$')
+		quote_type = valid_dollar_sign(ms, i, &quote_on, quote_type);
+		if (ms->cmd_line[i] == '$' && quote_type != 39)
 		{
-			replicate_text(&ret, ms->cmd_line, &i, &j);
+			replicate_text(ms, &i, &j);
 			i++;
 			j = i;
 			while (ft_isalpha(ms->cmd_line[i]) == 1)				// add "|| str[i] == '?'"
 				i++;
-			add_expanded_var(ms, &ret, &i, &j);
+			add_expanded_var(ms, &i, &j);
 		}
 		else
 			i++;
 	}
-	replicate_text(&ret, ms->cmd_line, &i, &j);
-	return (ret);
+	replicate_text(ms, &i, &j);
 }

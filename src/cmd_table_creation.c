@@ -67,7 +67,10 @@ char	*handle_input(t_vars *ms)
 
 	command_line = NULL;
 	new_cmd_line = NULL;
-	//expand dollar sign (here) when they are in double quotes or without quotes
+	dollar_expansion(ms);									//only function
+	free(ms->cmd_line);
+	ms->cmd_line = NULL;
+	ms->cmd_line = ft_strdup(ms->line);
 	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');							//finds position of pipe, is -1 if no pipe exists
 	quotes = check_quote_status(ms->cmd_line);								//checks for: no quotes (== 0), open quotes (== -1), active outside quotes and $ sign
 	if (pipe_marker == -1 && quotes == 0)									//no pipe & no quotes
