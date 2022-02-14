@@ -20,24 +20,6 @@
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
 
-// #define PIPE			0
-// // #define	AMPERCENT		1
-// // #define SEMICOLON		2
-// #define	LESS			3
-// #define	GREATER			4
-// #define	OPEN_BRACKET	5
-// #define	CLOSING_BRACKET	6
-// #define	DOLLAR			7
-// #define	APOSTROPHE		8
-// #define BACKSLASH		9
-// #define	DOUBLE_QUOTES	10
-// #define	SINGLE_QUOTES	11i
-// #define	SPACE			12
-// #define	TAB				13
-// #define NEWLINE			14
-// #define	LESSLESS		15
-// #define	GREATERGREATER	16
-
 /* **************************************************************** */
 /*							STRUCTS									*/
 /* **************************************************************** */
@@ -46,29 +28,32 @@ typedef struct s_info
 {
 	char			**command;
 	char			*outfile;
-	char			*infile;
-	char			*errfile;
-	int				op;
+	char			*infile;			//char **
+	char			*errfile;			//char **
+	int				op;					// int *  --> op[0] = 1, op[1] = -1
 	int				pipe;
-	int				single_quote_counter;
-	int				double_quote_counter;
-	int				open_quotes;
-	int				dollar;
 }	t_info;
+
+// typedef struct s_heredoc
+// {
+// 	char *limiter;
+
+// }	t_here_doc;
 
 typedef struct s_cmd
 {
 	char			**command;
 	// char			*execpath;				//we need the execpath of the command if its a command
-	char			*outfile;
 	// int				fd_out;
 	// int				fd_in;
-	char			*infile;
-	char			*errfile;
+	char			*infile;		//**infile
+	char			*outfile;		//**outfile
 	int				op;
-	int				pipe;					//pipe_in && pipe_out
+	int				pipe;
 	int				fd_out;
 	struct s_cmd	*next;
+	struct s_cmd	*previous;
+	// t_here_doc		*here_doc;
 }	t_cmd;
 
 typedef struct s_env
@@ -85,12 +70,14 @@ typedef struct s_vars
 	t_cmd	*cmd;
 	t_info	*info;
 	char	*cmd_line;
+	char	*line;
+	int		*here_doc;	// 0 oder 1
+	// int		pipe_fd[2];
+	// int		exit_status;
+
 	// char	*cwd;
 	// char	*new_wd;
 	// char	**execpath;
-	// char	**arr;
-	// char	**envp;
-	// int		exit_status;
 }	t_vars;
 
 /* **************************************************************** */
@@ -148,7 +135,7 @@ int		ft_strchr_pos(const char *s, int c);
 // char	*cut_quotes(char *str);
 int		ft_count_substrings(char *str);
 int		ft_count_chars(char *str, t_vars *ms);
-char	*dollar_expansion(t_vars *ms);
+void	dollar_expansion(t_vars *ms);
 
 t_cmd	*init_cmd_lst(t_vars *ms, int size);
 void	reset_info_struct(t_info *info);
@@ -158,6 +145,7 @@ void	pass_on_infos_node(t_info *info, t_cmd *node);
 t_cmd	*ft_lstnew_cmd(t_info *info);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *element);
+int 	ft_lstsize_cmd(t_cmd *lst);
 char 	*ft_strjoin_2(char *line, char *str, int i);
 int		ft_count_substrings(char *str);
 void	pass_on_infos_node(t_info *info, t_cmd *node);
@@ -169,6 +157,7 @@ void	ft_free_string(char *str);
 /* Printing utils */
 void	print_lst(t_vars *ms);
 void	print_arr(char **arr);
+void	print_lst_last(t_vars *ms);
 
 /* utils */
 void	ft_free_lst(t_list **lst);
@@ -185,7 +174,8 @@ void 	outfile_redirection(char **string, t_vars *ms);
 void	check_redirections(char **string, int pipe_marker, t_vars *ms);
 void	check_redirections(char **string, int pipe_marker, t_vars *ms);
 
-// void	ft_get_exec_path(t_vars *ms);
+
+
 // t_cmd	*init_cmd_lst(t_vars *ms, int size);
 // void	reset_info_struct(t_info *info);
 

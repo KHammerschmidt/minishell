@@ -24,6 +24,7 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 	{
 		last = ft_lstlast_cmd(*cmd);
 		last->next = node;
+		node->previous = last;							//added previous node == last node of list
 	}
 }
 
@@ -35,7 +36,6 @@ void	pass_on_infos_node(t_info *info, t_cmd *node)
 	node->op = info->op;
 	node->infile = info->infile;
 	node->outfile = info->outfile;
-	node->errfile = info->errfile;
 	reset_info_struct(info);
 }
 
@@ -51,6 +51,7 @@ t_cmd	*ft_lstnew_cmd(t_info *info)				//das hier wieder rein (neue lst_new)
 	// node->command = ms->cmd->command;
 	// node->pipe = ms->cmd->pipe;
 	node->next = NULL;
+	node->previous = NULL;
 	// node->outfile = NULL;
 	// node->infile = NULL;
 	// node->errfile = NULL;
@@ -59,4 +60,21 @@ t_cmd	*ft_lstnew_cmd(t_info *info)				//das hier wieder rein (neue lst_new)
 	// node->pipe = 0;
 	// node->command = NULL;
 	return (node);
+}
+
+int ft_lstsize_cmd(t_cmd *lst)
+{
+	t_cmd	*last;
+	int		counter;
+
+	counter = 0;
+	last = lst;
+	if (last == NULL)
+		return (0);
+	while (last->next != NULL)
+	{
+		last = last->next;
+		counter++;
+	}
+	return (counter + 1);
 }

@@ -101,14 +101,14 @@ char	**ft_split_quotes(char *str)
 
 	stop = 0;
 	start = 0;
-	k = ft_count_substrings(str);										//count number of substrings for memory allocation
+	k = ft_count_substrings(str);
 	string = (char **)ft_calloc(sizeof(char *), k + 1);
 	if (string == NULL)
 		printf("MEM ALLOC ERROR\n");									//create exit function
 	k = 0;
 	while (str[start] != '\0')
 	{
-		tmp = substring_quotes(&start, &stop, str);						//get start, stop of the temporary string
+		tmp = substring_quotes(&start, &stop, str);
 		if (tmp == NULL)
 			break ;
 		string[k++] = cut_quotes(tmp);

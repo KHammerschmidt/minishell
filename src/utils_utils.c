@@ -35,6 +35,30 @@ void	ft_free_string(char *str)
 	str = NULL;
 }
 
+void	print_lst_last(t_vars *ms)
+{
+	t_cmd *temp;
+	int		len;
+	int		i;
+
+	i = 0;
+	len = ft_lstsize_cmd(ms->cmd);
+	temp = NULL;
+	temp = ft_lstlast_cmd(ms->cmd);
+	if (len <= 1)
+	{
+		printf("pipe: %d\n", temp->pipe);
+		return ;
+	}
+	while (temp->previous != NULL && len >= 1)
+	{
+		printf("pipe: %d \n", temp->pipe);
+		temp = temp->previous;
+	}
+	if (temp->previous == NULL)
+		printf("pipe: %d \n", temp->pipe);
+}
+
 void	print_lst(t_vars *ms)
 {
 	t_cmd	*current;
@@ -48,7 +72,6 @@ void	print_lst(t_vars *ms)
 		i = 0;
 		while (current->command[i] != NULL)
 		{
-			// printf("...%s...\n", current->command[i]);
 			printf("command...%s... ", current->command[i]);
 			i++;
 		}
