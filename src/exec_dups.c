@@ -250,29 +250,27 @@ int	input_redirection(t_cmd *temp, t_vars *ms)
 			// }
 		}
 		//infile redirection
-		if (temp->input_op == -1)
-		{
-			if (access(temp->infile, F_OK) != 0)
-			{
-				ft_putstr_fd("zsh: No such file or directory: ", 2);
-				ft_putendl_fd(temp->infile, 2);
-				ft_free_string(temp->execpath);
-				exit(1);//exit?
-			}
-			if (access(temp->infile, R_OK) != 0)
-			{
-				perror("Error");
-				ft_free_string(temp->execpath);
-				exit(1);//exit?
-			}
-			temp->fd_in = open(temp->infile, O_RDONLY);
-			if (dup2(temp->fd_in, STDIN_FILENO) < 0)
-				perror("dup2 infile: ");
-			close(temp->fd_in);
-			return (0);
-		}
-			return (0);
-		}
+		// if (temp->input_op == -1)
+		// {
+		// 	if (access(temp->infile, F_OK) != 0)
+		// 	{
+		// 		ft_putstr_fd("zsh: No such file or directory: ", 2);
+		// 		ft_putendl_fd(temp->infile, 2);
+		// 		ft_free_string(temp->execpath);
+		// 		exit(1);//exit?
+		// 	}
+		// 	if (access(temp->infile, R_OK) != 0)
+		// 	{
+		// 		perror("Error");
+		// 		ft_free_string(temp->execpath);
+		// 		exit(1);//exit?
+		// 	}
+		// 	temp->fd_in = open(temp->infile, O_RDONLY);
+		// 	if (dup2(temp->fd_in, STDIN_FILENO) < 0)
+		// 		perror("dup2 infile: ");
+		// 	close(temp->fd_in);
+		// 	return (0);
+		// }
 	}
 	return (0);
 }

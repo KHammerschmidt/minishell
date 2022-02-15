@@ -12,9 +12,9 @@ int	pipex(t_vars *ms)
 			printf("ERROR\n"); //ft_error_function
 		if (is_builtin(ms, current->command[0]) == 1)
 		{
-			// input_redirection(current, ms);				//special case for builtin
-			// output_redirection(current, ms);
-			// execute_builtin(current->command, ms);
+			input_redirection(current, ms);				//special case for builtin
+			output_redirection(current, ms);
+			execute_builtin(ms, current);
 		}
 		else
 		{
