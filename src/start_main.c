@@ -39,7 +39,6 @@ int	read_line(t_vars *ms)
 int	main(int argc, char **argv, char **envp)
 {
 	t_vars	ms;
-	t_cmd	*current;
 	int		i;
 
 	i = 0;
@@ -51,27 +50,17 @@ int	main(int argc, char **argv, char **envp)
 	{
 		read_line(&ms);
 		create_cmd_table(&ms);
-		reset_info_struct(ms.info);
-		// print_lst(&ms);
-		// printf("%s\n", ms.line);
-		// dollar_expansion(&ms);
-		// printf("%s\n", ms.line);
 		get_paths(&ms);
-		current = ms.cmd;
-		// check_cmd(&ms, current->command);		// nicht in main(), in cmd_execution.c
-		print_lst_last(&ms);
+
+		// print_lst(&ms);
+		// print_lst_last(&ms);
+
 		// execute_cmd(&ms);
-		if (ms.line)
-		{
-			free(ms.line);
-			ms.line = NULL;
-		}
+
 		free_cmd_struct(&ms);
 		if (ms.line)
-		{
-			free(ms.line);
-			ms.line = NULL;
-		}
+			ft_free_string(ms.line);
+		reset_info_struct(ms.info);
 		// system("leaks minishell");
 	}
 	return (0);

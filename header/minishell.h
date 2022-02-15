@@ -44,14 +44,12 @@ typedef struct s_cmd
 {
 	char			**command;
 	char			*execpath;				//we need the execpath of the command if its a command
-	char			*outfile;
-	// char			*execpath;				//we need the execpath of the command if its a command
-	// int				fd_out;
-	// int				fd_in;
-	char			*infile;		//**infile
-	char			*outfile;		//**outfile
-	int				input_op;		//int **
-	int				output_op;		//int **
+	int				fd_out;
+	int				fd_in;
+	char			*infile;			//**infile
+	char			*outfile;			//**outfile
+	int				input_op;			//int **
+	int				output_op;			//int **
 	char			*limiter_here_doc;
 	int				pipe;
 	struct s_cmd	*next;
@@ -76,7 +74,7 @@ typedef struct s_vars
 	int		pipe_fd[2];
 	int		tmp_fd;
 	char	**paths;
-	int		*here_doc;	// 0 oder 1
+	// int		*here_doc;	// 0 oder 1
 	// int		exit_status;
 	// char	*cwd;
 	// char	*new_wd;

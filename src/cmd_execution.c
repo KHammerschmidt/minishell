@@ -1,5 +1,6 @@
 #include "../header/minishell.h"
 
+/* Returns 1 for builtin and 0 when its no builtin. */
 int	is_builtin(t_vars *ms, char *cmd)
 {
 	t_list	*current;
@@ -8,15 +9,18 @@ int	is_builtin(t_vars *ms, char *cmd)
 	while (current != NULL)
 	{
 		if (compare_str(current->content, cmd) == 0)
-			return (0);
+			return (1);
 		current = current->next;
 	}
-	return (1);
+	return (0);
 }
 
 int	execute_cmd(t_vars *ms)
 {
-	if (is_builtin(ms, ms->cmd->command[0]) == 0)
+	t_cmd	*current;
+
+	current = ms->cmd;
+	if (is_builtin(ms, ms->cmd->command[0]) == 1)
 	{
 		if (compare_str(ms->cmd->command[0], "echo") == 0)
 			builtin_echo(ms);
@@ -35,6 +39,7 @@ int	execute_cmd(t_vars *ms)
 	}
 	else
 	{
+
 		// check_cmd(ms, ms->cmd->command[0]);
 		// check if valid ms->cmd->command, then execute or return error
 	}
