@@ -14,26 +14,26 @@ int	validate_arg(char *arg)
 	return (0);
 }
 
-int	builtin_exit(t_vars *ms)
+int	builtin_exit(t_vars *ms, t_cmd *current)
 {
 	int	e_code;
 
 	e_code = 0;
 	ft_putendl_fd("exit", 2);
-	if (ms->cmd->command[1] != NULL && ms->cmd->command[2] != NULL)
+	if (current->command[1] != NULL && current->command[2] != NULL)
 	{
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		e_code = 1;
 	}
-	if (ms->cmd->command[1] != NULL && validate_arg(ms->cmd->command[1]) == 1)
+	if (current->command[1] != NULL && validate_arg(current->command[1]) == 1)
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(ms->cmd->command[1], 2);
+		ft_putstr_fd(current->command[1], 2);
 		ft_putendl_fd(": numeric argument required", 2);
 		e_code = 255;
 	}
-	if (ms->cmd->command[1] != NULL && validate_arg(ms->cmd->command[1]) == 0)
-		e_code = ft_atoi(ms->cmd->command[1]);
+	if (current->command[1] != NULL && validate_arg(current->command[1]) == 0)
+		e_code = ft_atoi(current->command[1]);
 	rl_clear_history();
 	free_and_exit(ms, 1, e_code);
 	return (e_code);

@@ -55,7 +55,7 @@ static int	create_variable(char **var_name, char **var_val, \
 	return (0);
 }
 
-static int	insert_variable(t_vars *ms, char *var_name, char *var_val, int k)
+static int	insert_variable(t_vars *ms, char *var_name, char *var_val, char *command)
 {
 	t_env	*current;
 	t_env	*new;
@@ -79,37 +79,37 @@ static int	insert_variable(t_vars *ms, char *var_name, char *var_val, int k)
 		}
 		current = current->next;
 	}
-	new = ft_lstnew_env(ms->cmd->command[k]);
+	new = ft_lstnew_env(command);
 	ft_lstadd_back_env(&ms->env, new);
 	return (0);
 }
 
 /* Looks for var_name in envar list. If found, changes var_value or, if not */
 /* found, creates new node with respective name and content.                */
-int	builtin_export(t_vars *ms)
+int	builtin_export(t_vars *ms, t_cmd *current)
 {
-	t_env	*current;
+	// t_env	*tmp;
 	char	*var_name;
 	char	*var_val;
 	int		i;
 	int		k;
 
 	k = 1;
-	while (ms->cmd->command[k] != NULL)
+	while (current->command[k] != NULL)
 	{
-		current = ms->env;
+		// tmp = ms->env;
 		var_name = NULL;
 		var_val = NULL;
 		i = 0;
-		if (validate_arg(ms->cmd->command[k], &i) == 1)
+		if (validate_arg(current->command[k], &i) == 1)
 			return (1);													// TODO: exit status
-		if (validate_arg(ms->cmd->command[k], &i) == 2)
+		if (validate_arg(current->command[k], &i) == 2)
 		{
 			k++;
 			continue ;
 		}
-		create_variable(&var_name, &var_val, ms->cmd->command[k], i);
-		if (insert_variable(ms, var_name, var_val, k) == 1)
+		create_variable(&var_name, &var_val, current->command[k], i);
+		if (insert_variable(ms, var_name, var_val, current->command[k]) == 1)
 			return (1);													// TODO: exit status
 		free(var_name);
 		free(var_val);
