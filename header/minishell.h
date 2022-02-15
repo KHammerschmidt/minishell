@@ -19,6 +19,10 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
+# include <fcntl.h>
+
+# define BUFFER_SIZE 1
+
 
 /* **************************************************************** */
 /*							STRUCTS									*/
@@ -30,15 +34,11 @@ typedef struct s_info
 	char			*outfile;
 	char			*infile;			//char **
 	char			*errfile;			//char **
-	int				op;					// int *  --> op[0] = 1, op[1] = -1
+	int				input_op;			//int **
+	int				output_op;			//int **
+	char			*limiter_here_doc;
 	int				pipe;
 }	t_info;
-
-// typedef struct s_heredoc
-// {
-// 	char *limiter;
-
-// }	t_here_doc;
 
 typedef struct s_cmd
 {
@@ -50,12 +50,12 @@ typedef struct s_cmd
 	// int				fd_in;
 	char			*infile;		//**infile
 	char			*outfile;		//**outfile
-	int				op;
+	int				input_op;		//int **
+	int				output_op;		//int **
+	char			*limiter_here_doc;
 	int				pipe;
-	int				fd_out;
 	struct s_cmd	*next;
 	struct s_cmd	*previous;
-	// t_here_doc		*here_doc;
 }	t_cmd;
 
 typedef struct s_env
@@ -73,9 +73,10 @@ typedef struct s_vars
 	t_info	*info;
 	char	*cmd_line;
 	char	*line;
+	int		pipe_fd[2];
+	int		tmp_fd;
 	char	**paths;
 	int		*here_doc;	// 0 oder 1
-	// int		pipe_fd[2];
 	// int		exit_status;
 	// char	*cwd;
 	// char	*new_wd;
@@ -123,7 +124,7 @@ void	rl_reset(void);
 void	signal_handler(int signum);
 
 /* input parsing, command table development */
-int		create_cmd_table(t_vars *ms);
+void	create_cmd_table(t_vars *ms);
 char	*handle_input(t_vars *ms);
 int		check_quote_status(char *str);
 

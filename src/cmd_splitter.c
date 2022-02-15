@@ -27,7 +27,8 @@ void	reset_info_struct(t_info *info)
 	info->outfile = NULL;
 	info->infile = NULL;
 	info->errfile = NULL;
-	info->op = 0;
+	info->input_op = 0;
+	info->output_op = 0;
 	info->pipe = 0;
 }
 

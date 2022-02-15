@@ -67,10 +67,6 @@ char	*handle_input(t_vars *ms)
 
 	command_line = NULL;
 	new_cmd_line = NULL;
-	dollar_expansion(ms);									//only function
-	free(ms->cmd_line);
-	ms->cmd_line = NULL;
-	ms->cmd_line = ft_strdup(ms->line);
 	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');							//finds position of pipe, is -1 if no pipe exists
 	quotes = check_quote_status(ms->cmd_line);								//checks for: no quotes (== 0), open quotes (== -1), active outside quotes and $ sign
 	if (pipe_marker == -1 && quotes == 0)									//no pipe & no quotes
@@ -86,7 +82,7 @@ char	*handle_input(t_vars *ms)
 }
 
 /* Creates the simple command table, e.g. the char **command of struct t_cmd. */
-int	create_cmd_table(t_vars *ms)
+void	create_cmd_table(t_vars *ms)
 {
 	int		i;
 	char	*tmp;
@@ -98,6 +94,9 @@ int	create_cmd_table(t_vars *ms)
 	tmp = (char *)malloc(sizeof(ms->cmd_line) + 1);
 	if (!tmp)
 		printf("MEM ALLOC ERROR!\n");					//exit function einbauen
+	dollar_expansion(ms);
+	ft_free_string(ms->cmd_line);	//free(ms->cmd_line); //ms->cmd_line = NULL;
+	ms->cmd_line = ft_strdup(ms->line);
 	while (ms->cmd_line != NULL)
 	{
 		tmp = handle_input(ms);							//returns new cmd_line, puts the current command in the struct t_info
@@ -110,7 +109,6 @@ int	create_cmd_table(t_vars *ms)
 		ms->cmd_line = ft_strdup(tmp);
 		free(tmp);
 	}
-	return (0);
 }
 
 
@@ -119,32 +117,6 @@ int	create_cmd_table(t_vars *ms)
 
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------
-//OLD
-// char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *command_line)
-// {
-// 	int	pipe_marker;
-// 	int	pipe_redirections_index;
-
-// 	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');
-// 	pipe_redirections_index = pos_pipe_redirection(&ms->cmd_line, pipe_marker);			//tests if pipe comes before redirection
-// 	// if (pipe_redirections_index != 1)													//redirection comes before any redirection
-// 	// {
-// 	// 	check_redirections(&ms->cmd_line, pipe_marker, ms);
-// 	// 	new_cmd_line = substring_pipe(ms, &command_line, pipe_marker);
-// 	// 	printf("new_cmd_line: %s\n", new_cmd_line);
-// 	// }
-// 	// else																				//pipe come before pipes //ERROR!!!
-// 	// {
-// 	new_cmd_line = substring_pipe(ms, &command_line, pipe_marker);
-// 	check_redirections(&command_line, pipe_marker, ms);
-// 	// }
-// 	ms->info->command = ft_split(command_line, ' ');
-// 	if (ms->info->double_quote_counter != 0 || ms->info->single_quote_counter != 0)
-// 		return (handle_quotes_pipe(quotes, ms, command_line, new_cmd_line));
-// 	return (new_cmd_line);
-// }
-
-
 
 /* Compares the position of the pipe to any redirections and indicates
 what should be done next in the splitting process. */
