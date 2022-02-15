@@ -59,7 +59,7 @@ typedef struct s_info
 typedef struct s_cmd
 {
 	char			**command;
-	// char			*execpath;				//we need the execpath of the command if its a command
+	char			*execpath;				//we need the execpath of the command if its a command
 	char			*outfile;
 	// int				fd_out;
 	// int				fd_in;
@@ -85,6 +85,8 @@ typedef struct s_vars
 	t_cmd	*cmd;
 	t_info	*info;
 	char	*cmd_line;
+	char	*line;
+	char	**paths;
 	// char	*cwd;
 	// char	*new_wd;
 	// char	**execpath;
@@ -148,11 +150,15 @@ int		ft_strchr_pos(const char *s, int c);
 // char	*cut_quotes(char *str);
 int		ft_count_substrings(char *str);
 int		ft_count_chars(char *str, t_vars *ms);
-char	*dollar_expansion(t_vars *ms);
+void	dollar_expansion(t_vars *ms);
 
 t_cmd	*init_cmd_lst(t_vars *ms, int size);
 void	reset_info_struct(t_info *info);
 void	pass_on_infos_node(t_info *info, t_cmd *node);
+
+/* command execution */
+int		get_paths(t_vars *ms);
+int		check_cmd(t_vars *ms, char **cmd);
 
 /* cmd utils */
 t_cmd	*ft_lstnew_cmd(t_info *info);
