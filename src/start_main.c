@@ -49,7 +49,7 @@ int	main(int argc, char **argv, char **envp)
 	init_struct(&ms, envp);
 	while (1)
 	{
-		read_line(&ms);						//KATHI: potential new structure instead of parsing().
+		read_line(&ms);
 		create_cmd_table(&ms);
 		reset_info_struct(ms.info);
 		// print_lst(&ms);
@@ -59,7 +59,13 @@ int	main(int argc, char **argv, char **envp)
 		get_paths(&ms);
 		current = ms.cmd;
 		// check_cmd(&ms, current->command);		// nicht in main(), in cmd_execution.c
+		print_lst_last(&ms);
 		// execute_cmd(&ms);
+		if (ms.line)
+		{
+			free(ms.line);
+			ms.line = NULL;
+		}
 		free_cmd_struct(&ms);
 		if (ms.line)
 		{

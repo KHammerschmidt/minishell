@@ -37,7 +37,6 @@ SRC_LIST	=	builtin_cd.c			\
 				start_create_prompt.c	\
 				start_main.c			\
 				utils_free_memory.c		\
-				utils_structs_arrays.c	\
 				utils_utilities.c		\
 				utils_utils.c
 
