@@ -51,19 +51,6 @@ void	ft_lstadd_back_env(t_env **lst, t_env *new)
 	last->next = new;
 }
 
-// void	ft_free_lst_env(t_env **lst)
-// {
-// 	t_env	*tmp;
-
-// 	tmp = *lst;
-// 	while (tmp)
-// 	{
-// 		lst = &(*lst)->next;
-// 		free(tmp);
-// 		tmp = *lst;
-// 	}
-// }
-
 void	ft_free_lst_env(t_env **lst)
 {
 	t_env	*tmp;

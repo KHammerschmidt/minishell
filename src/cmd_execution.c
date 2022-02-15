@@ -35,6 +35,7 @@ int	execute_cmd(t_vars *ms)
 	}
 	else
 	{
+		// check_cmd(ms, ms->cmd->command[0]);
 		// check if valid ms->cmd->command, then execute or return error
 	}
 	return (0);

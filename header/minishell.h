@@ -43,9 +43,11 @@ typedef struct s_info
 typedef struct s_cmd
 {
 	char			**command;
-	char			*execpath;
-	int				fd_in;
-	int				fd_out;
+	char			*execpath;				//we need the execpath of the command if its a command
+	char			*outfile;
+	// char			*execpath;				//we need the execpath of the command if its a command
+	// int				fd_out;
+	// int				fd_in;
 	char			*infile;		//**infile
 	char			*outfile;		//**outfile
 	int				input_op;		//int **
@@ -72,11 +74,10 @@ typedef struct s_vars
 	char	*cmd_line;
 	char	*line;
 	int		pipe_fd[2];
-
 	int		tmp_fd;
-	// int		*here_doc;	// 0 oder 1
+	char	**paths;
+	int		*here_doc;	// 0 oder 1
 	// int		exit_status;
-
 	// char	*cwd;
 	// char	*new_wd;
 	// char	**execpath;
@@ -142,6 +143,10 @@ void	dollar_expansion(t_vars *ms);
 t_cmd	*init_cmd_lst(t_vars *ms, int size);
 void	reset_info_struct(t_info *info);
 void	pass_on_infos_node(t_info *info, t_cmd *node);
+
+/* command execution */
+int		get_paths(t_vars *ms);
+int		check_cmd(t_vars *ms, char **cmd);
 
 /* cmd utils */
 t_cmd	*ft_lstnew_cmd(t_info *info);
