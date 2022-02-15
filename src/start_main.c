@@ -51,16 +51,17 @@ int	main(int argc, char **argv, char **envp)
 		read_line(&ms);
 		create_cmd_table(&ms);
 		get_paths(&ms);
-
+		pipex(&ms);
 		// print_lst(&ms);
 		// print_lst_last(&ms);
 
-		// execute_cmd(&ms);
-
 		free_cmd_struct(&ms);
 		if (ms.line)
-			ft_free_string(ms.line);
-		reset_info_struct(ms.info);
+		{
+			free(ms.line);
+			ms.line = NULL;
+		}
+		// reset_info_struct(ms.info);
 		// system("leaks minishell");
 	}
 	return (0);

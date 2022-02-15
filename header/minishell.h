@@ -182,8 +182,7 @@ void	check_redirections(char **string, int pipe_marker, t_vars *ms);
 
 int	input_redirection(t_cmd *temp, t_vars *ms);
 int	output_redirection(t_cmd *temp, t_vars *ms);
-
-
+int	pipex(t_vars *ms);
 
 // t_cmd	*init_cmd_lst(t_vars *ms, int size);
 // void	reset_info_struct(t_info *info);

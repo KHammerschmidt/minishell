@@ -30,6 +30,7 @@ int	check_cmd(t_vars *ms, t_cmd *current)
 	write(2, "Error: command not found: ", 26);
 	ft_putstr_fd(current->command[0], 2);
 	write(2, "\n", 1);
+	ms->exit_status = 127;
 	// free_and_exit(ms, 1, 127);
 	return (1);
 }
