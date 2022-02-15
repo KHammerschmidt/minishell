@@ -8,6 +8,7 @@ int	init_struct(t_vars *ms, char **envp)
 	init_builtin(ms);
 	ms->cmd = ft_calloc(1, sizeof(t_cmd));				//Kathi: war auskommentiert?
 	ms->cmd = NULL;
+	ms->envp = envp;
 	ms->info = ft_calloc(1, sizeof(t_info));
 	ft_memset(ms->info, 0, sizeof(t_info));
 	return (0);

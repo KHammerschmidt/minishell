@@ -250,27 +250,27 @@ int	input_redirection(t_cmd *temp, t_vars *ms)
 			// }
 		}
 		//infile redirection
-		// if (temp->input_op == -1)
-		// {
-		// 	if (access(temp->infile, F_OK) != 0)
-		// 	{
-		// 		ft_putstr_fd("zsh: No such file or directory: ", 2);
-		// 		ft_putendl_fd(temp->infile, 2);
-		// 		ft_free_string(temp->execpath);
-		// 		exit(1);//exit?
-		// 	}
-		// 	if (access(temp->infile, R_OK) != 0)
-		// 	{
-		// 		perror("Error");
-		// 		ft_free_string(temp->execpath);
-		// 		exit(1);//exit?
-		// 	}
-		// 	temp->fd_in = open(temp->infile, O_RDONLY);
-		// 	if (dup2(temp->fd_in, STDIN_FILENO) < 0)
-		// 		perror("dup2 infile: ");
-		// 	close(temp->fd_in);
-		// 	return (0);
-		// }
+		if (temp->input_op == -1)
+		{
+			if (access(temp->infile, F_OK) != 0)
+			{
+				ft_putstr_fd("zsh: No such file or directory: ", 2);
+				ft_putendl_fd(temp->infile, 2);
+				ft_free_string(temp->execpath);
+				exit(1);//exit?
+			}
+			if (access(temp->infile, R_OK) != 0)
+			{
+				perror("Error");
+				ft_free_string(temp->execpath);
+				exit(1);//exit?
+			}
+			temp->fd_in = open(temp->infile, O_RDONLY);
+			if (dup2(temp->fd_in, STDIN_FILENO) < 0)
+				perror("dup2 infile: ");
+			close(temp->fd_in);
+			return (0);
+		}
 	}
 	return (0);
 }
@@ -278,20 +278,35 @@ int	input_redirection(t_cmd *temp, t_vars *ms)
 int	output_redirection(t_cmd *temp, t_vars *ms)
 {
 	//nur ein cmd (kein duplicaten notwendig)
-	if (ft_lstsize_cmd(ms->cmd) == 1)
+	if (ft_lstsize_cmd(ms->cmd) == 1 && temp->output_op == 0)
 	{
 		close(ms->pipe_fd[0]);
 		close(ms->pipe_fd[1]);
+		return (0);
+	}
+	if (temp->output_op == -1)
+	{
+		close(ms->pipe_fd[1]);
+		temp->fd_out = open(temp->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
+		if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
+		{
+			perror("Error");
+			ft_free_string(temp->execpath);
+			exit(1);//exit?
+		}
+		if (dup2(temp->fd_out, STDOUT_FILENO) < 0)
+			perror("dup2 outfile1: ");
 		return (0);
 	}
 	// kein output file und keine redirection
 	if (temp->output_op == 0 && temp->pipe == 0)
 	{
 		close(ms->pipe_fd[0]);
-		// close(ms->pipe_fd[1]);
-		if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
-			perror("dup2 outfile: ");
+		close(ms->pipe_fd[1]);
+		// if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
+		// 	perror("dup2 outfile: ");
 		return (0);
 	}
+	// outfile redirection im truncate mode
 	return (0);
 }

@@ -37,7 +37,8 @@ void	execute_cmd(t_vars *ms, t_cmd *current)
 {
 	if (check_cmd(ms, current) == 0)
 	{
-		execve(current->execpath, current->command, &ms->env->content);		//env in char **envp (abspeichern)
+		// execve(current->execpath, current->command, &ms->env->content);		//env in char **envp (abspeichern)
+		execve(current->execpath, current->command, ms->envp);
 		close(ms->pipe_fd[1]);
 		perror("Error");
 		exit(EXIT_FAILURE);

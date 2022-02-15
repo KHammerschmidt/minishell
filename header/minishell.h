@@ -74,6 +74,7 @@ typedef struct s_vars
 	int		pipe_fd[2];
 	int		tmp_fd;
 	char	**paths;
+	char	**envp;
 
 	// int		*here_doc;	// 0 oder 1
 	int		exit_status;

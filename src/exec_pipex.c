@@ -29,9 +29,9 @@ int	pipex(t_vars *ms)
 			// close(ms->tmp_fd);
 			if (ft_lstsize_cmd(ms->cmd) != 1)
 			{
-				// if (dup2(ms->pipe_fd[0], ms->tmp_fd) < 0)
-				// 	perror("dup2 fd[0] into tmp_fd: ");
-				// close(ms->pipe_fd[0]);
+				if (dup2(ms->pipe_fd[0], ms->tmp_fd) < 0)
+					perror("dup2 fd[0] into tmp_fd: ");
+				close(ms->pipe_fd[0]);
 			}
 
 			waitpid(pid, &ms->exit_status, 0);
