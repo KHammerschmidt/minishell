@@ -22,6 +22,7 @@ SRC_LIST	=	builtin_cd.c			\
 				cmd_execpath.c			\
 				cmd_execution.c			\
 				cmd_dollar_expansion.c	\
+				cmd_input.c				\
 				cmd_lst_utils.c			\
 				cmd_pipes.c				\
 				cmd_quotes.c			\
