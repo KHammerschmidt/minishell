@@ -47,16 +47,16 @@ void	print_lst_last(t_vars *ms)
 	temp = ft_lstlast_cmd(ms->cmd);
 	if (len <= 1)
 	{
-		printf("pipe: %d\n", temp->pipe);
+		printf("input_op: %d   output_op: %d\n", temp->input_op, temp->output_op);
 		return ;
 	}
 	while (temp->previous != NULL && len >= 1)
 	{
-		printf("pipe: %d \n", temp->pipe);
+		printf("input_op: %d   output_op: %d\n", temp->input_op, temp->output_op);
 		temp = temp->previous;
 	}
 	if (temp->previous == NULL)
-		printf("pipe: %d \n", temp->pipe);
+		printf("input_op: %d    output_op: %d\n", temp->input_op, temp->output_op);
 }
 
 void	print_lst(t_vars *ms)

@@ -33,7 +33,8 @@ void	pass_on_infos_node(t_info *info, t_cmd *node)
 {
 	node->command = info->command;
 	node->pipe = info->pipe;
-	node->op = info->op;
+	node->output_op = info->output_op;
+	node->input_op = info->input_op;
 	node->infile = info->infile;
 	node->outfile = info->outfile;
 	reset_info_struct(info);

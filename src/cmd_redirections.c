@@ -140,21 +140,39 @@ void	check_redirections(char **string, int pipe_marker, t_vars *ms)
 	int		redirection_in;
 	int		redirection_out;
 
-	redirection_in = ft_strchr_pos((*string), '<');
+	redirection_in = ft_strchr_pos((*string), '<'); 
+	if (redirection_in == -1)
+		ms->info->input_op = 0;
 	if (redirection_in != -1)
 	{
 		if ((*string)[redirection_in] == '<' && (*string)[redirection_in + 1] == '<')		//check for '<<'
-			printf("READ INPUT FROM THE CURRENT SOURCE\n");
-		else																			//single '<'
+		{
+			ms->info->input_op = -2;
 			infile_redirection(string, ms);
+			ms->info->limiter_here_doc = ms->info->infile;			//cut out limiter of cmd
+			ft_free_string(ms->info->infile);
+		}
+		else																			//single '<'
+		{
+			ms->info->input_op = -1;
+			infile_redirection(string, ms);
+		}
 	}
 	redirection_out = ft_strchr_pos(*string, '>');
+	if (redirection_out == 0)
+		ms->info->output_op = 0;
 	if (redirection_out != -1)
 	{
 		if ((*string)[redirection_out] == '>' && (*string)[redirection_out + 1] == '>')
-			printf("REDIRECTS OUTPUT WITH APPEND MODE\n");
-		else
+		{
+			ms->info->output_op = -2;
 			outfile_redirection(string, ms);
+		}
+		else
+		{
+			ms->info->output_op = -1;
+			outfile_redirection(string, ms);
+		}
 	}
 	if (ft_strchr_pos(*string, '<') != -1 && ft_strchr_pos(*string, '>') != -1)			// in case there are multiple redirections in there (how are they overwriting each other, but calling the here_doc for example?)
 		check_redirections((&*string), pipe_marker, ms);
