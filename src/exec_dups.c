@@ -84,13 +84,13 @@ int	input_redirection(t_cmd *temp, t_vars *ms)
 			{
 				ft_putstr_fd("zsh: No such file or directory: ", 2);
 				ft_putendl_fd(temp->infile, 2);
-				ft_free_arr(temp->execpath);
+				ft_free_string(temp->execpath);
 				exit(1);//exit?
 			}
 			if (access(temp->infile, R_OK) != 0)
 			{
 				perror("Error");
-				ft_free_arr(temp->execpath);
+				ft_free_string(temp->execpath);
 				exit(1);//exit?
 			}
 			temp->fd_in = open(temp->infile, O_RDONLY);
@@ -138,13 +138,13 @@ int	input_redirection(t_cmd *temp, t_vars *ms)
 			{
 				ft_putstr_fd("zsh: No such file or directory: ", 2);
 				ft_putendl_fd(temp->infile, 2);
-				ft_free_arr(temp->execpath);
+				ft_free_string(temp->execpath);
 				exit(1);//exit?
 			}
 			if (access(temp->infile, R_OK) != 0)
 			{
 				perror("Error");
-				ft_free_arr(temp->execpath);
+				ft_free_string(temp->execpath);
 				exit(1);//exit?
 			}
 			temp->fd_in = open(temp->infile, O_RDONLY);
@@ -174,6 +174,7 @@ int	input_redirection(t_cmd *temp, t_vars *ms)
 			return (0);
 		}
 	}
+	return (0);
 }
 
 int	output_redirection(t_cmd *temp, t_vars *ms)
@@ -201,10 +202,10 @@ int	output_redirection(t_cmd *temp, t_vars *ms)
 		if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
 		{
 			perror("Error");
-			ft_free_arr(temp->execpath);
+			ft_free_string(temp->execpath);
 			exit(1);//exit?
 		}
-		if (dup2(temp->outfile, STDOUT_FILENO) < 0)
+		if (dup2(temp->fd_out, STDOUT_FILENO) < 0)
 			perror("dup2 outfile1: ");
 		return (0);
 	}
@@ -216,10 +217,10 @@ int	output_redirection(t_cmd *temp, t_vars *ms)
 		if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
 		{
 			perror("Error");
-			ft_free_arr(temp->execpath);
+			ft_free_string(temp->execpath);
 			exit(1);//exit?
 		}
-		if (dup2(temp->outfile, STDOUT_FILENO) < 0)
+		if (dup2(temp->fd_out, STDOUT_FILENO) < 0)
 			perror("dup2 outfile1: ");
 		return (0);
 	}

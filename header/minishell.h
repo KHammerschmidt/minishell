@@ -74,8 +74,9 @@ typedef struct s_vars
 	int		pipe_fd[2];
 	int		tmp_fd;
 	char	**paths;
+
 	// int		*here_doc;	// 0 oder 1
-	// int		exit_status;
+	int		exit_status;
 	// char	*cwd;
 	// char	*new_wd;
 	// char	**execpath;
@@ -106,7 +107,7 @@ int		builtin_exit(t_vars *ms);
 int		builtin_export(t_vars *ms);
 void	builtin_pwd(t_vars *ms);
 int		builtin_unset(t_vars *ms);
-int		execute_cmd(t_vars *ms);
+void		execute_cmd(t_vars *ms, t_cmd *current);
 int		is_builtin(t_vars *ms, char *cmd);
 
 /* prompt */
@@ -144,7 +145,7 @@ void	pass_on_infos_node(t_info *info, t_cmd *node);
 
 /* command execution */
 int		get_paths(t_vars *ms);
-int		check_cmd(t_vars *ms, char **cmd);
+int		check_cmd(t_vars *ms, t_cmd *current);
 
 /* cmd utils */
 t_cmd	*ft_lstnew_cmd(t_info *info);
@@ -178,6 +179,9 @@ void 	infile_redirection(char **string, t_vars *ms);
 void 	outfile_redirection(char **string, t_vars *ms);
 void	check_redirections(char **string, int pipe_marker, t_vars *ms);
 void	check_redirections(char **string, int pipe_marker, t_vars *ms);
+
+int	input_redirection(t_cmd *temp, t_vars *ms);
+int	output_redirection(t_cmd *temp, t_vars *ms);
 
 
 
