@@ -52,7 +52,7 @@ int	validate_and_change_path(t_vars *ms, char *new_path, char *start_wd)
 
 /* Gets home directory from envar list, concatenates and changes path. */
 /* Changes OLDPWD and PWD in envar list.                               */
-int	builtin_cd(t_vars *ms)
+int	builtin_cd(t_vars *ms, t_cmd *current)
 {
 	char	*start_wd;
 	char	*new_path;
@@ -65,7 +65,7 @@ int	builtin_cd(t_vars *ms)
 		return (1);
 	}
 	new_path = NULL;
-	new_path = ms->cmd->command[1];
+	new_path = current->command[1];
 	home = get_env_var(ms, "HOME")->content;
 	if (new_path == NULL && home == NULL)
 	{

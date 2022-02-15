@@ -23,7 +23,7 @@ static int	validate_arg(char *command)
 	return (0);
 }
 
-int	check_first_element(t_vars *ms, int i)
+int	check_first_element(t_vars *ms, char *command)
 {
 	t_env	*current;
 
@@ -33,9 +33,9 @@ int	check_first_element(t_vars *ms, int i)
 		write(2, "Error. No environment variables found.\n", 39);
 		return (1);
 	}
-	if (validate_arg(ms->cmd->command[i]) == 1)
+	if (validate_arg(command) == 1)
 		return (1);
-	if (compare_str(current->name, ms->cmd->command[i]) == 0)
+	if (compare_str(current->name, command) == 0)
 	{
 		ms->env = current->next;
 		free(current->name);
@@ -62,30 +62,30 @@ int	check_other_elements(t_env **prev, t_env **current, char *command)
 }
 
 /* Looks for var_name in envar list and deletes the respective node if found. */
-int	builtin_unset(t_vars *ms)
+int	builtin_unset(t_vars *ms, t_cmd *current)
 {
-	t_env	*current;
+	t_env	*tmp;
 	t_env	*prev;
 	int		i;
 
 	i = 1;
-	while (ms->cmd->command[i] != NULL)
+	while (current->command[i] != NULL)
 	{
-		current = ms->env;
+		tmp = ms->env;
 		prev = NULL;
-		if (check_first_element(ms, i) == 1)
+		if (check_first_element(ms, current->command[i]) == 1)
 			return (1);
-		else if (check_first_element(ms, i) == 2)
+		else if (check_first_element(ms, current->command[i]) == 2)
 		{
 			i++;
 			continue ;
 		}
 		else
 		{
-			prev = current;
-			current = current->next;
-			while (current != NULL)
-				check_other_elements(&prev, &current, ms->cmd->command[i]);
+			prev = tmp;
+			tmp = tmp->next;
+			while (tmp != NULL)
+				check_other_elements(&prev, &tmp, current->command[i]);
 			i++;
 		}
 	}

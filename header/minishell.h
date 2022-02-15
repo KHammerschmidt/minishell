@@ -100,14 +100,15 @@ t_env	*ft_lstlast_env(t_env *lst);
 /* builtins */
 void	init_builtin(t_vars *ms);				//arr + lst
 void	add_builtin(t_vars *ms, char *builtin);
-int		builtin_cd(t_vars *ms);
-int		builtin_echo(t_vars *ms);
-void	builtin_env(t_vars *ms);
-int		builtin_exit(t_vars *ms);
-int		builtin_export(t_vars *ms);
-void	builtin_pwd(t_vars *ms);
-int		builtin_unset(t_vars *ms);
-void		execute_cmd(t_vars *ms, t_cmd *current);
+int		builtin_cd(t_vars *ms, t_cmd *current);
+int		builtin_echo(t_vars *ms, t_cmd *current);
+void	builtin_env(t_vars *ms, t_cmd *current);
+int		builtin_exit(t_vars *ms, t_cmd *current);
+int		builtin_export(t_vars *ms, t_cmd *current);
+void	builtin_pwd(t_vars *ms, t_cmd *current);
+int		builtin_unset(t_vars *ms, t_cmd *current);
+void	execute_cmd(t_vars *ms, t_cmd *current);
+void	execute_builtin(t_vars *ms, t_cmd *current);
 int		is_builtin(t_vars *ms, char *cmd);
 
 /* prompt */

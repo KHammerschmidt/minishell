@@ -16,7 +16,7 @@ int	find_n_flag(t_vars *ms)
 
 /* Writes given string to correponding output, omitting the new line if -n */
 /* is given as option.                                                     */
-int	builtin_echo(t_vars *ms)
+int	builtin_echo(t_vars *ms, t_cmd *current)
 {
 	int	i;
 	int	n_flag;
@@ -26,18 +26,18 @@ int	builtin_echo(t_vars *ms)
 	n_flag = find_n_flag(ms);
 	if (n_flag == 1)
 		i++;
-	if (ms->cmd->command[1] != NULL)
+	if (current->command[1] != NULL)
 	{
-		if (n_flag == 1 && ms->cmd->command[2] == NULL)
+		if (n_flag == 1 && current->command[2] == NULL)
 			return (0);
 	}
-	while (ms->cmd->command[i] != NULL)
+	while (current->command[i] != NULL)
 	{
-		ft_putstr_fd(ms->cmd->command[i], ms->cmd->fd_out);
-		ft_putchar_fd(' ', ms->cmd->fd_out);
+		ft_putstr_fd(current->command[i], current->fd_out);
+		ft_putchar_fd(' ', current->fd_out);
 		i++;
 	}
 	if (n_flag == 0)
-		ft_putchar_fd('\n', ms->cmd->fd_out);
+		ft_putchar_fd('\n', current->fd_out);
 	return (0);
 }
