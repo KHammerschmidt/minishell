@@ -89,5 +89,6 @@ int	builtin_unset(t_vars *ms, t_cmd *current)
 			i++;
 		}
 	}
+	update_envp_array(ms);
 	return (0);
 }

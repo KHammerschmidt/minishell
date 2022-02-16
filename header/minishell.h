@@ -97,6 +97,7 @@ t_env	*get_env_var(t_vars *ms, char *var_name);
 t_env	*ft_lstnew_env(char *content);
 void	ft_lstadd_back_env(t_env **lst, t_env *new);
 t_env	*ft_lstlast_env(t_env *lst);
+void	update_envp_array(t_vars *ms);
 
 /* builtins */
 void	init_builtin(t_vars *ms);				//arr + lst

@@ -64,3 +64,41 @@ void	ft_free_lst_env(t_env **lst)
 		free(tmp);
 	}
 }
+
+static void	create_envarr_update(t_vars *ms, t_env *current)
+{
+	char	*tmp;
+	int		i;
+
+	tmp = NULL;
+	i = 0;
+	while (current != NULL)
+	{
+		tmp = ft_strdup(current->name);
+		tmp = ft_strjoin(tmp, "=");
+		tmp = ft_strjoin(tmp, current->content);
+		ms->envp[i] = ft_strdup(tmp);
+		free(tmp);
+		tmp = NULL;
+		current = current->next;
+		i++;
+	}
+	ms->envp[i] = NULL;
+}
+
+void	update_envp_array(t_vars *ms)
+{
+	t_env	*current;
+	int		i;
+
+	current = ms->env;
+	i = 0;
+	while (current != NULL)
+	{
+		current = current->next;
+		i++;
+	}
+	ms->envp = malloc(i * sizeof(char *));
+	current = ms->env;
+	create_envarr_update(ms, current);
+}
