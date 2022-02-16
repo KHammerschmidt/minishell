@@ -35,7 +35,7 @@ int	pipex(t_vars *ms)
 			}
 
 			waitpid(pid, &ms->exit_status, 0);
-			printf("exit status %d\n", ms->exit_status);
+			// printf("exit status %d\n", ms->exit_status);
 		}
 		current = current->next;
 	}
