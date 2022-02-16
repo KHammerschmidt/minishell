@@ -43,6 +43,7 @@ int	validate_and_change_path(t_vars *ms, char *new_path, char *start_wd)
 	}
 	chdir(new_path);
 	adjust_envar_list(ms, start_wd);
+	update_envp_array(ms);
 	if (flag == 1)
 		free(tmp);
 	if (start_wd)

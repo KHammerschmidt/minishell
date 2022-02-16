@@ -55,14 +55,13 @@ int	main(int argc, char **argv, char **envp)
 		pipex(&ms);
 		// print_lst(&ms);
 		// print_lst_last(&ms);
-
 		free_cmd_struct(&ms);
 		if (ms.line)
 		{
 			free(ms.line);
 			ms.line = NULL;
 		}
-		// reset_info_struct(ms.info);
+		reset_info_struct(ms.info);
 		// system("leaks minishell");
 	}
 	return (0);

@@ -21,7 +21,7 @@ static int	validate_arg(char *command, int *i)
 	while (command[*i] != '=' && command[*i] != '\0')
 		(*i)++;
 	if (command[*i] == '\0')
-		return (2);
+		return (1);
 	return (0);
 }
 
@@ -88,7 +88,6 @@ static int	insert_variable(t_vars *ms, char *var_name, char *var_val, char *comm
 /* found, creates new node with respective name and content.                */
 int	builtin_export(t_vars *ms, t_cmd *current)
 {
-	// t_env	*tmp;
 	char	*var_name;
 	char	*var_val;
 	int		i;
@@ -97,13 +96,10 @@ int	builtin_export(t_vars *ms, t_cmd *current)
 	k = 1;
 	while (current->command[k] != NULL)
 	{
-		// tmp = ms->env;
 		var_name = NULL;
 		var_val = NULL;
 		i = 0;
 		if (validate_arg(current->command[k], &i) == 1)
-			return (1);													// TODO: exit status
-		if (validate_arg(current->command[k], &i) == 2)
 		{
 			k++;
 			continue ;
@@ -115,5 +111,6 @@ int	builtin_export(t_vars *ms, t_cmd *current)
 		free(var_val);
 		k++;
 	}
+	update_envp_array(ms);
 	return (0);
 }
