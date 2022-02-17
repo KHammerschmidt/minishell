@@ -10,6 +10,7 @@ int	init_struct(t_vars *ms, char **envp)
 	ms->cmd = NULL;
 	ms->envp = envp;
 	ms->info = ft_calloc(1, sizeof(t_info));
+	ms->tmp_fd = dup(STDIN_FILENO);
 	ft_memset(ms->info, 0, sizeof(t_info));
 	return (0);
 }

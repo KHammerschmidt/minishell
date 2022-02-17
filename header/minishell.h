@@ -36,7 +36,6 @@ typedef struct s_info
 	char			*errfile;			//char **
 	int				input_op;			//int **
 	int				output_op;			//int **
-	char			*limiter_here_doc;
 	int				pipe;
 }	t_info;
 
@@ -44,13 +43,12 @@ typedef struct s_cmd
 {
 	char			**command;
 	char			*execpath;				//we need the execpath of the command if its a command
-	int				fd_out;
 	int				fd_in;
+	int				fd_out;
 	char			*infile;			//**infile
 	char			*outfile;			//**outfile
 	int				input_op;			//int **
 	int				output_op;			//int **
-	char			*limiter_here_doc;
 	int				pipe;
 	struct s_cmd	*next;
 	struct s_cmd	*previous;
@@ -176,18 +174,16 @@ int		compare_str(char *s1, char *s2);
 void	free_cmd_struct(t_vars *ms);
 
 /* Redirections */
-void 	ft_cut_infile_redirections(char **string, t_vars *ms);
-void 	ft_cut_outfile_redirections(char **string, t_vars *ms);
+void	ft_cut_infile_redirections(char **string);
+void	ft_cut_outfile_redirections(char **string);
 void 	infile_redirection(char **string, t_vars *ms);
 void 	outfile_redirection(char **string, t_vars *ms);
 void	check_redirections(char **string, int pipe_marker, t_vars *ms);
-void	check_redirections(char **string, int pipe_marker, t_vars *ms);
 
-int	input_redirection(t_cmd *temp, t_vars *ms);
-int	output_redirection(t_cmd *temp, t_vars *ms);
-int	pipex(t_vars *ms);
-
-// t_cmd	*init_cmd_lst(t_vars *ms, int size);
-// void	reset_info_struct(t_info *info);
+/* Processes */
+int		pipex(t_vars *ms);
+void	input_redirection_1(t_cmd *temp, t_vars *ms);
+void	input_redirection_2(t_cmd *temp, t_vars *ms);
+void	output_redirection(t_cmd *temp, t_vars *ms);
 
 #endif
