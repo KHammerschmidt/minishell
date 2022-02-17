@@ -30,6 +30,7 @@ SRC_LIST	=	builtin_cd.c			\
 				cmd_utils.c 			\
 				env_get_env_var.c		\
 				env_init.c				\
+				env_handling.c			\
 				env_utils.c				\
 				exec_builtin_cmd.c		\
 				exec_dups.c				\

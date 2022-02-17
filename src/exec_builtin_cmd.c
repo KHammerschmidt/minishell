@@ -18,19 +18,19 @@ int	is_builtin(t_vars *ms, char *cmd)
 void	execute_builtin(t_vars *ms, t_cmd *current)
 {
 	if (compare_str(current->command[0], "echo") == 0)
-		builtin_echo(ms, current);
+		ms->exit_status = builtin_echo(ms, current);
 	if (compare_str(current->command[0], "cd") == 0)
-		builtin_cd(ms, current);
+		ms->exit_status = builtin_cd(ms, current);
 	if (compare_str(current->command[0], "pwd") == 0)
-		builtin_pwd(ms, current);
+		ms->exit_status = builtin_pwd(ms, current);
 	if (compare_str(current->command[0], "env") == 0)
-		builtin_env(ms, current);
+		ms->exit_status = builtin_env(ms, current);
 	if (compare_str(current->command[0], "export") == 0)
-		builtin_export(ms, current);
+		ms->exit_status = builtin_export(ms, current);
 	if (compare_str(current->command[0], "unset") == 0)
-		builtin_unset(ms, current);
+		ms->exit_status = builtin_unset(ms, current);
 	if (compare_str(current->command[0], "exit") == 0)
-		builtin_exit(ms, current);
+		ms->exit_status = builtin_exit(ms, current);
 }
 
 void	execute_cmd(t_vars *ms, t_cmd *current)

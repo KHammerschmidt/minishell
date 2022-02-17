@@ -9,7 +9,10 @@ int	pipex(t_vars *ms)
 	while (current != NULL)
 	{
 		if (pipe(ms->pipe_fd) == -1)	//protecten mio!
-			printf("ERROR\n"); //ft_error_function
+		{
+			perror("Error");
+			return (-1);			// Mio: Muessen wir hier raus springen oder weiter machen?
+		}
 		if (is_builtin(ms, current->command[0]) == 1)
 		{
 			input_redirection(current, ms);				//special case for builtin
@@ -27,15 +30,19 @@ int	pipex(t_vars *ms)
 			}
 			// close(ms->pipe_fd[1]);
 			// close(ms->tmp_fd);
-			if (ft_lstsize_cmd(ms->cmd) != 1)
+			else
 			{
-				if (dup2(ms->pipe_fd[0], ms->tmp_fd) < 0)
-					perror("dup2 fd[0] into tmp_fd: ");
-				close(ms->pipe_fd[0]);
+				if (ft_lstsize_cmd(ms->cmd) != 1)
+				{
+					if (dup2(ms->pipe_fd[0], ms->tmp_fd) < 0)
+						perror("dup2 fd[0] into tmp_fd: ");
+					close(ms->pipe_fd[0]);
+				}
+				signal(SIGQUIT, SIG_IGN);
+				signal(SIGINT, SIG_IGN);
+				waitpid(pid, &ms->exit_status, 0);
+				printf("exit status %d\n", ms->exit_status);
 			}
-
-			waitpid(pid, &ms->exit_status, 0);
-			printf("exit status %d\n", ms->exit_status);
 		}
 		current = current->next;
 	}

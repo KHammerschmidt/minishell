@@ -38,6 +38,17 @@ static void	free_cmd_list(t_vars *ms)
 		if (tmp->command != NULL)
 		{
 			ft_free_strarray(tmp->command);
+			tmp->command = NULL;
+		}
+		if (tmp->execpath != NULL)
+		{
+			free(tmp->execpath);
+			tmp->execpath = NULL;
+		}
+		if (tmp->error_msg != NULL)
+		{
+			free(tmp->error_msg);
+			tmp->error_msg = NULL;
 		}
 		// Mio: add additional allocated memory to be freed.
 	}
@@ -59,6 +70,16 @@ void	free_and_exit(t_vars *ms, int e_flag, int e_code)
 	{
 		free(ms->cmd_line);
 		ms->cmd_line = NULL;
+	}
+	// if (ms->envp)					// malloc double free error after update_env_array()
+	// {
+	// 	ft_free_strarray(ms->envp);
+	// 	ms->envp = NULL;
+	// }
+	if (ms->paths)
+	{
+		ft_free_strarray(ms->paths);
+		ms->paths = NULL;
 	}
 	if (e_flag == 1)
 		exit(e_code);

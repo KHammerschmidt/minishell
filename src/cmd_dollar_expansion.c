@@ -5,8 +5,8 @@ static char	*search_for_var(t_vars *ms, char *var)
 	t_env	*current;
 
 	current = ms->env;
-	// if (compare_string(var, "$?") == 0)					// add $? once exit status handling is done
-	// 	return (ms->exit_code);
+	if (compare_str(var, "?") == 0)
+		return (ft_itoa(ms->exit_status));
 	while (current != NULL)
 	{
 		if (compare_str(current->name, var) == 0)
@@ -88,7 +88,7 @@ void	dollar_expansion(t_vars *ms)
 			replicate_text(ms, &i, &j);
 			i++;
 			j = i;
-			while (ft_isalpha(ms->cmd_line[i]) == 1)				// add "|| str[i] == '?'"
+			while (ft_isalpha(ms->cmd_line[i]) == 1 || ms->cmd_line[i] == '?')
 				i++;
 			add_expanded_var(ms, &i, &j);
 		}
