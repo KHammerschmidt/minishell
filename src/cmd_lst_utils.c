@@ -28,15 +28,52 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 	}
 }
 
+/* Open any files related to infile and outfile redirections. */
+void	open_files(t_cmd *node)
+{
+	if (node->input_op == -1)
+	{
+		if (access(node->infile, F_OK) != 0)
+		{
+			if (access(node->infile, R_OK) != 0)
+				perror("Error");
+			else
+			{
+				ft_putstr_fd("zsh: No such file or directory: ", 2);
+				ft_putendl_fd(node->infile, 2);
+			}
+		}
+		else
+		{
+			node->fd_in = open(node->infile, O_RDONLY);
+			if (node->fd_in == -1)
+				perror("Error: ");
+		}
+	}
+	if (node->output_op != 0)
+	{
+		if (node->output_op == -1)
+			node->fd_out = open(node->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
+		if (node->output_op == -2)
+			node->fd_out = open(node->outfile, O_RDWR | O_CREAT | O_APPEND, 0644);
+		if (node->fd_out == -1 || access(node->outfile, W_OK) != 0)
+			perror("Error");
+	}
+}
+
 /* Passes on the information about the command into the struct t_cmd. */
 void	pass_on_infos_node(t_info *info, t_cmd *node)
 {
 	node->command = info->command;
 	node->pipe = info->pipe;
-	node->output_op = info->output_op;
+											//dups oder einfach Gleichzeichen?????
+	node->fd_out = 1;
+	node->fd_in = 0;
 	node->input_op = info->input_op;
+	node->output_op = info->output_op;
 	node->infile = info->infile;
 	node->outfile = info->outfile;
+	open_files(node);
 	reset_info_struct(info);
 }
 
@@ -47,19 +84,9 @@ t_cmd	*ft_lstnew_cmd(t_info *info)				//das hier wieder rein (neue lst_new)
 	node = malloc(sizeof(t_cmd));
 	if (node == NULL)
 		return (NULL);
-	// init_cmd(node, size, command);
 	pass_on_infos_node(info, node);
-	// node->command = ms->cmd->command;
-	// node->pipe = ms->cmd->pipe;
 	node->next = NULL;
 	node->previous = NULL;
-	// node->outfile = NULL;
-	// node->infile = NULL;
-	// node->errfile = NULL;
-	// node->next = NULL;
-	// node->op = 0;
-	// node->pipe = 0;
-	// node->command = NULL;
 	return (node);
 }
 
