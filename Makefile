@@ -33,9 +33,8 @@ SRC_LIST	=	builtin_cd.c			\
 				env_handling.c			\
 				env_utils.c				\
 				exec_builtin_cmd.c		\
-				exec_dups.c				\
 				exec_input.c			\
-				exec_pipex.c			\
+				exec_pipex_2.c			\
 				start_create_prompt.c	\
 				start_main.c			\
 				utils_free_memory.c		\

@@ -1,14 +1,136 @@
 #include "../header/minishell.h"
 
+
+void	input_redirection_2(t_cmd *temp, t_vars *ms)
+{
+	if (temp->input_op == 0)
+	{
+		if (temp->previous != NULL)
+		{
+			if (temp->previous->pipe == 1)
+			{
+				if (temp->previous->output_op == -1 || temp->previous->output_op == -2)
+					close(ms->pipe_fd[0]);
+				else if (temp->previous->output_op == 0)
+				{
+					if (dup2(ms->tmp_fd, STDIN_FILENO) < 0)
+						perror("dup2 infile_2 1: ");
+					close(ms->tmp_fd);
+				}
+			}
+			else if (temp->previous->pipe == 0)
+				close(ms->tmp_fd);
+			// if (ms->pipe_fd[0] != STDIN_FILENO)
+				// close(ms->pipe_fd[0]);
+		}
+		else if (temp->previous == NULL)
+		{
+			// if (ms->pipe_fd[0] != STDIN_FILENO)
+			close(ms->pipe_fd[0]);
+		}
+	}
+}
+
+void	input_redirection_1(t_cmd *temp, t_vars *ms)
+{
+	if (temp->input_op == -1)			//infile redirection			//-2 fehlt
+	{
+		close(ms->pipe_fd[0]);
+		if (access(temp->infile, F_OK) != 0)
+		{
+			if (access(temp->infile, R_OK) != 0)
+				perror("Error");
+			else
+			{
+				ft_putstr_fd("zsh: No such file or directory: ", 2);
+				ft_putendl_fd(temp->infile, 2);
+			}
+		}
+		else
+		{
+			temp->fd_in = open(temp->infile, O_RDONLY);
+			if (dup2(temp->fd_in, STDIN_FILENO) < 0)
+				perror("dup2 infile1: ");
+			close(temp->fd_in);
+			printf("HERE hihihi\n");
+		}
+	}
+	else if (temp->input_op == -2)
+		printf("HERE DOC/n");
+	if (temp->input_op == 0)
+	{
+		if (temp->previous != NULL)
+		{
+			if (temp->previous->pipe == 1)
+			{
+				if (temp->previous->output_op == -1 || temp->previous->output_op == -2)
+					close(ms->pipe_fd[0]);
+				else if (temp->previous->output_op == 0)
+				{
+					if (dup2(ms->pipe_fd[0], STDIN_FILENO) < 0)
+						perror("dup2 infile2: ");
+					close(ms->pipe_fd[0]);
+				}
+			}
+			else if (temp->previous->pipe == 0)
+				close(ms->pipe_fd[0]);
+			// if (ms->pipe_fd[0] != STDIN_FILENO)
+				// close(ms->pipe_fd[0]);
+		}
+		else if (temp->previous == NULL)
+		{
+			// if (ms->pipe_fd[0] != STDIN_FILENO)
+			close(ms->pipe_fd[0]);
+		}
+	}
+}
+
+void	output_redirection(t_cmd *temp, t_vars *ms)
+{
+	if (temp->output_op == -1 || temp->output_op == -2)
+	{
+		if (temp->output_op == -1)
+			temp->fd_out = open(temp->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
+		else if (temp->output_op == -2)
+			temp->fd_out = open(temp->outfile, O_RDWR | O_CREAT | O_APPEND, 0644);
+		if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
+			perror("Error");
+		else
+		{
+			if (dup2(temp->fd_out, STDOUT_FILENO) < 0)		//hier die Version anders für builtins (kein dup notwendig)
+				perror("dup2 outfile1: ");
+			close(temp->fd_out);
+			close(ms->pipe_fd[1]);
+		}
+	}
+	if (temp->output_op == 0)
+	{
+		if (temp->pipe == 0)
+		{
+			// if (ms->pipe_fd[1] != 1)
+			close(ms->pipe_fd[1]);
+		}
+		else if (temp->pipe == 1)
+		{
+			printf("HERE 1\n");
+			if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
+				perror("dup2 outfile2: ");
+			write(1, "HALLO\n", 6);
+			printf("HERE 2\n");
+			close(ms->pipe_fd[1]);
+		}
+	}
+}
+
+
+// ---------__________--------------------__________--------------------__________--------------------__________--------------------__________-----------
+
 //OPEN POINTS
 //multiple redirections (finding the last and dominant one)
 //how to handle here_doc (open and where to dup it into)
 //exceptions for the last command necessary?
 
-/* Rewritten gnl for pipex. The read() function reads respectively from fd = 0
-one character at a time until a '\n' or '\0' is read. Each read character is
-saved in buffer[i] which is then appended by a newline and a null-termiantor.
-The buffer is freed and the line returned. */
+/* Gnl for pipex. read() reads from fd 0. */
 // static char	*get_next_line_pipex(int fd)
 // {
 // 	char		*buffer;
@@ -38,12 +160,9 @@ The buffer is freed and the line returned. */
 // 	return (line);
 // }
 
-/* The function ft_strncmp() compares lexicographically the null-terminated
-strings s1 and s2 but not more than n characters. Characters that appear
-after null-terminator are not compared. The function returns an integer
-greater than, equal to or less than 0, according as s1 is greater than,
-equal to or less than string 2. Comparison is done using unsigned
-characters. */
+/* Compares lexicographically the null-terminated strings, not more than
+n characters. Returns an integer greater than, equal to or less than 0
+if s1 is greater than, equal to or less than s2.  */
 int	ft_strncmp_pipex(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
@@ -62,251 +181,299 @@ int	ft_strncmp_pipex(const char *s1, const char *s2, size_t n)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-/* Checks if there is a pipe in the previous command.
-Afterwards searches for a prioritised redirection in input_op. */
-// int	input_redirection(t_cmd *temp, t_vars *ms)
+// int	here_doc(t_cmd *temp, t_vars *ms)
 // {
-	// close(ms->pipe_fd[0]);
-	//second and following commands / maybe extra part for the last command
-	// if(temp->previous != NULL)
-	// {
-	// 	//input comes from a previous pipe, no other input redirections		//tmp_fd?
-	// 	if (temp->input_op == 0 && temp->previous->pipe == 1)
-	// 	{
-	// 		if (dup2(ms->tmp_fd, STDIN_FILENO) < 0)
-	// 			perror("dup2 infile: ");
-	// 		return (0);
-	// 	}
-	// 	//input is not taken from previous pipe but from the overwriting input redirection
-	// 	else if (temp->input_op == -1)
-	// 	{
-	// 		if (access(temp->infile, F_OK) != 0)
-	// 		{
-	// 			ft_putstr_fd("zsh: No such file or directory: ", 2);
-	// 			ft_putendl_fd(temp->infile, 2);
-	// 			ft_free_string(temp->execpath);
-	// 			exit(1);//exit?
-	// 		}
-	// 		if (access(temp->infile, R_OK) != 0)
-	// 		{
-	// 			perror("Error");
-	// 			ft_free_string(temp->execpath);
-	// 			exit(1);//exit?
-	// 		}
-	// 		temp->fd_in = open(temp->infile, O_RDONLY);
-	// 		if (dup2(temp->fd_in, STDIN_FILENO) < 0)
-	// 			perror("dup2 infile: ");
-	// 		close(temp->fd_in);
-	// 		return (0);
-	// 	}
-	// 	//input comes from here_doc (read into char *line and written to pipe_fd[1])
-	// 	else if (temp->input_op == -2)
-	// 	{
-	// 		char	*line;
-	// 		char	*limiter;
+// 	char	*line;
 
-	// 		if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
-	// 			perror("dup2 here_doc STDOUT: ");
-	// 		while (1)
+// 	line = NULL;
+// 	close(ms->pipe_fd[0]);
+// 	if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
+// 		perror("dup2 here_doc STDOUT:");
+// 	while (1)
+// 	{
+// 		line = get_next_line_pipex(0);
+// 		if (ft_strncmp_pipex(line, temp->infile, ft_strlen(temp->infile)) == 0)
+// 		{
+// 			printf("LIMITER FOUND\n");
+// 			close(ms->pipe_fd[1]);
+// 			return (0);
+// 		}
+// 		write(ms->pipe_fd[1], line, ft_strlen(line));
+// 	}
+// }
+
+
+
+// ____________________________________________________________________________________________________________________________________________
+//BACKUP 2
+
+
+int	input_redirection(t_cmd *temp, t_vars *ms)
+{
+	if (ft_lstsize_cmd(ms->cmd) == 1)
+		return (0);
+	else if (temp->previous == NULL && temp->input_op == 0)
+	{
+		//erster command, keine input redirection und nur ein command
+		close(ms->pipe_fd[0]);
+	}
+	else if (temp->input_op == 0 && temp->previous != NULL)
+	{
+		//keine input redirection
+		if (dup2(ms->pipe_fd[0], STDIN_FILENO) < 0)
+			perror("dup2: infile1: ");
+		close(ms->pipe_fd[0]);
+	}
+	else if (temp->input_op == -1)
+	{
+		//infile redirection
+		close(ms->pipe_fd[0]);
+		if (access(temp->infile, F_OK) != 0)
+		{
+			ft_putstr_fd("zsh: No such file or directory: ", 2);
+			ft_putendl_fd(temp->infile, 2);
+		}
+		if (access(temp->infile, F_OK) == 0 && access(temp->infile, R_OK) != 0)
+			perror("Error");
+		else
+		{
+			temp->fd_in = open(temp->infile, O_RDONLY);
+			if (dup2(temp->fd_in, STDIN_FILENO) < 0)
+				perror("dup2 infile2: ");
+			close(temp->fd_in);
+		}
+	}
+	else if (temp->previous->pipe == 1)
+	{
+		// there is no previous input STDIN bleibt STDIN
+		if (temp->previous->fd_out == -1 || temp->previous->fd_out == -2)
+			return (0);
+		//previous cmd comes from a pipe
+		if (dup2(ms->pipe_fd[0], STDIN_FILENO) < 0)
+			perror("dup2: infile3: ");
+		// close(ms->pipe_fd[0]);
+	}
+	// else if (temp->input_op == -2)
+	// {
+	// 	// here_doc
+	// 	close(ms->pipe_fd[0]);
+	// 	char	*line;
+
+	// 	line = NULL;
+	// 	if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
+	// 		perror("dup2 here_doc STDOUT:");
+	// 	while (1)
+	// 	{
+	// 		line = get_next_line_pipex(0);
+	// 		if (ft_strncmp_pipex(line, temp->infile, ft_strlen(temp->infile)) == 0)
 	// 		{
-	// 			line = get_next_line_pipex(0);
-	// 			if (ft_strncmp_pipex(line, limiter, ft_strlen(limiter)) == 0)
-	// 			{
-	// 				close(ms->pipe_fd[1]);
-	// 				exit(EXIT_SUCCESS);
-	// 			}
+	// 			printf("LIMITER FOUND\n");
+	// 			close(ms->pipe_fd[1]);
+	// 			return (0);
+	// 			// break ;
 	// 		}
 	// 		write(ms->pipe_fd[1], line, ft_strlen(line));
-	// 		return (0);
 	// 	}
 	// }
-	//first command
-	// if (temp->previous == NULL)
-	// {
-	// 	//kein input
-	// 	if (temp->input_op == 0)			// keine redirection
-	// 	{
-	// 		if (dup2(ms->tmp_fd, STDIN_FILENO) < 0)
-	// 			perror("dup2: infile: ");
-	// 		return (0);
-	// 	}
-		//infile redirection
-		// else if (temp->input_op == -1)
-		// {
-		// 	if (access(temp->infile, F_OK) != 0)
-		// 	{
-		// 		ft_putstr_fd("zsh: No such file or directory: ", 2);
-		// 		ft_putendl_fd(temp->infile, 2);
-		// 		ft_free_string(temp->execpath);
-		// 		exit(1);//exit?
-		// 	}
-		// 	if (access(temp->infile, R_OK) != 0)
-		// 	{
-		// 		perror("Error");
-		// 		ft_free_string(temp->execpath);
-		// 		exit(1);//exit?
-		// 	}
-		// 	temp->fd_in = open(temp->infile, O_RDONLY);
-		// 	if (dup2(temp->fd_in, STDIN_FILENO) < 0)
-		// 		perror("dup2 infile: ");
-		// 	close(temp->fd_in);
-		// 	return (0);
-		// }
-		// //here_doc
-		// else if (temp->input_op == -2)
-		// {
-		// 	char	*line;
-		// 	char	*limiter;
+	return (0);
+}
 
-		// 	if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
-		// 		perror("dup2 here_doc STDOUT: ");
-		// 	while (1)
-		// 	{
-		// 		line = get_next_line_pipex(0);
-		// 		if (ft_strncmp_pipex(line, limiter, ft_strlen(limiter)) == 0)
-		// 		{
-		// 			close(ms->pipe_fd[1]);
-		// 			exit(EXIT_SUCCESS);
-		// 		}
-		// 	}
-		// 	write(ms->pipe_fd[1], line, ft_strlen(line));
-		// 	return (0);
-		// }
+int	output_redirection(t_cmd *temp, t_vars *ms)
+{
+	if (ft_lstsize_cmd(ms->cmd) == 1)
+		return (0);
+	else if (ft_lstsize_cmd(ms->cmd) == 1 && temp->output_op == 0)
+	{
+		//nur ein cmd (kein duplicaten notwendig)
+		close(ms->pipe_fd[1]);
+	}
+	else if (temp->output_op == 0 && temp->pipe == 0)
+	{
+		// kein output file und keine redirection oder pipe
+		close(ms->pipe_fd[1]);
+	}
+	else if (temp->output_op == -1)
+	{
+		//output redirection
+		close(ms->pipe_fd[1]);
+		temp->fd_out = open(temp->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
+		if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
+			perror("Error");
+		else
+		{
+			if (dup2(temp->fd_out, STDOUT_FILENO) < 0)				//hier die Version anders für builtins (kein dup notwendig)
+				perror("dup2 outfile1: ");
+		}
+		// close(temp->fd_out);
+	}
+	else if (temp->output_op == -2)
+	{
+		// outfile redirection im truncate mode
+		close(ms->pipe_fd[1]);
+		temp->fd_out = open(temp->outfile, O_RDWR | O_CREAT | O_APPEND, 0644);
+		if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
+			perror("Error");
+		else
+		{
+			if (dup2(temp->fd_out, STDOUT_FILENO) < 0)
+				perror("dup2 outfile2: ");
+		}
+	}
+	else if (temp->pipe == 1)	//&& temp->output_op == 0?	//außer wenn here_doc
+	{
+		//builtings
+		temp->fd_out = ms->pipe_fd[1];
+
+		// cmd:
+		if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
+				perror("dup2 outfile3: ");
+		close(ms->pipe_fd[1]);
+	}
+	else if (temp->next == NULL)
+		close(ms->pipe_fd[1]);
+	return (0);
+}
+
+
+
+
+
+
+
+// ------------------------------------------------------------------------------------------------
+// BACKUP
+
+// int	input_redirection(t_cmd *temp, t_vars *ms)
+// {
+// 	if (temp->previous == NULL && temp->input_op == 0 && ft_lstsize(ms->cmd) == 1)
+// 	{
+// 		//erster command, keine input redirection und nur ein command
+// 		close(ms->pipe_fd[1]);
+// 		close(ms->pipe_fd[0]);
+// 	}
+// 	else if (temp-input_op == 0)
+// 	{
+// 		//keine input redirection
+// 		close(ms->pipe_fd[1]);
+// 		if (dup2(ms->tmp_fd, STDIN_FILENO) < 0)
+// 			perror("dup2: infile: ");
+// 		close(ms->pipe_fd[0]);
+// 	}
+// 	else if (temp->input_op == -1)
+// 	{
+// 		//infile redirection
+// 		close(ms->pipe_fd[0]);
+// 		if (access(temp->infile, F_OK) != 0)
+// 		{
+// 			ft_putstr_fd("zsh: No such file or directory: ", 2);
+// 			ft_putendl_fd(temp->infile, 2);
+// 			// ft_free_string(temp->execpath);
+// 			// exit(1);//exit?
+// 		}
+// 		if (access(temp->infile, R_OK) != 0)
+// 		{
+// 			perror("Error");
+// 			// ft_free_string(temp->execpath);
+// 			// exit(1);//exit?
+// 		}
+// 		else
+// 		{
+// 			temp->fd_in = open(temp->infile, O_RDONLY);
+// 			if (dup2(temp->fd_in, STDIN_FILENO) < 0)
+// 				perror("dup2 infile: ");
+// 			close(temp->fd_in);
+// 		}
+// 	}
+// 	else if (temp->input_op == -2)
+// 	{
+// 		// here_doc
+// 		printf("HEREDOC\n");
+// 		char	*line;
+// 		char	*limiter;
+
+// 		// if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
+// 		// 	perror("dup2 here_doc STDOUT: ");
+// 		while (1)
+// 		{
+// 			line = get_next_line_pipex(0);
+// 			if (ft_strncmp_pipex(line, limiter, ft_strlen(limiter)) == 0)
+// 			{
+// 				close(ms->pipe_fd[1]);
+// 				break ;
+// 				// exit(EXIT_SUCCESS);
+// 			}
+// 		}
+// 		write(ms->pipe_fd[1], line, ft_strlen(line));
+// 	}
+// 	else if (temp->previous->pipe == 1)
+// 	{
+// 		//previous cmd comes from a pipe
+// 		close(ms->pipe_fd[1]);
+// 		if (dup2(ms->tmp_fd, STDIN_FILENO) < 0)
+// 			perror("dup2: infile: ");
+// 		close(ms->pipe_fd[0]);
+
 // 	}
 // 	return (0);
 // }
 
 // int	output_redirection(t_cmd *temp, t_vars *ms)
 // {
-	// if ("here_doc found") // 	ft_here_doc_out(ms);
-	// output goes into a pipe
-	// kein output file und keine redirection
-	// if (temp->output_op == 0 && temp->pipe == 0)
-	// {
-	// 	if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
-	// 		perror("dup2 outfile: ");
-	// 	return (0);
-	// }
-	// else if (temp->pipe == 1 && temp->output_op == 0)
-	// {
-	// 	if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
-	// 		perror("dup2 outfile: ");
-	// 	return (0);
-	// }
-	// outfile redirection im truncate mode
-	// else if (temp->output_op == -1)
-	// {
-	// 	close(ms->pipe_fd[1]);
-	// 	temp->fd_out = open(temp->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
-	// 	if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
-	// 	{
-	// 		perror("Error");
-	// 		ft_free_string(temp->execpath);
-	// 		exit(1);//exit?
-	// 	}
-	// 	if (dup2(temp->fd_out, STDOUT_FILENO) < 0)
-	// 		perror("dup2 outfile1: ");
-	// 	return (0);
-	// }
-	// // outfile redirection im append mode
-	// else if (temp->output_op == -2)
-	// {
-	// 	close(ms->pipe_fd[1]);
-	// 	temp->fd_out = open(temp->outfile, O_RDWR | O_CREAT | O_APPEND, 0644);
-	// 	if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
-	// 	{
-	// 		perror("Error");
-	// 		ft_free_string(temp->execpath);
-	// 		exit(1);//exit?
-	// 	}
-	// 	if (dup2(temp->fd_out, STDOUT_FILENO) < 0)
-	// 		perror("dup2 outfile1: ");
-	// 	return (0);
-	// }
+// 	if (ft_lstsize_cmd(ms->cmd) == 1 && temp->output_op == 0)
+// 	{
+// 		//nur ein cmd (kein duplicaten notwendig)
+// 		close(ms->pipe_fd[0]);
+// 		close(ms->pipe_fd[1]);
+// 	}
+// 	else if (temp->output_op == 0 && temp->pipe == 0)
+// 	{
+// 		// kein output file und keine redirection oder pipe
+// 		close(ms->pipe_fd[0]);
+// 		close(ms->pipe_fd[1]);
+// 	}
+// 	else if (temp->output_op == -1)
+// 	{
+// 		//output redirection
+// 		close(ms->pipe_fd[0]);
+// 		close(ms->pipe_fd[1]);
+// 		temp->fd_out = open(temp->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
+// 		if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
+// 		{
+// 			perror("Error");
+// 			// ft_free_string(temp->execpath);
+// 			// exit(1);//exit?
+// 		}
+// 		else
+// 		{
+// 			if (dup2(temp->fd_out, STDOUT_FILENO) < 0)
+// 			perror("dup2 outfile1: ");
+// 		}
+// 	}
+// 	else if (temp->output_op == -2)
+// 	{
+// 		// outfile redirection im truncate mode
+// 		close(ms->pipe_fd[1]);
+// 		temp->fd_out = open(temp->outfile, O_RDWR | O_CREAT | O_APPEND, 0644);
+// 		if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
+// 		{
+// 			perror("Error");
+// 			// ft_free_string(temp->execpath);
+// 			// exit(1);//exit?
+// 		}
+// 		else
+// 		{
+// 			if (dup2(temp->fd_out, STDOUT_FILENO) < 0)
+// 				perror("dup2 outfile1: ");
+// 		}
+// 		close(ms->pipe_fd[0]);
+// 	}
+// 	else if (temp->pipe == 1)	//&& temp->output_op == 0?
+// 	{
+// 		close(ms->pipe_fd[0]);
+// 		if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
+// 				perror("dup2 outfile: ");
+// 		close(ms->pipe_fd[1]);
+// 	}
 // 	return (0);
 // }
 
-
-int	input_redirection(t_cmd *temp, t_vars *ms)
-{
-	//erster command
-	if (temp->previous == NULL)
-	{
-		//kein input
-		if (temp->input_op == 0)			// keine redirection
-		{
-			if (ft_lstsize_cmd(ms->cmd) == 1)
-			{
-				close(ms->pipe_fd[1]);
-				close(ms->pipe_fd[0]);
-				// if (dup2(ms->pipe_fd[0], STDIN_FILENO) < 0)
-				// 	perror("dup2: infile: ");
-			}
-			// else
-			// {
-			// 	close(ms->pipe_fd[0]);
-			// 	if (dup2(ms->tmp_fd, STDIN_FILENO) < 0)
-			// 		perror("dup2: infile: ");
-			// }
-		}
-		//infile redirection
-		if (temp->input_op == -1)
-		{
-			if (access(temp->infile, F_OK) != 0)
-			{
-				ft_putstr_fd("zsh: No such file or directory: ", 2);
-				ft_putendl_fd(temp->infile, 2);
-				ft_free_string(temp->execpath);
-				exit(1);//exit?
-			}
-			if (access(temp->infile, R_OK) != 0)
-			{
-				perror("Error");
-				ft_free_string(temp->execpath);
-				exit(1);//exit?
-			}
-			temp->fd_in = open(temp->infile, O_RDONLY);
-			if (dup2(temp->fd_in, STDIN_FILENO) < 0)
-				perror("dup2 infile: ");
-			close(temp->fd_in);
-			return (0);
-		}
-	}
-	return (0);
-}
-
-int	output_redirection(t_cmd *temp, t_vars *ms)
-{
-	//nur ein cmd (kein duplicaten notwendig)
-	if (ft_lstsize_cmd(ms->cmd) == 1 && temp->output_op == 0)
-	{
-		close(ms->pipe_fd[0]);
-		close(ms->pipe_fd[1]);
-		return (0);
-	}
-	if (temp->output_op == -1)
-	{
-		close(ms->pipe_fd[1]);
-		temp->fd_out = open(temp->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
-		if (temp->fd_out == -1 || access(temp->outfile, W_OK) != 0)
-		{
-			perror("Error");
-			ft_free_string(temp->execpath);
-			exit(1);//exit?
-		}
-		if (dup2(temp->fd_out, STDOUT_FILENO) < 0)
-			perror("dup2 outfile1: ");
-		return (0);
-	}
-	// kein output file und keine redirection
-	if (temp->output_op == 0 && temp->pipe == 0)
-	{
-		close(ms->pipe_fd[0]);
-		close(ms->pipe_fd[1]);
-		// if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
-		// 	perror("dup2 outfile: ");
-		return (0);
-	}
-	// outfile redirection im truncate mode
-	return (0);
-}

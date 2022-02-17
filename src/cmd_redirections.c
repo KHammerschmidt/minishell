@@ -29,7 +29,7 @@
 
 
 /* Cuts out the redirections associated with the infile from the cmd_line. */
-void	ft_cut_infile_redirections(char **string, t_vars *ms)
+void	ft_cut_infile_redirections(char **string)
 {
 	char	*tmp;
 	int		i;
@@ -43,7 +43,7 @@ void	ft_cut_infile_redirections(char **string, t_vars *ms)
 		tmp = ft_strnjoin(tmp, (*string)[i], 1);
 		i++;
 	}
-	if ((*string)[i] == '<')
+	while ((*string)[i] == '<')
 		i++;
 	while ((*string)[i] == ' ' && (*string)[i] != '\0')
 		i++;
@@ -57,8 +57,6 @@ void	ft_cut_infile_redirections(char **string, t_vars *ms)
 	free(*string);
 	*string = NULL;
 	*string = tmp;
-	if (!ms)
-		printf("\n");
 }
 
 /* Saves the infile in the t_info struct. */
@@ -77,11 +75,11 @@ void	infile_redirection(char **string, t_vars *ms)
 		k++;
 	tmp = ft_substr(*string, j, k - j);
 	ms->info->infile = tmp;
-	ft_cut_infile_redirections(string, ms);
+	ft_cut_infile_redirections(string);
 }
 
 /* Cuts out the redirections associated with the outfile from the cmd_line. */
-void	ft_cut_outfile_redirections(char **string, t_vars *ms)				//he isn't allowed to jump in here!
+void	ft_cut_outfile_redirections(char **string)
 {
 	char	*tmp;
 	int		i;
@@ -109,8 +107,6 @@ void	ft_cut_outfile_redirections(char **string, t_vars *ms)				//he isn't allowe
 	free(*string);
 	*string = NULL;
 	*string = tmp;
-	if (!ms)
-		printf("\n");
 }
 
 /* Saves the outfile in the t_info struct. */
@@ -129,36 +125,11 @@ void outfile_redirection(char **string, t_vars *ms)
 		k++;
 	tmp = ft_substr((*string), j, k - j);
 	ms->info->outfile = tmp;
-	ft_cut_outfile_redirections(string, ms);
+	ft_cut_outfile_redirections(string);
 }
 
-/* Funktion compares the position of a redirection, first '<' then '>' and tests
-if '<<' or '>>' are called. It then tests further if the pipe comes before				//necessary?
-the redirection. */
-void	check_redirections(char **string, int pipe_marker, t_vars *ms)
+static void	redirection_expansion_output(t_vars *ms, int redirection_out, char **string)
 {
-	int		redirection_in;
-	int		redirection_out;
-
-	redirection_in = ft_strchr_pos((*string), '<'); 
-	if (redirection_in == -1)
-		ms->info->input_op = 0;
-	if (redirection_in != -1)
-	{
-		if ((*string)[redirection_in] == '<' && (*string)[redirection_in + 1] == '<')		//check for '<<'
-		{
-			ms->info->input_op = -2;
-			infile_redirection(string, ms);
-			ms->info->limiter_here_doc = ms->info->infile;			//cut out limiter of cmd
-			ft_free_string(ms->info->infile);
-		}
-		else																			//single '<'
-		{
-			ms->info->input_op = -1;
-			infile_redirection(string, ms);
-		}
-	}
-	redirection_out = ft_strchr_pos(*string, '>');
 	if (redirection_out == 0)
 		ms->info->output_op = 0;
 	if (redirection_out != -1)
@@ -174,6 +145,41 @@ void	check_redirections(char **string, int pipe_marker, t_vars *ms)
 			outfile_redirection(string, ms);
 		}
 	}
-	if (ft_strchr_pos(*string, '<') != -1 && ft_strchr_pos(*string, '>') != -1)			// in case there are multiple redirections in there (how are they overwriting each other, but calling the here_doc for example?)
-		check_redirections((&*string), pipe_marker, ms);
+}
+
+static void	redirection_expansion_input(t_vars *ms, int redirection_in, char **string)
+{
+	if (redirection_in == -1)
+			ms->info->input_op = 0;
+		if (redirection_in != -1)
+		{
+			if ((*string)[redirection_in] == '<' && (*string)[redirection_in + 1] == '<')
+			{
+				ms->info->input_op = -2;
+				infile_redirection(string, ms);
+			}
+			else
+			{
+				ms->info->input_op = -1;
+				infile_redirection(string, ms);
+			}
+		}
+}
+
+/* Funktion compares the position of a redirection, first '<' then '>' and tests
+if '<<' or '>>' are called. It then tests further if the pipe comes before
+the redirection. */
+void	check_redirections(char **string, int pipe_marker, t_vars *ms)
+{
+	int		redirection_in;
+	int		redirection_out;
+
+	redirection_in = ft_strchr_pos((*string), '<');
+	redirection_expansion_input(ms, redirection_in, string);
+	redirection_out = ft_strchr_pos(*string, '>');
+	redirection_expansion_output(ms, redirection_out, string);
+	if (ft_strchr_pos(*string, '<') != -1 && ft_strchr_pos(*string, '>') != -1)
+	check_redirections((&*string), pipe_marker, ms);
+
+	//add here info struct to open files!!!! and save here_doc and file descriptors in info struct
 }

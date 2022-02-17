@@ -6,6 +6,7 @@ int	pipex(t_vars *ms)
 	pid_t	pid;
 
 	current = ms->cmd;
+	input_redirection_1(current, ms);
 	while (current != NULL)
 	{
 		if (pipe(ms->pipe_fd) == -1)	//protecten mio!
@@ -15,18 +16,28 @@ int	pipex(t_vars *ms)
 		}
 		if (is_builtin(ms, current->command[0]) == 1)
 		{
-			input_redirection(current, ms);				//special case for builtin
-			output_redirection(current, ms);
+			output_redirection(current, ms);					//extra function für builtin
 			execute_builtin(ms, current);
+			if (ms->pipe_fd[1] != STDOUT_FILENO)
+				close(ms->pipe_fd[1]);
 		}
 		else
 		{
 			pid = fork();
 			if (pid == 0)
 			{
-				input_redirection(current, ms);
-				output_redirection(current, ms);
-				execute_cmd(ms, current);
+				if (is_builtin(ms, current->command[0]) == 1)
+				{
+					output_redirection(current, ms);					//extra function für builtin
+					execute_builtin(ms, current);
+					if (ms->pipe_fd[1] != STDOUT_FILENO)
+						close(ms->pipe_fd[1]);
+				}
+				else
+				{
+					output_redirection(current, ms);
+					execute_cmd(ms, current);
+				}
 			}
 			// close(ms->pipe_fd[1]);
 			// close(ms->tmp_fd);
@@ -48,5 +59,3 @@ int	pipex(t_vars *ms)
 	}
 	return (WEXITSTATUS(ms->exit_status));
 }
-
-//wenn nur ein cmd ohne redirection (kein input output dup2)
