@@ -50,6 +50,8 @@ typedef struct s_cmd
 	int				input_op;			//int **
 	int				output_op;			//int **
 	int				pipe;
+	int				error_flag;
+	char			*error_msg;
 	struct s_cmd	*next;
 	struct s_cmd	*previous;
 }	t_cmd;
@@ -102,10 +104,10 @@ void	init_builtin(t_vars *ms);				//arr + lst
 void	add_builtin(t_vars *ms, char *builtin);
 int		builtin_cd(t_vars *ms, t_cmd *current);
 int		builtin_echo(t_vars *ms, t_cmd *current);
-void	builtin_env(t_vars *ms, t_cmd *current);
+int		builtin_env(t_vars *ms, t_cmd *current);
 int		builtin_exit(t_vars *ms, t_cmd *current);
 int		builtin_export(t_vars *ms, t_cmd *current);
-void	builtin_pwd(t_vars *ms, t_cmd *current);
+int		builtin_pwd(t_vars *ms, t_cmd *current);
 int		builtin_unset(t_vars *ms, t_cmd *current);
 void	execute_cmd(t_vars *ms, t_cmd *current);
 void	execute_builtin(t_vars *ms, t_cmd *current);

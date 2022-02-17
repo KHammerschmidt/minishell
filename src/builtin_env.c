@@ -1,7 +1,7 @@
 #include "../header/minishell.h"
 
 /* Writes envar list to corresponding output. */
-void	builtin_env(t_vars *ms, t_cmd *current)
+int	builtin_env(t_vars *ms, t_cmd *current)
 {
 	t_env	*tmp;
 
@@ -14,4 +14,5 @@ void	builtin_env(t_vars *ms, t_cmd *current)
 		write(current->fd_out, "\n", 1);
 		tmp = tmp->next;
 	}
+	return (0);
 }

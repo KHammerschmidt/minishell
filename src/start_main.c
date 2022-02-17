@@ -1,5 +1,29 @@
 #include "../header/minishell.h"
 
+static char	**copy_strarray(char **strarray)
+{
+	char	**ret;
+	int		i;
+
+	i = 0;
+	while (strarray[i] != NULL)
+		i++;
+	// printf("envp: %d\n", i);
+	ret = (char **)malloc(i * sizeof(char *));
+	if (ret == NULL)
+		return (NULL);
+	i = 0;
+	while (strarray[i] != NULL)
+	{
+		ret[i] = ft_strdup(strarray[i]);
+		i++;
+	}
+	ret[i] = NULL;
+	// printf("%s\n", strarray[1]);
+	// printf("%s\n", ret[1]);
+	return (ret);
+}
+
 /* Initialises main struct ms as well as builtin and env. */
 int	init_struct(t_vars *ms, char **envp)
 {
@@ -8,8 +32,10 @@ int	init_struct(t_vars *ms, char **envp)
 	init_builtin(ms);
 	ms->cmd = ft_calloc(1, sizeof(t_cmd));				//Kathi: war auskommentiert?
 	ms->cmd = NULL;
-	ms->envp = envp;
+	ms->envp = copy_strarray(envp);
+	// ms->envp = envp;
 	ms->info = ft_calloc(1, sizeof(t_info));
+	ms->exit_status = 0;
 	ms->tmp_fd = dup(STDIN_FILENO);
 	ft_memset(ms->info, 0, sizeof(t_info));
 	return (0);
@@ -31,7 +57,7 @@ int	read_line(t_vars *ms)
 		ms->cmd_line = readline("minishell ॐ  ");
 	rl_reset();
 	if (ms->cmd_line == NULL)							// (x) Makes CTRL+D work.
-		exit(EXIT_SUCCESS);								// NOTE: replace exit() by own function incl. free() etc.
+		free_and_exit(ms, 1, 0);
 	if (ms->cmd_line && *ms->cmd_line)
 		add_history (ms->cmd_line);
 	free(prompt);

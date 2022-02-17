@@ -51,6 +51,20 @@ int	validate_and_change_path(t_vars *ms, char *new_path, char *start_wd)
 	return (0);
 }
 
+static int	check_special_cases(t_vars *ms, char **new_path, char **home)
+{
+	if ((*new_path == NULL && *home != NULL) || (compare_str(*new_path, "~") == 0 && *home != NULL))
+		*new_path = *home;
+	if (compare_str(*new_path, "-") == 0 && get_env_var(ms, "OLDPWD") == NULL)
+	{
+		printf("minishell: cd: OLDPWD not set\n");
+		return (1);
+	}
+	if (compare_str(*new_path, "-") == 0 && get_env_var(ms, "OLDPWD") != NULL)
+		*new_path = get_env_var(ms, "OLDPWD")->content;
+	return (0);
+}
+
 /* Gets home directory from envar list, concatenates and changes path. */
 /* Changes OLDPWD and PWD in envar list.                               */
 int	builtin_cd(t_vars *ms, t_cmd *current)
@@ -62,7 +76,8 @@ int	builtin_cd(t_vars *ms, t_cmd *current)
 	start_wd = getcwd(NULL, PATH_MAX);
 	if (start_wd == NULL)
 	{
-		perror("cwd");
+		current->error_flag = 1;
+		current->error_msg = ft_strdup(strerror(errno));
 		return (1);
 	}
 	new_path = NULL;
@@ -70,11 +85,21 @@ int	builtin_cd(t_vars *ms, t_cmd *current)
 	home = get_env_var(ms, "HOME")->content;
 	if (new_path == NULL && home == NULL)
 	{
-		printf("minishell: cd: HOME not set\n");
+		current->error_flag = 1;
+		current->error_msg = ft_strdup("Error: HOME not set");
 		return (1);
 	}
-	if (new_path == NULL && home != NULL)
-		new_path = home;
+	// if ((new_path == NULL && home != NULL) || (compare_str(new_path, "~") == 0 && home != NULL))
+	// 	new_path = home;
+	// if (compare_str(new_path, "-") == 0 && get_env_var(ms, "OLDPWD") == NULL)
+	// {
+	// 	printf("minishell: cd: OLDPWD not set\n");
+	// 	return (1);
+	// }
+	// if (compare_str(new_path, "-") == 0 && get_env_var(ms, "OLDPWD") != NULL)
+	// 	new_path = get_env_var(ms, "OLDPWD")->content;
+	if (check_special_cases(ms, &new_path, &home) == 1)
+		return (1);
 	if (validate_and_change_path(ms, new_path, start_wd) == 1)
 		return (1);
 	return (0);
