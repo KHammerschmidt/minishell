@@ -1,0 +1,26 @@
+OBJ_DIR		=	./obj/
+OBJ			=	$(addprefix $(OBJ_DIR), $(patsubst %.c, %.o, $(SRC_LIST)))
+# BONUS_OBJ	=	$(addprefix $(BONUS_ODIR), $(patsubst %.c, %.o, $(BONUS_LIST)))
+$(NAME): $(OBJ_DIR) $(OBJ) $(LIBFT) $(INCLUDES)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT)/libft.a -o $@ $(L_FLAGS)
+$(OBJ_DIR):
+	@mkdir $(OBJ_DIR)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+# bonus: $(BONUS_ODIR) $(BONUS_OBJ) $(LIBFT) $(B_INCLUDES)
+# 	@$(CC) $(CFLAGS) $(BONUS_OBJ) $(LIBFT)/libft.a -o $(BONUS)
+# 	@mkdir -p $(OBJ_DIR)
+	@rm -rf $(OBJ)
+	@rm -rf -d $(OBJ_DIR)
+OBJ_DIR		=	./obj/
+OBJ			=	$(addprefix $(OBJ_DIR), $(patsubst %.c, %.o, $(SRC_LIST)))
+# BONUS_OBJ	=	$(addprefix $(BONUS_ODIR), $(patsubst %.c, %.o, $(BONUS_LIST)))
+$(NAME): $(OBJ_DIR) $(OBJ) $(LIBFT) $(INCLUDES)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT)/libft.a -o $@ $(L_FLAGS)
+$(OBJ_DIR):
+	@mkdir $(OBJ_DIR)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+# bonus: $(BONUS_ODIR) $(BONUS_OBJ) $(LIBFT) $(B_INCLUDES)
+# 	@$(CC) $(CFLAGS) $(BONUS_OBJ) $(LIBFT)/libft.a -o $(BONUS)
+# 	@mkdir -p $(OBJ_DIR)
+	@rm -rf $(OBJ)
+	@rm -rf -d $(OBJ_DIR)
