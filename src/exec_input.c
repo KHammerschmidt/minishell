@@ -1,5 +1,37 @@
 #include "../header/minishell.h"
 
+// rename exec_cmd.c
+
+int	get_paths(t_vars *ms)
+{
+	int		i;
+	t_env	*current;
+
+	i = 0;
+	current = ms->env;
+	while (current != NULL)
+	{
+		if (compare_str(current->name, "PATH") == 0)
+		{
+			ms->paths = ft_split(current->content, ':');
+			if (!ms->paths)
+				// free_and_exit(ms, 1, 1);
+				return (1);				// change to correct exit code
+			break ;
+		}
+		current = current->next;
+	}
+	i = 0;
+	while (ms->paths[i] != NULL)
+	{
+		ms->paths[i] = ft_strjoin(ms->paths[i], "/");
+		// if (!ms->paths)							// brauchen wir das? wozu?
+		// 	free_and_exit(ms, 1, 1);				// change to correct exit code
+		i++;
+	}
+	return (0);
+}
+
 /* Checks if command is accessible and, if so, sets execpath accordingly.   */
 /* Also handles commands given as path from input. Returns error if command */
 /* is not found or not accessible.                                          */
@@ -33,32 +65,13 @@ int	check_cmd(t_vars *ms, t_cmd *current)
 	return (1);
 }
 
-int	get_paths(t_vars *ms)
+void	execute_cmd(t_vars *ms, t_cmd *current)
 {
-	int		i;
-	t_env	*current;
-
-	i = 0;
-	current = ms->env;
-	while (current != NULL)
+	if (check_cmd(ms, current) == 0)
 	{
-		if (compare_str(current->name, "PATH") == 0)
-		{
-			ms->paths = ft_split(current->content, ':');
-			if (!ms->paths)
-				// free_and_exit(ms, 1, 1);
-				return (1);				// change to correct exit code
-			break ;
-		}
-		current = current->next;
+		execve(current->execpath, current->command, ms->envp);
+		close(ms->pipe_fd[1]);
+		perror("Error");
+		exit(EXIT_FAILURE);
 	}
-	i = 0;
-	while (ms->paths[i] != NULL)
-	{
-		ms->paths[i] = ft_strjoin(ms->paths[i], "/");
-		// if (!ms->paths)							// brauchen wir das? wozu?
-		// 	free_and_exit(ms, 1, 1);				// change to correct exit code
-		i++;
-	}
-	return (0);
 }

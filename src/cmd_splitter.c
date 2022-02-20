@@ -5,7 +5,7 @@ void	ft_free_arr(char **arr)
 	int		i;
 
 	i = 0;
-	while (arr[i] != '\0' && arr)
+	while (arr[i] != NULL && arr)			//NULL or '\0'
 	{
 		if (arr[i])
 		{
@@ -26,7 +26,6 @@ void	reset_info_struct(t_info *info)
 	info->command = NULL;
 	info->outfile = NULL;
 	info->infile = NULL;
-	info->errfile = NULL;
 	info->input_op = 0;
 	info->output_op = 0;
 	info->pipe = 0;

@@ -28,15 +28,23 @@
 /*							STRUCTS									*/
 /* **************************************************************** */
 
+typedef struct s_here_doc
+{
+	char				*limiter;
+	char				*text;
+} t_here_doc;
+
 typedef struct s_info
 {
 	char			**command;
-	char			*outfile;
 	char			*infile;			//char **
-	char			*errfile;			//char **
+	char			*outfile;
 	int				input_op;			//int **
 	int				output_op;			//int **
 	int				pipe;
+	int				fd_in;
+	int				fd_out;
+	t_here_doc		**here_doc;
 }	t_info;
 
 typedef struct s_cmd
@@ -47,13 +55,14 @@ typedef struct s_cmd
 	int				fd_out;
 	char			*infile;			//**infile
 	char			*outfile;			//**outfile
-	int				input_op;			//int **
+	int				input_op;
 	int				output_op;			//int **
 	int				pipe;
 	int				error_flag;
 	char			*error_msg;
 	struct s_cmd	*next;
 	struct s_cmd	*previous;
+	t_here_doc		*here_doc;
 }	t_cmd;
 
 typedef struct s_env
@@ -180,13 +189,25 @@ void	ft_cut_infile_redirections(char **string);
 void	ft_cut_outfile_redirections(char **string);
 void 	infile_redirection(char **string, t_vars *ms);
 void 	outfile_redirection(char **string, t_vars *ms);
-void	check_redirections(char **string, int pipe_marker, t_vars *ms);
+void	check_redirections(char **string, t_vars *ms);
 
 /* Processes */
 int		pipex(t_vars *ms);
 void	input_redirection_1(t_cmd *temp, t_vars *ms);
 void	input_redirection_2(t_cmd *temp, t_vars *ms);
-void	output_redirection(t_cmd *temp, t_vars *ms);
 void	ft_builtin_parent(t_cmd *current, t_vars *ms);
+
+void	input_redirection(t_vars *ms, char **string, int red_in);
+// void	expansion_infile_red(char **string, t_vars *ms, int i);
+void	cut_infile_red(char **string);
+int		mem_alloc_info_input(t_vars *ms, char **string, int cnt_smpl_red, int cnt_hdoc);
+void	ft_count_red_hdoc(char **string, int cnt_hdoc);
+
+void	infile_fd(t_vars *ms, int i);
+
+
+void	ft_free_intarray(int **arr);
+int	ft_here_doc(t_vars *ms, int *i, char *limiter);
+
 
 #endif

@@ -10,7 +10,7 @@ int	init_env(t_vars *ms, char **envp)					//Kathi: this is the right version, co
 	i = 0;
 	if (!envp)
 		return (1);
-	while (envp[i] != '\0' && envp)
+	while (envp[i] != NULL && envp)				//'\0'
 	{
 		tmp = ft_strdup(envp[i]);
 		if (tmp == NULL)

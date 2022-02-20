@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_strarray.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: katharinahammerschmidt <katharinahammer    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 11:29:41 by mortmeie          #+#    #+#             */
-/*   Updated: 2022/01/30 14:02:50 by mortmeie         ###   ########.fr       */
+/*   Updated: 2022/02/20 19:22:41 by katharinaha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,23 @@ void	ft_free_strarray(char **arr)
 		i++;
 	}
 	free(arr);
+	arr = NULL;
+}
+
+void	ft_free_intarray(int **arr)
+{
+	int	i;
+
+	i = 0;
+	if (arr == 0)
+		return ;
+	while (arr[i] != 0)
+	{
+		free(arr[i]);
+		arr[i] = NULL;
+		i++;
+	}
+	if (arr)
+		free(arr);
 	arr = NULL;
 }
