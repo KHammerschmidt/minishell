@@ -24,14 +24,16 @@ static char	**copy_strarray(char **strarray)
 /* Initialises main struct ms as well as builtin and env. */
 int	init_struct(t_vars *ms, char **envp)
 {
-	ms->env = NULL;
+	ms->env = NULL;											// ditto: warum muss das NULL gesetzt werden?
+	// ms->env = malloc(sizeof(t_env));						// Hier gibt's Fehler, wenn das einkommentiert wird. 
 	if (init_env(ms, envp) != 0)
 		return (1);
 	init_builtin(ms);
-	ms->cmd = ft_calloc(1, sizeof(t_cmd));				//Kathi: war auskommentiert?
-	ms->cmd = NULL;
+	// ms->cmd = ft_calloc(1, sizeof(t_cmd));				// Kathi: war auskommentiert? Mio: Brauchen wir das wirklich?! Scheint auch ohne zu gehen. Warum?
+	ms->cmd = NULL;											// Warum muessen wir alles auf NULL setzen? Dachte, das machen wir in der main mit ms = (t_vars){0};? Scheint aber wichtig zu sein, weil sonst komische Fehler.
 	ms->envp = copy_strarray(envp);
-	ms->info = ft_calloc(1, sizeof(t_info));
+	ms->info = ft_calloc(1, sizeof(t_info));				// Warum brauchen wir das hier? Gibt sonst segfault. Ich muss dieses ganze mem-alloc Thema unbedingt noch verstehen.
+	// ms->info = NULL;
 	ms->exit_status = 0;
 	ms->tmp_fd = dup(STDIN_FILENO);
 	ft_memset(ms->info, 0, sizeof(t_info));
