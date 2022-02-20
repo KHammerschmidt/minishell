@@ -59,11 +59,9 @@ static int	insert_variable(t_vars *ms, char *var_name, char *var_val, char *comm
 {
 	t_env	*current;
 	t_env	*new;
-	int		i;
 
 	current = ms->env;
 	new = NULL;
-	i = 0;
 	if (current == NULL)
 	{
 		write(2, "Error. No environment variables found.\n", 39);

@@ -85,6 +85,8 @@ int	pipex(t_vars *ms)
 				close(ms->pipe_fd[0]);
 			}
 		}
+		// signal(SIGQUIT, SIG_IGN);
+		// signal(SIGINT, SIG_IGN);
 		current = current->next;
 	}
 	waitpid(pid, &ms->exit_status, 0);

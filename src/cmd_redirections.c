@@ -33,10 +33,10 @@ void	ft_cut_infile_redirections(char **string)
 {
 	char	*tmp;
 	int		i;
-	int		p;
+	// int		p;
 
 	i = 0;
-	p = 0;
+	// p = 0;
 	tmp = NULL;
 	while ((*string)[i] != '<')
 	{
@@ -83,10 +83,10 @@ void	ft_cut_outfile_redirections(char **string)
 {
 	char	*tmp;
 	int		i;
-	int		p;
+	// int		p;
 
 	i = 0;
-	p = 0;
+	// p = 0;
 	tmp = NULL;
 	while ((*string)[i] != '>')
 	{

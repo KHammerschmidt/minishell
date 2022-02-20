@@ -8,8 +8,7 @@ static char	**copy_strarray(char **strarray)
 	i = 0;
 	while (strarray[i] != NULL)
 		i++;
-	// printf("envp: %d\n", i);
-	ret = (char **)malloc(i * sizeof(char *));
+	ret = (char **)malloc((i + 1) * sizeof(char *));
 	if (ret == NULL)
 		return (NULL);
 	i = 0;
@@ -19,21 +18,19 @@ static char	**copy_strarray(char **strarray)
 		i++;
 	}
 	ret[i] = NULL;
-	// printf("%s\n", strarray[1]);
-	// printf("%s\n", ret[1]);
 	return (ret);
 }
 
 /* Initialises main struct ms as well as builtin and env. */
 int	init_struct(t_vars *ms, char **envp)
 {
+	ms->env = NULL;
 	if (init_env(ms, envp) != 0)
 		return (1);
 	init_builtin(ms);
 	ms->cmd = ft_calloc(1, sizeof(t_cmd));				//Kathi: war auskommentiert?
 	ms->cmd = NULL;
 	ms->envp = copy_strarray(envp);
-	// ms->envp = envp;
 	ms->info = ft_calloc(1, sizeof(t_info));
 	ms->exit_status = 0;
 	ms->tmp_fd = dup(STDIN_FILENO);
@@ -67,9 +64,7 @@ int	read_line(t_vars *ms)
 int	main(int argc, char **argv, char **envp)
 {
 	t_vars	ms;
-	int		i;
 
-	i = 0;
 	if (argc < 1 || argv[1])
 		return (-1);
 	ms = (t_vars){0};

@@ -31,7 +31,7 @@ int	check_first_element(t_vars *ms, char *command)
 	if (current == NULL)
 	{
 		write(2, "Error. No environment variables found.\n", 39);
-		return (1);
+		return (2);
 	}
 	if (validate_arg(command) == 1)
 		return (1);
@@ -41,7 +41,8 @@ int	check_first_element(t_vars *ms, char *command)
 		free(current->name);
 		free(current->content);
 		free(current);
-		return (2);
+		current = NULL;
+		return (1);
 	}
 	return (0);
 }
@@ -54,6 +55,7 @@ int	check_other_elements(t_env **prev, t_env **current, char *command)
 		free((*current)->name);
 		free((*current)->content);
 		free(*current);
+		*current = NULL;
 		return (1);
 	}
 	*prev = *current;
@@ -74,12 +76,12 @@ int	builtin_unset(t_vars *ms, t_cmd *current)
 		tmp = ms->env;
 		prev = NULL;
 		if (check_first_element(ms, current->command[i]) == 1)
-			return (1);
-		else if (check_first_element(ms, current->command[i]) == 2)
 		{
 			i++;
 			continue ;
 		}
+		else if (check_first_element(ms, current->command[i]) == 2)
+			return (1);
 		else
 		{
 			prev = tmp;

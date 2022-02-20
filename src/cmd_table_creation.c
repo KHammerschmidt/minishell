@@ -84,13 +84,13 @@ char	*handle_input(t_vars *ms)
 /* Creates the simple command table, e.g. the char **command of struct t_cmd. */
 void	create_cmd_table(t_vars *ms)
 {
-	int		i;
+	// int		i;
 	char	*tmp;
-	char	**split;
+	// char	**split;
 	t_cmd	*new;
 
-	i = 0;
-	split = NULL;
+	// i = 0;
+	// split = NULL;
 	tmp = (char *)malloc(sizeof(ms->cmd_line) + 1);
 	if (!tmp)
 		printf("MEM ALLOC ERROR!\n");					//exit function einbauen
