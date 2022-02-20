@@ -1,6 +1,6 @@
 #include "../header/minishell.h"
 
-void	infile_fd(t_vars *ms, int i)
+static void	infile_fd(t_vars *ms, int i)
 {
 	if (ms->info->input_op == -1)
 	{
@@ -34,7 +34,7 @@ void	infile_fd(t_vars *ms, int i)
 }
 
 /* Counts the number of simple infile redirections and here_doc. */
-int	ft_count_hdoc(char **string)
+static int	ft_count_hdoc(char **string)
 {
 	int	i;
 	int	cnt_hdoc;
@@ -54,7 +54,7 @@ int	ft_count_hdoc(char **string)
 }
 
 /* Allocates memory space for the struct t_here_doc and the int array input_op. */
-int	mem_alloc_hdoc(t_vars *ms, char **string)
+static int	mem_alloc_hdoc(t_vars *ms, char **string)
 {
 	int	cnt_hdoc;
 	int	j;
@@ -86,7 +86,7 @@ int	mem_alloc_hdoc(t_vars *ms, char **string)
 }
 
 /* Cuts out the redirections associated with the infile from the cmd_line. */
-void	cut_infile_red(char **string)
+static void	cut_infile_red(char **string)
 {
 	char	*tmp;
 	int		i;
@@ -118,7 +118,7 @@ void	cut_infile_red(char **string)
 
 /* Saves the infile in the t_info struct or the respective
 limiter for a here_doc. */
-void	expansion_infile_red(char **string, t_vars *ms, int i, int flag)
+static void	expansion_infile_red(char **string, t_vars *ms, int i, int flag)
 {
 	int		k;
 	int		j;

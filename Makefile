@@ -11,38 +11,38 @@ OBJ_DIR		=	./obj/
 BONUS_DIR	=	./src/bonus/
 BONUS_ODIR	=	./obj/bonus/
 
-SRC_LIST	=	builtin_cd.c			\
-				builtin_echo.c			\
-				builtin_env.c			\
-				builtin_exit.c			\
-				builtin_export.c		\
-				builtin_init.c 			\
-				builtin_pwd.c			\
-				builtin_unset.c			\
-				cmd_dollar_expansion.c	\
-				cmd_input_redirection.c	\
-				cmd_lst_utils.c			\
-				cmd_pipes.c				\
-				cmd_quotes.c			\
-				cmd_redirections.c		\
-				cmd_splitter.c			\
-				cmd_splitting_quotes.c	\
-				cmd_table_creation.c	\
-				cmd_utils.c 			\
-				env_get_env_var.c		\
-				env_init.c				\
-				env_handling.c			\
-				env_utils.c				\
-				exec_builtin_cmd.c		\
-				exec_builtin_parent.c	\
-				exec_builtin.c			\
-				exec_here_doc.c			\
-				exec_input.c			\
-				exec_pipex_2.c			\
-				start_create_prompt.c	\
-				start_main.c			\
-				utils_free_memory.c		\
-				utils_utilities.c		\
+SRC_LIST	=	builtin_cd.c				\
+				builtin_echo.c				\
+				builtin_env.c				\
+				builtin_exit.c				\
+				builtin_export.c			\
+				builtin_init.c 				\
+				builtin_pwd.c				\
+				builtin_unset.c				\
+				cmd_dollar_expansion.c		\
+				cmd_lst_utils.c				\
+				cmd_pipes.c					\
+				cmd_quotes.c				\
+				cmd_redirection_input.c		\
+				cmd_redirection_output.c	\
+				cmd_redirections.c			\
+				cmd_splitting_quotes.c		\
+				cmd_table_creation.c		\
+				cmd_utils.c 				\
+				env_get_env_var.c			\
+				env_init.c					\
+				env_handling.c				\
+				env_utils.c					\
+				exec_builtin_cmd.c			\
+				exec_builtin_parent.c		\
+				exec_builtin.c				\
+				exec_here_doc.c				\
+				exec_input.c				\
+				exec_pipex.c				\
+				start_create_prompt.c		\
+				start_main.c				\
+				utils_free_memory.c			\
+				utils_utilities.c			\
 				utils_utils.c
 
 # BONUS_LIST	=	minishell_bonus.c

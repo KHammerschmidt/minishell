@@ -56,19 +56,19 @@ t_cmd	*ft_lstnew_cmd(t_info *info)
 	return (node);
 }
 
-// int ft_lstsize_cmd(t_cmd *lst)
-// {
-// 	t_cmd	*last;
-// 	int		counter;
+int ft_lstsize_cmd(t_cmd *lst)
+{
+	t_cmd	*last;
+	int		counter;
 
-// 	counter = 0;
-// 	last = lst;
-// 	if (last == NULL)
-// 		return (0);
-// 	while (last->next != NULL)
-// 	{
-// 		last = last->next;
-// 		counter++;
-// 	}
-// 	return (counter + 1);
-// }
+	counter = 0;
+	last = lst;
+	if (last == NULL)
+		return (0);
+	while (last->next != NULL)
+	{
+		last = last->next;
+		counter++;
+	}
+	return (counter + 1);
+}

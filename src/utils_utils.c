@@ -93,6 +93,15 @@ void	free_cmd_struct(t_vars *ms)
 	ms->cmd = NULL;										// Mio: Leaks?!
 }
 
+void	reset_info_struct(t_info *info)
+{
+	info->command = NULL;
+	info->outfile = NULL;
+	info->infile = NULL;
+	info->input_op = 0;
+	info->output_op = 0;
+	info->pipe = 0;
+}
 
 
 

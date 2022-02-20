@@ -136,24 +136,14 @@ void	signal_handler(int signum);
 
 /* input parsing, command table development */
 void	create_cmd_table(t_vars *ms);
-char	*handle_input(t_vars *ms);
-int		check_quote_status(char *str);
-
-
-int		check_pipes_in_quote(t_vars *ms);
-char	**ft_split_quotes(char *str);
-void	reset_info_struct(t_info *info);
-int		quote_infos(t_vars *ms, char *str);
-int		check_pipe_validity(char *str);
-int		ft_strchr_pos(const char *s, int c);
-// char	*cut_quotes(char *str);
-int		ft_count_substrings(char *str);
-int		ft_count_chars(char *str, t_vars *ms);
 void	dollar_expansion(t_vars *ms);
-
-t_cmd	*init_cmd_lst(t_vars *ms, int size);
-void	reset_info_struct(t_info *info);
-void	pass_on_infos_node(t_info *info, t_cmd *node);
+void	handle_redirections(char **string, t_vars *ms);
+char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *command_line);
+int		pipe_validity(char *str);
+int		check_quote_status(char *str);
+char	**ft_split_quotes(char *str);
+int		ft_strchr_pos(const char *s, int c);
+int		ft_count_chars(char *str, t_vars *ms);
 
 /* command execution */
 int		get_paths(t_vars *ms);
@@ -171,6 +161,7 @@ void	pass_on_infos_node(t_info *info, t_cmd *node);
 /* Free and exit */
 void	free_and_exit(t_vars *ms, int e_flag, int e_code);
 void	ft_free_string(char *str);
+void	reset_info_struct(t_info *info);
 
 /* Printing utils */
 void	print_lst(t_vars *ms);
@@ -185,29 +176,17 @@ int		compare_str(char *s1, char *s2);
 void	free_cmd_struct(t_vars *ms);
 
 /* Redirections */
-void	ft_cut_infile_redirections(char **string);
-void	ft_cut_outfile_redirections(char **string);
-void 	infile_redirection(char **string, t_vars *ms);
-void 	outfile_redirection(char **string, t_vars *ms);
-void	check_redirections(char **string, t_vars *ms);
+void	handle_redirections(char **string, t_vars *ms);
+void	input_redirection(t_vars *ms, char **string, int red_in);
+void	output_redirection(t_vars *ms, char **string, int red_out);
+int		ft_here_doc(t_vars *ms, int *i, char *limiter);
 
 /* Processes */
 int		pipex(t_vars *ms);
-void	input_redirection_1(t_cmd *temp, t_vars *ms);
-void	input_redirection_2(t_cmd *temp, t_vars *ms);
 void	ft_builtin_parent(t_cmd *current, t_vars *ms);
 
-void	input_redirection(t_vars *ms, char **string, int red_in);
-// void	expansion_infile_red(char **string, t_vars *ms, int i);
-void	cut_infile_red(char **string);
-int		mem_alloc_info_input(t_vars *ms, char **string, int cnt_smpl_red, int cnt_hdoc);
-void	ft_count_red_hdoc(char **string, int cnt_hdoc);
-
-void	infile_fd(t_vars *ms, int i);
 
 
-void	ft_free_intarray(int **arr);
-int	ft_here_doc(t_vars *ms, int *i, char *limiter);
 
 
 #endif
