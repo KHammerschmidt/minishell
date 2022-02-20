@@ -38,7 +38,7 @@ SRC_LIST	=	builtin_cd.c			\
 				exec_builtin.c			\
 				exec_here_doc.c			\
 				exec_input.c			\
-				exec_pipex.c			\
+				exec_pipex_2.c			\
 				start_create_prompt.c	\
 				start_main.c			\
 				utils_free_memory.c		\

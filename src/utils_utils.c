@@ -101,7 +101,6 @@ void	free_cmd_struct(t_vars *ms)
 	while (current != NULL)								// Mio: Delete command table after each execution.
 	{
 		ft_free_strarray(current->command);				// Mio: Replace by function to empty and free the complete list
-		//free_here_doc()
 		current = current->next;
 	}
 	ms->cmd = NULL;										// Mio: Leaks?!
