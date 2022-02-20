@@ -187,5 +187,6 @@ int		pipex(t_vars *ms);
 void	input_redirection_1(t_cmd *temp, t_vars *ms);
 void	input_redirection_2(t_cmd *temp, t_vars *ms);
 void	output_redirection(t_cmd *temp, t_vars *ms);
+void	ft_builtin_parent(t_cmd *current, t_vars *ms);
 
 #endif
