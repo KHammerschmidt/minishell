@@ -4,11 +4,11 @@ t_env	*ft_lstnew_env(char *content)
 {
 	t_env	*new_element;
 	char	**tmp;
-	char	*str;
+	// char	*str;
 	int		i;
 
 	i = 0;
-	str = NULL;
+	// str = NULL;
 	new_element = malloc(sizeof(t_env));
 	if (new_element == NULL)
 		return (NULL);

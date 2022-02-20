@@ -21,8 +21,10 @@ static void	free_env_list(t_vars *ms)
 			tmp->content = NULL;
 		}
 		free(tmp);
+		tmp = NULL;
 	}
-	ms->env = NULL;
+	free(current);
+	current = NULL;
 }
 
 static void	free_cmd_list(t_vars *ms)
@@ -51,8 +53,11 @@ static void	free_cmd_list(t_vars *ms)
 			tmp->error_msg = NULL;
 		}
 		// Mio: add additional allocated memory to be freed.
+		free(tmp);
+		tmp = NULL;
 	}
-	ms->cmd = NULL;
+	free(current);
+	current = NULL;
 }
 
 // static void	free_bi_list(t_vars *ms)
@@ -64,18 +69,17 @@ void	free_and_exit(t_vars *ms, int e_flag, int e_code)
 {
 	free_env_list(ms);
 	free_cmd_list(ms);
-	// free_bi_list(ms);
 	free_list(&ms->builtins);
 	if (ms->cmd_line)
 	{
 		free(ms->cmd_line);
 		ms->cmd_line = NULL;
 	}
-	// if (ms->envp)					// malloc double free error after update_env_array()
-	// {
-	// 	ft_free_strarray(ms->envp);
-	// 	ms->envp = NULL;
-	// }
+	if (ms->envp)
+	{
+		ft_free_strarray(ms->envp);
+		ms->envp = NULL;
+	}
 	if (ms->paths)
 	{
 		ft_free_strarray(ms->paths);

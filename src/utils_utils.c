@@ -39,9 +39,9 @@ void	print_lst_last(t_vars *ms)
 {
 	t_cmd *temp;
 	int		len;
-	int		i;
+	// int		i;
 
-	i = 0;
+	// i = 0;
 	len = ft_lstsize_cmd(ms->cmd);
 	temp = NULL;
 	temp = ft_lstlast_cmd(ms->cmd);

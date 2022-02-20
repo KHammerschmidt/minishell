@@ -48,6 +48,11 @@ int	pipex(t_vars *ms)
 	current = ms->cmd;
 	while (current != NULL)
 	{
+		if (current->previous == NULL && current->next == NULL && is_builtin(ms, current->command[0]) == 1)
+		{
+			execute_builtin(ms, current);
+			return (ms->exit_status);
+		}
 		if (pipe(ms->pipe_fd) == -1)
 			printf("PIPE ERROR\n");
 		pid = fork();
@@ -59,6 +64,8 @@ int	pipex(t_vars *ms)
 			ft_handle_stdout(current, ms);
 			execute_cmd(ms, current);
 		}
+		// signal(SIGQUIT, SIG_IGN);
+		// signal(SIGINT, SIG_IGN);
 		close(ms->pipe_fd[1]);
 		close(ms->tmp_fd);
 		if (dup2(ms->pipe_fd[0], ms->tmp_fd) < 0)
