@@ -14,7 +14,6 @@ static void	create_envarr_update(t_vars *ms, t_env *current)
 		tmp = ft_strjoin(tmp, "=");
 		tmp = ft_strjoin(tmp, current->content);
 		ms->envp[i] = ft_strdup(tmp);
-		// printf("%s\n", ms->envp[i]);
 		free(tmp);
 		tmp = NULL;
 		current = current->next;
@@ -38,8 +37,7 @@ void	update_envp_array(t_vars *ms)
 		current = current->next;
 		i++;
 	}
-	// printf("ms->env: %d\n", i);
-	ms->envp = (char **)malloc(i * sizeof(char *));
+	ms->envp = (char **)malloc((i + 1) * sizeof(char *));
 	current = ms->env;
 	create_envarr_update(ms, current);
 }

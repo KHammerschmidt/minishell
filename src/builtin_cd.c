@@ -1,9 +1,29 @@
 #include "../header/minishell.h"
 
+static void	create_old_pwd(t_vars *ms, int flag, char *start_wd)
+{
+	t_env	*new;
+	char	*tmp;
+
+	tmp = NULL;
+	new = NULL;
+	if (flag == 0)
+	{
+		tmp = ft_strdup("OLDPWD=");
+		tmp = ft_strjoin(tmp, start_wd);
+		new = ft_lstnew_env(tmp);
+		ft_lstadd_back_env(&ms->env, new);
+		free(tmp);
+		tmp = NULL;
+	}
+}
+
 static void	adjust_envar_list(t_vars *ms, char *start_wd)
 {
 	t_env	*current;
+	int		flag;
 
+	flag = 0;
 	current = ms->env;
 	while (current != NULL)
 	{
@@ -11,6 +31,7 @@ static void	adjust_envar_list(t_vars *ms, char *start_wd)
 		{
 			free(current->content);
 			current->content = ft_strdup(start_wd);
+			flag++;
 		}
 		if (compare_str(current->name, "PWD") == 0)
 		{
@@ -19,6 +40,7 @@ static void	adjust_envar_list(t_vars *ms, char *start_wd)
 		}
 		current = current->next;
 	}
+	create_old_pwd(ms, flag, start_wd);
 }
 
 int	validate_and_change_path(t_vars *ms, char *new_path, char *start_wd)
@@ -51,17 +73,17 @@ int	validate_and_change_path(t_vars *ms, char *new_path, char *start_wd)
 	return (0);
 }
 
-static int	check_special_cases(t_vars *ms, char **new_path, char **home)
+static int	check_special_cases(t_vars *ms, char **new_path, t_env *home)
 {
-	if ((*new_path == NULL && *home != NULL) || (compare_str(*new_path, "~") == 0 && *home != NULL))
-		*new_path = *home;
+	if ((*new_path == NULL && home->content) || (compare_str(*new_path, "~") == 0 && home->content))
+		*new_path = home->content;
 	if (compare_str(*new_path, "-") == 0 && get_env_var(ms, "OLDPWD") == NULL)
 	{
 		printf("minishell: cd: OLDPWD not set\n");
 		return (1);
 	}
 	if (compare_str(*new_path, "-") == 0 && get_env_var(ms, "OLDPWD") != NULL)
-		*new_path = get_env_var(ms, "OLDPWD")->content;
+		printf("%s\n" ,*new_path = get_env_var(ms, "OLDPWD")->content);
 	return (0);
 }
 
@@ -71,7 +93,7 @@ int	builtin_cd(t_vars *ms, t_cmd *current)
 {
 	char	*start_wd;
 	char	*new_path;
-	char	*home;
+	t_env	*home;
 
 	start_wd = getcwd(NULL, PATH_MAX);
 	if (start_wd == NULL)
@@ -82,23 +104,30 @@ int	builtin_cd(t_vars *ms, t_cmd *current)
 	}
 	new_path = NULL;
 	new_path = current->command[1];
-	home = get_env_var(ms, "HOME")->content;
-	if (new_path == NULL && home == NULL)
+	home = get_env_var(ms, "HOME");
+	// create separate function to check home directory:
+	if (new_path == NULL || compare_str(new_path, "~") == 0)
 	{
-		current->error_flag = 1;
-		current->error_msg = ft_strdup("Error: HOME not set");
-		return (1);
+		if (home == NULL)
+		{
+			current->error_flag = 1;
+			current->error_msg = ft_strdup("Error: HOME not set");
+			// for testing until error handling complete:
+			printf("Error: HOME not set\n");
+			return (1);
+		}
+		else if (home->content[0] == '\0')
+		{
+			current->error_flag = 1;
+			current->error_msg = ft_strdup("Error: HOME not set");
+			// for testing until error handling complete:
+			printf("Error: HOME not set\n");
+			return (1);
+		}
+		else
+			new_path = home->content;
 	}
-	// if ((new_path == NULL && home != NULL) || (compare_str(new_path, "~") == 0 && home != NULL))
-	// 	new_path = home;
-	// if (compare_str(new_path, "-") == 0 && get_env_var(ms, "OLDPWD") == NULL)
-	// {
-	// 	printf("minishell: cd: OLDPWD not set\n");
-	// 	return (1);
-	// }
-	// if (compare_str(new_path, "-") == 0 && get_env_var(ms, "OLDPWD") != NULL)
-	// 	new_path = get_env_var(ms, "OLDPWD")->content;
-	if (check_special_cases(ms, &new_path, &home) == 1)
+	if (check_special_cases(ms, &new_path, home) == 1)
 		return (1);
 	if (validate_and_change_path(ms, new_path, start_wd) == 1)
 		return (1);
