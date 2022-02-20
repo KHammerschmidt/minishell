@@ -30,11 +30,12 @@ int	init_struct(t_vars *ms, char **envp)
 	if (init_env(ms, envp) != 0)
 		return (1);
 	init_builtin(ms);
-	ms->cmd = ft_calloc(1, sizeof(t_cmd));				//Kathi: war auskommentiert?
-	ms->cmd = NULL;
 	ms->envp = copy_strarray(envp);
-	// ms->envp = envp;
+	ms->cmd = ft_calloc(1, sizeof(t_cmd));
+	ms->cmd = NULL;
+	// ms->cmd->here_doc = ft_calloc(1, sizeof(t_here_doc));
 	ms->info = ft_calloc(1, sizeof(t_info));
+	// ms->info->here_doc = ft_calloc(1, sizeof(t_here_doc));
 	ms->exit_status = 0;
 	ms->tmp_fd = dup(STDIN_FILENO);
 	ft_memset(ms->info, 0, sizeof(t_info));

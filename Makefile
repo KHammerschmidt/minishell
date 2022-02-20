@@ -20,6 +20,7 @@ SRC_LIST	=	builtin_cd.c			\
 				builtin_pwd.c			\
 				builtin_unset.c			\
 				cmd_dollar_expansion.c	\
+				cmd_input_redirection.c	\
 				cmd_lst_utils.c			\
 				cmd_pipes.c				\
 				cmd_quotes.c			\
@@ -34,8 +35,10 @@ SRC_LIST	=	builtin_cd.c			\
 				env_utils.c				\
 				exec_builtin_cmd.c		\
 				exec_builtin_parent.c	\
+				exec_builtin.c			\
+				exec_here_doc.c			\
 				exec_input.c			\
-				exec_pipex_2.c			\
+				exec_pipex.c			\
 				start_create_prompt.c	\
 				start_main.c			\
 				utils_free_memory.c		\
