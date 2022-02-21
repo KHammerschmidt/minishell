@@ -26,8 +26,7 @@ void	cut_outfile_red(char **string)
 		i++;
 	while ((*string)[i] != '\0')
 		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
-	free(*string);
-	*string = NULL;
+	ft_free_string(*string);
 	*string = tmp;
 }
 
@@ -55,13 +54,15 @@ void	outfile_fd(t_vars *ms)
 	{
 		if (ms->info->fd_out != STDOUT_FILENO)
 			close(ms->info->fd_out);
-		ms->info->fd_out = open(ms->info->outfile, O_RDWR | O_CREAT | O_TRUNC, 0644);
+		ms->info->fd_out = open(ms->info->outfile,
+			O_RDWR | O_CREAT | O_TRUNC, 0644);
 	}
 	if (ms->info->output_op == -2)
 	{
 		if (ms->info->fd_out != STDOUT_FILENO)
 			close(ms->info->fd_out);
-		ms->info->fd_out = open(ms->info->outfile, O_RDWR | O_CREAT | O_APPEND, 0644);
+		ms->info->fd_out = open(ms->info->outfile,
+			O_RDWR | O_CREAT | O_APPEND, 0644);
 	}
 	if (ms->info->fd_out == -1 || access(ms->info->outfile, W_OK) != 0)
 		perror("Error");

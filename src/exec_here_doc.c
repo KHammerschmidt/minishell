@@ -1,20 +1,5 @@
 #include "../header/minishell.h"
 
-// '<<'
-//3.6.6 Here Documents
-// This type of redirection instructs the shell to read input from the current source until a line containing only word (with no trailing blanks) i
-// s seen. All of the lines read up to that point are then used as the standard input (or file descriptor n if n is specified) for a command.
-// The format of here-documents is:
-// [n]<<[-]word
-//         here-document
-// delimiter
-// No parameter and variable expansion, command substitution, arithmetic expansion, or filename expansion is performed on word. If any part of word is
-// quoted, the delimiter is the result of quote removal on word, and the lines in the here-document are not expanded. If word is unquoted, all lines
-// of the here-document are subjected to parameter expansion, command substitution, and arithmetic expansion, the character sequence \newline is ignored,
-// and ‘\’ must be used to quote the characters ‘\’, ‘$’, and ‘`’.
-// If the redirection operator is ‘<<-’, then all leading tab characters are stripped from input lines and the line containing delimiter. This allows
-// here-documents within shell scripts to be indented in a natural fashion.
-
 /* Gnl for pipex. read() reads from fd 0. */
 static char	*get_next_line_pipex(int fd)
 {
@@ -70,7 +55,7 @@ int	ft_strncmp_pipex(const char *s1, const char *s2, size_t n)
 in struct. GNL writes into fd[1] and breaks when the delimiter is found. */
 int	ft_here_doc(t_vars *ms, char *limiter)
 {
-	int	hdoc_pipe_fd[2];
+	int		hdoc_pipe_fd[2];
 	char	*line;
 
 	line = NULL;
@@ -79,7 +64,6 @@ int	ft_here_doc(t_vars *ms, char *limiter)
 		close(ms->tmp_fd);
 		ms->tmp_fd = dup(STDIN_FILENO);
 	}
-
 	if (pipe(hdoc_pipe_fd) == -1)
 		printf("PIPE ERROR\n");
 	if (dup2(hdoc_pipe_fd[0], ms->tmp_fd) < 0)

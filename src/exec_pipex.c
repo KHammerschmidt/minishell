@@ -42,7 +42,6 @@ static void	ft_handle_stdin(t_cmd *current, t_vars *ms)
 	}
 }
 
-
 int	pipex(t_vars *ms)
 {
 	t_cmd	*current;
