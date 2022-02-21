@@ -33,7 +33,6 @@ SRC_LIST	=	builtin_cd.c				\
 				env_init.c					\
 				env_handling.c				\
 				env_utils.c					\
-				exec_builtin_cmd.c			\
 				exec_builtin_parent.c		\
 				exec_builtin.c				\
 				exec_here_doc.c				\

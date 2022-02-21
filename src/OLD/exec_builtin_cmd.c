@@ -1,4 +1,4 @@
-#include "../header/minishell.h"
+// #include "../header/minishell.h"
 
 // /* Returns 1 for builtin and 0 when its no builtin. */
 // int	is_builtin(t_vars *ms, char *cmd)
