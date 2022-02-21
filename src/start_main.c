@@ -25,7 +25,7 @@ static char	**copy_strarray(char **strarray)
 int	init_struct(t_vars *ms, char **envp)
 {
 	ms->env = NULL;											// ditto: warum muss das NULL gesetzt werden?
-	// ms->env = malloc(sizeof(t_env));						// Hier gibt's Fehler, wenn das einkommentiert wird. 
+	// ms->env = malloc(sizeof(t_env));						// Hier gibt's Fehler, wenn das einkommentiert wird.
 	if (init_env(ms, envp) != 0)
 		return (1);
 	init_builtin(ms);
@@ -36,7 +36,7 @@ int	init_struct(t_vars *ms, char **envp)
 	// ms->info = NULL;
 	ms->exit_status = 0;
 	ms->tmp_fd = dup(STDIN_FILENO);
-	ft_memset(ms->info, 0, sizeof(t_info));
+	// ft_memset(ms->info, 0, sizeof(t_info));
 	return (0);
 }
 

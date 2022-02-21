@@ -28,41 +28,33 @@
 /*							STRUCTS									*/
 /* **************************************************************** */
 
-typedef struct s_here_doc
-{
-	char				*limiter;
-	char				*text;
-} t_here_doc;
-
 typedef struct s_info
 {
 	char			**command;
-	char			*infile;			//char **
+	char			*infile;
 	char			*outfile;
-	int				input_op;			//int **
-	int				output_op;			//int **
+	int				input_op;
+	int				output_op;
 	int				pipe;
 	int				fd_in;
 	int				fd_out;
-	t_here_doc		**here_doc;
 }	t_info;
 
 typedef struct s_cmd
 {
 	char			**command;
-	char			*execpath;				//we need the execpath of the command if its a command
+	char			*execpath;
 	int				fd_in;
 	int				fd_out;
-	char			*infile;			//**infile
-	char			*outfile;			//**outfile
+	char			*infile;
+	char			*outfile;
 	int				input_op;
-	int				output_op;			//int **
-	int				pipe;
+	int				output_op;
+	// int				pipe;
 	int				error_flag;
 	char			*error_msg;
 	struct s_cmd	*next;
 	struct s_cmd	*previous;
-	t_here_doc		*here_doc;
 }	t_cmd;
 
 typedef struct s_env
@@ -84,8 +76,7 @@ typedef struct s_vars
 	int		tmp_fd;
 	char	**paths;
 	char	**envp;
-
-	// int		*here_doc;	// 0 oder 1
+	// int		hdoc_pipe_fd[2];
 	int		exit_status;
 	// char	*cwd;
 	// char	*new_wd;
@@ -179,14 +170,15 @@ void	free_cmd_struct(t_vars *ms);
 void	handle_redirections(char **string, t_vars *ms);
 void	input_redirection(t_vars *ms, char **string, int red_in);
 void	output_redirection(t_vars *ms, char **string, int red_out);
-int		ft_here_doc(t_vars *ms, int *i, char *limiter);
+int		ft_here_doc(t_vars *ms, char *limiter);
+
+
+/* Heredoc */
+int	mem_alloc_hdoc(t_vars *ms, char **string);
+
 
 /* Processes */
 int		pipex(t_vars *ms);
 void	ft_builtin_parent(t_cmd *current, t_vars *ms);
-
-
-
-
 
 #endif
