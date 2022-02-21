@@ -32,14 +32,16 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 to the struct t_cmd. */
 void	pass_on_infos_node(t_info *info, t_cmd *node)
 {
-	node->command = info->command;
+	node->command = copy_strarray(info->command);
 	node->pipe = info->pipe;
 	node->input_op = info->input_op;
 	node->output_op = info->output_op;
 	node->fd_out = info->fd_out;
 	node->fd_in = info->fd_in;
-	node->infile = info->infile;
-	node->outfile = info->outfile;
+	node->infile = ft_strdup(info->infile);
+	node->outfile = ft_strdup(info->outfile);
+	node->execpath = NULL;							// Mio: added to initialise variable (VALGRIND)
+	node->error_msg = NULL;							// Mio: added to initialise variable (VALGRIND)
 }
 
 /* Creates a new node of type t_cmd. */

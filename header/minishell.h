@@ -9,8 +9,8 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <dirent.h>
-# include <curses.h>
-# include <term.h>
+// # include <curses.h>
+// # include <term.h>
 # include <termios.h>
 # include <limits.h>
 # include <errno.h>
@@ -77,16 +77,16 @@ typedef struct s_vars
 	t_env	*env;
 	t_list	*builtins;
 	t_cmd	*cmd;
-	t_info	*info;
+	t_info	info;
 	char	*cmd_line;
 	char	*line;
 	int		pipe_fd[2];
 	int		tmp_fd;
 	char	**paths;
 	char	**envp;
+	int		exit_status;
 
 	// int		*here_doc;	// 0 oder 1
-	int		exit_status;
 	// char	*cwd;
 	// char	*new_wd;
 	// char	**execpath;
@@ -157,10 +157,11 @@ int 	ft_lstsize_cmd(t_cmd *lst);
 char 	*ft_strjoin_2(char *line, char *str, int i);
 int		ft_count_substrings(char *str);
 void	pass_on_infos_node(t_info *info, t_cmd *node);
+char	**copy_strarray(char **strarray);
 
 /* Free and exit */
 void	free_and_exit(t_vars *ms, int e_flag, int e_code);
-void	ft_free_string(char *str);
+void	ft_free_string(char **str);
 void	reset_info_struct(t_info *info);
 
 /* Printing utils */

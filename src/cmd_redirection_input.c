@@ -2,33 +2,33 @@
 
 static void	infile_fd(t_vars *ms, int i)
 {
-	if (ms->info->input_op == -1)
+	if (ms->info.input_op == -1)
 	{
-		if (ms->info->fd_in != STDIN_FILENO)
-			close(ms->info->fd_in);
-		if (access(ms->info->infile, F_OK) != 0)
+		if (ms->info.fd_in != STDIN_FILENO)
+			close(ms->info.fd_in);
+		if (access(ms->info.infile, F_OK) != 0)
 		{
-			if (access((ms->info->infile), R_OK) != 0)
+			if (access((ms->info.infile), R_OK) != 0)
 				perror("Error");
 			else
 			{
 				ft_putstr_fd("zsh: No such file or directory: ", 2);
-				ft_putendl_fd((ms->info->infile), 2);
+				ft_putendl_fd((ms->info.infile), 2);
 			}
 		}
 		else
 		{
-			ms->info->fd_in = open((ms->info->infile), O_RDONLY);
-			if (ms->info->fd_in == -1)
+			ms->info.fd_in = open((ms->info.infile), O_RDONLY);
+			if (ms->info.fd_in == -1)
 				perror("Error: ");
 		}
-		if (ms->info->input_op == -2)
+		if (ms->info.input_op == -2)
 		{
 			if (!i)
 				printf("%d \n", i);
-			if (ms->info->fd_in != STDIN_FILENO)
-				close(ms->info->fd_in);
-			ms->info->fd_in = 0;					// here_doc
+			if (ms->info.fd_in != STDIN_FILENO)
+				close(ms->info.fd_in);
+			ms->info.fd_in = 0;					// here_doc
 		}
 	}
 }
@@ -62,19 +62,19 @@ static int	mem_alloc_hdoc(t_vars *ms, char **string)
 	j = 0;
 	cnt_hdoc = ft_count_hdoc(string);
 	if (cnt_hdoc == 0)
-		ms->info->here_doc = NULL;
+		ms->info.here_doc = NULL;
 	else
 	{
-		ms->info->here_doc = (t_here_doc **)ft_calloc(sizeof(t_here_doc *), cnt_hdoc);
-		if (!(ms->info->here_doc))
+		ms->info.here_doc = (t_here_doc **)ft_calloc(sizeof(t_here_doc *), cnt_hdoc);
+		if (!(ms->info.here_doc))
 		{
 			printf("Mem allocation error here_doc\n");
 			return (1);
 		}
 		while (j < cnt_hdoc)
 		{
-			ms->info->here_doc[j] = ft_calloc(1, sizeof(t_here_doc));
-			if (!(ms->info->here_doc))
+			ms->info.here_doc[j] = ft_calloc(1, sizeof(t_here_doc));
+			if (!(ms->info.here_doc))
 			{
 				printf("Mem allocation error here_doc\n");
 				return (1);
@@ -90,10 +90,10 @@ static void	cut_infile_red(char **string)
 {
 	char	*tmp;
 	int		i;
-	int		p;
+	// int		p;
 
 	i = 0;
-	p = 0;
+	// p = 0;
 	tmp = NULL;
 	while ((*string)[i] != '<')
 	{
@@ -131,9 +131,9 @@ static void	expansion_infile_red(char **string, t_vars *ms, int i, int flag)
 	while ((*string)[k] != ' ' && (*string)[k] != '\0')
 		k++;
 	if (flag == -2)
-		ms->info->here_doc[i]->limiter = ft_substr(*string, j, k - j);
+		ms->info.here_doc[i]->limiter = ft_substr(*string, j, k - j);
 	else
-		ms->info->infile = ft_substr(*string, j, k - j);
+		ms->info.infile = ft_substr(*string, j, k - j);
 }
 
 /* Allocates memory for the info struct and extracts the redirections and
@@ -150,14 +150,14 @@ void	input_redirection(t_vars *ms, char **string, int red_in)
 		if ((*string)[red_in] == '<')
 		{
 			if ((*string)[red_in + 1] == '<')
-				ms->info->input_op = -2;
+				ms->info.input_op = -2;
 			else
-				ms->info->input_op = -1;
+				ms->info.input_op = -1;
 		}
-		expansion_infile_red(string, ms, i, ms->info->input_op);
+		expansion_infile_red(string, ms, i, ms->info.input_op);
 		cut_infile_red(string);
-		if (ms->info->input_op == -2)
-			ft_here_doc(ms, &i, ms->info->here_doc[i]->limiter);
+		if (ms->info.input_op == -2)
+			ft_here_doc(ms, &i, ms->info.here_doc[i]->limiter);
 		infile_fd(ms, i);
 		red_in = ft_strchr_pos(*string, '<');
 	}

@@ -74,7 +74,7 @@ int	ft_here_doc(t_vars *ms, int *i, char *limiter)
 	line = NULL;
 	printf("HERE\n");
 	// limiter = ms->info->here_doc[*i]->limiter;
-	ms->info->here_doc[*i]->text = ft_strdup("");
+	ms->info.here_doc[*i]->text = ft_strdup("");
 	while (1)
 	{
 		line = get_next_line_pipex(0);
@@ -84,12 +84,12 @@ int	ft_here_doc(t_vars *ms, int *i, char *limiter)
 			// close(ms->pipe_fd[1]);
 			break ;
 		}
-		ms->info->here_doc[*i]->text = ft_strjoin(ms->info->here_doc[*i]->text, line);
+		ms->info.here_doc[*i]->text = ft_strjoin(ms->info.here_doc[*i]->text, line);
 		// write(ms->pipe_fd[1], line, ft_strlen(line));
 	}
 	// ms->info->here_doc->text = line;
 	(*i)++;
-	printf("%s \n", ms->info->here_doc[*i]->text);
+	printf("%s \n", ms->info.here_doc[*i]->text);
 	return (0);
 }
 

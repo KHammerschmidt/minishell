@@ -50,9 +50,8 @@ int	check_cmd(t_vars *ms, t_cmd *current)
 	}
 	while (ms->paths[i] != NULL)
 	{
-		current->execpath = ft_strjoin(ms->paths[i], current->command[0]);
-		if (!current->execpath)
-			free_and_exit(ms, 0, 1);
+		current->execpath = ft_strdup(ms->paths[i]);
+		current->execpath = ft_strjoin(current->execpath, current->command[0]);
 		if (access(current->execpath, F_OK) == 0)
 			return (0);
 		free(current->execpath);

@@ -3,10 +3,19 @@
 static char	*search_for_var(t_vars *ms, char *var)
 {
 	t_env	*current;
+	char	*tmp;
+	char	*tmp2;
 
 	current = ms->env;
+	tmp = NULL;
+	tmp2 = NULL;
 	if (compare_str(var, "?") == 0)
-		return (ft_itoa(ms->exit_status));
+	{
+		tmp = ft_itoa(ms->exit_status);
+		tmp2 = tmp;
+		ft_free_string(&tmp);
+		return (tmp2);
+	}
 	while (current != NULL)
 	{
 		if (compare_str(current->name, var) == 0)
@@ -26,7 +35,9 @@ static void	replicate_text(t_vars *ms, int *i, int *j)
 		ms->line = ft_strdup(tmp);
 	else
 		ms->line = ft_strjoin(ms->line, tmp);
-	free(tmp);
+	ft_free_string(&tmp);
+	(*i)++;
+	*j = *i;
 }
 
 static void	add_expanded_var(t_vars *ms, int *i, int *j)
@@ -46,8 +57,8 @@ static void	add_expanded_var(t_vars *ms, int *i, int *j)
 	else
 		ms->line = ft_strjoin(ms->line, tmp);
 	*j = *i;
-	free(var);
-	free(tmp);
+	ft_free_string(&var);
+	ft_free_string(&tmp);
 }
 
 /* Checks if the dollar sign stands within double or single quotes
@@ -86,8 +97,6 @@ void	dollar_expansion(t_vars *ms)
 		if (ms->cmd_line[i] == '$' && quote_type != 39)
 		{
 			replicate_text(ms, &i, &j);
-			i++;
-			j = i;
 			while (ft_isalpha(ms->cmd_line[i]) == 1 || ms->cmd_line[i] == '?')
 				i++;
 			add_expanded_var(ms, &i, &j);
