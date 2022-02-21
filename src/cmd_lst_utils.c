@@ -28,12 +28,12 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 	}
 }
 
-/* Passes on the information from command, fds and redirections 
+/* Passes on the information from command, fds and redirections
 to the struct t_cmd. */
 void	pass_on_infos_node(t_info *info, t_cmd *node)
 {
 	node->command = info->command;
-	node->pipe = info->pipe;
+	// node->pipe = info->pipe;
 	node->input_op = info->input_op;
 	node->output_op = info->output_op;
 	node->fd_out = info->fd_out;

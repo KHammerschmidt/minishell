@@ -39,9 +39,7 @@ void	print_lst_last(t_vars *ms)
 {
 	t_cmd *temp;
 	int		len;
-	// int		i;
 
-	// i = 0;
 	len = ft_lstsize_cmd(ms->cmd);
 	temp = NULL;
 	temp = ft_lstlast_cmd(ms->cmd);
@@ -75,7 +73,7 @@ void	print_lst(t_vars *ms)
 			printf("command...%s... ", current->command[i]);
 			i++;
 		}
-		printf("pipe: %d     infile: %s      outfile: %s\n", current->pipe, current->infile, current->outfile);
+		printf("infile: %s      outfile: %s\n", current->infile, current->outfile);
 		current = current->next;
 	}
 }
