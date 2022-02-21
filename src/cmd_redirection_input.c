@@ -29,10 +29,8 @@ static void	cut_infile_red(char **string)
 {
 	char	*tmp;
 	int		i;
-	int		p;
 
 	i = 0;
-	p = 0;
 	tmp = NULL;
 	while ((*string)[i] != '<')
 	{

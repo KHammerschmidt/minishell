@@ -86,7 +86,7 @@ int	main(int argc, char **argv, char **envp)
 			ms.line = NULL;
 		}
 		reset_info_struct(ms.info);
-		// system("leaks minishell");
+		system("leaks minishell");
 	}
 	return (0);
 }

@@ -8,6 +8,7 @@ char	*ft_strjoin_2(char *line, char *str, int i)
 	tmp = ft_strdup(&str[i]);
 	tmp[1] = '\0';
 	line = ft_strjoin(line, tmp);
+	ft_free_string(tmp);
 	return (line);
 }
 

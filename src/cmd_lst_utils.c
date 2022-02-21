@@ -13,6 +13,29 @@ t_cmd	*ft_lstlast_cmd(t_cmd *lst)
 	return (last);
 }
 
+// int	ft_lstsize_cmd(t_cmd *lst)
+// {
+// 	t_cmd	*last;
+// 	int		counter;
+
+// 	counter = 0;
+// 	last = lst;
+// 	// if (last == NULL)		//can be deleted because *lst is never NULL
+// 	// 	return (0);
+// 	while (last != NULL)		//different while loop condition
+// 	{
+// 		last = last->next;
+// 		counter++;
+// 	}
+// 	// while (last->next != NULL)
+// 	// {
+// 	// 	last = last->next;
+// 	// 	counter++;
+// 	// }
+// 	return (counter + 1);
+// }
+
+
 /* Adds a node to the back of a list t_cmd. */
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 {

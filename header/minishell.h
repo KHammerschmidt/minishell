@@ -76,7 +76,6 @@ typedef struct s_vars
 	int		tmp_fd;
 	char	**paths;
 	char	**envp;
-	// int		hdoc_pipe_fd[2];
 	int		exit_status;
 	// char	*cwd;
 	// char	*new_wd;
