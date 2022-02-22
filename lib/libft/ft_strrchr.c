@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: katharinahammerschmidt <katharinahammer    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/14 14:44:51 by mortmeie          #+#    #+#             */
-/*   Updated: 2021/07/14 15:43:15 by mortmeie         ###   ########.fr       */
+/*   Updated: 2022/02/22 19:14:53 by katharinaha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ char	*ft_strrchr(const char *s, int c)
 			i++;
 	}
 	if (s[i] == (unsigned char)c)
-	{
 		tmp = &((char *)s)[i];
-	}
 	return (tmp);
 }

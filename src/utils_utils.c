@@ -1,40 +1,5 @@
 #include "../header/minishell.h"
 
-void	ft_free_lst(t_list **lst)
-{
-	t_list	*tmp;
-
-	tmp = *lst;
-	while (tmp)
-	{
-		lst = &(*lst)->next;
-		free(tmp);
-		tmp = *lst;
-	}
-}
-
-int	ft_strchr_pos(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	if (s == NULL)
-		return (-1);
-	while (s[i] != (unsigned char)c && s[i] != '\0')
-		i++;
-	if (s[i] == (unsigned char)c)
-		return (i);
-	else
-		return (-1);
-}
-
-void	ft_free_string(char **str)
-{
-	if (*str)
-		free(*str);
-	*str = NULL;
-}
-
 void	print_lst_last(t_vars *ms)
 {
 	t_cmd	*temp;
@@ -81,35 +46,45 @@ void	print_lst(t_vars *ms)
 	}
 }
 
+// void	free_cmd_struct(t_vars *ms)
+// {
+// 	t_cmd	*current;
+// 	t_cmd	*tmp;
+
+// 	current = ms->cmd;
+// 	while (current != NULL)
+// 	{
+// 		tmp = current;
+// 		current = current->next;
+// 		ft_free_strarray(tmp->command);
+// 		ft_free_string(&tmp->execpath);
+// 		ft_free_string(&tmp->infile);
+// 		ft_free_string(&tmp->outfile);
+// 		ft_free_string(&tmp->error_msg);
+// 		// free(tmp);							// Mio: deleted to get rid of "invalid read" / "invalid write" (VALGRIND)
+// 		// tmp = NULL;
+// 	}
+// 	free(current);
+// 	current = NULL;
+// }
+
 void	free_cmd_struct(t_vars *ms)
 {
 	t_cmd	*current;
 	t_cmd	*tmp;
 
 	current = ms->cmd;
-	while (current != NULL)
+	tmp = current;
+	while (tmp != NULL)
 	{
-		tmp = current;
-		current = current->next;
-		ft_free_strarray(tmp->command);
-		ft_free_string(&tmp->execpath);
-		ft_free_string(&tmp->infile);
-		ft_free_string(&tmp->outfile);
-		ft_free_string(&tmp->error_msg);
-		// free(tmp);							// Mio: deleted to get rid of "invalid read" / "invalid write" (VALGRIND)
-		// tmp = NULL;
+		ft_free_strarray(current->command);
+		ft_free_string(&current->execpath);
+		ft_free_string(&current->infile);
+		ft_free_string(&current->outfile);
+		ft_free_string(&current->error_msg);
+		tmp = current->next;
+		free(current);							// Mio: deleted to get rid of "invalid read" / "invalid write" (VALGRIND)
+		current = NULL;							// Wirklich auf NULL setzen?!
+		current = tmp;
 	}
-	free(current);
-	current = NULL;
-}
-
-void	reset_info_struct(t_info *info)		// muss hier nicht vorher gefreed werden?
-{
-	
-	ft_free_strarray(info->command);
-	ft_free_string(&info->outfile);
-	ft_free_string(&info->infile);
-	info->input_op = 0;
-	info->output_op = 0;
-	info->pipe = 0;
 }

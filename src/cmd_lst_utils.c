@@ -51,12 +51,23 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 	}
 }
 
+void	reset_info_struct(t_info *info)
+{
+	ft_free_string(info->command);
+	ft_free_string(&info->infile);
+	ft_free_string(&info->outfile);
+	info->input_op = 0;
+	info->output_op = 0;
+	info->pipe = 0;
+	info->fd_in = 0;
+	info->fd_out = 1;
+}
+
 /* Passes on the information from command, fds and redirections
 to the struct t_cmd. */
 void	pass_on_infos_node(t_info *info, t_cmd *node)
 {
 	node->command = copy_strarray(info->command);
-// 	node->pipe = info->pipe;
 	node->input_op = info->input_op;
 	node->output_op = info->output_op;
 	node->fd_out = info->fd_out;
@@ -65,6 +76,7 @@ void	pass_on_infos_node(t_info *info, t_cmd *node)
 	node->outfile = ft_strdup(info->outfile);
 	node->execpath = NULL;							// Mio: added to initialise variable (VALGRIND)
 	node->error_msg = NULL;							// Mio: added to initialise variable (VALGRIND)
+	reset_info_struct(info);
 }
 
 /* Creates a new node of type t_cmd. */

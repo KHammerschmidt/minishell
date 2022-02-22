@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_strarray.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: katharinahammerschmidt <katharinahammer    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/19 11:29:41 by mortmeie          #+#    #+#             */
-/*   Updated: 2022/02/21 18:41:54 by mortmeie         ###   ########.fr       */
+/*   Updated: 2022/02/22 16:44:19 by katharinaha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,24 +25,7 @@ void	ft_free_strarray(char **arr)
 		arr[i] = NULL;
 		i++;
 	}
-	// free(arr);				// Mio: Deleted to get rid of "Invalid read" / "Invalid Write" (VALGRIND)
-	// arr = NULL;
-}
-
-void	ft_free_intarray(int **arr)
-{
-	int	i;
-
-	i = 0;
-	if (arr == 0)
-		return ;
-	while (arr[i] != 0)
-	{
-		free(arr[i]);
-		arr[i] = NULL;
-		i++;
-	}
-	if (arr)
-		free(arr);
+	free(arr);				// Kathi: has to be in here otherwise it creates 1 leaks for env line 
+							// Mio: Deleted to get rid of "Invalid read" / "Invalid Write" (VALGRIND)
 	arr = NULL;
 }
