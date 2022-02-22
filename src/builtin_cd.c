@@ -110,8 +110,8 @@ int	builtin_cd(t_vars *ms, t_cmd *current)
 	{
 		if (home == NULL)
 		{
-			current->error_flag = 1;
-			current->error_msg = ft_strdup("Error: HOME not set");
+			current->error_flag = 1;									// Brauchen wir oder koennen wir einfach mit prinft arbeiten.
+			current->error_msg = ft_strdup("Error: HOME not set");		// Dito.
 			// for testing until error handling complete:
 			printf("Error: HOME not set\n");
 			return (1);

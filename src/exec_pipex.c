@@ -1,5 +1,7 @@
 #include "../header/minishell.h"
 
+// #include <sys/wait.h>				// Mio: activate for use with VALGRIND
+
 /* Duplicates fd_out into STDOUT in case of an oufile redirection,
 otherwise into the pipe. */
 static void	ft_handle_stdout(t_cmd *current, t_vars *ms)
@@ -52,7 +54,10 @@ int	pipex(t_vars *ms)
 	{
 		if (current->next == NULL && current->previous == NULL
 			&& is_builtin(ms, current->command[0]) == 1)
+			{
 			ft_builtin_parent(current, ms);
+			return (ms->exit_status);					// Mio: Added this line to prevent function to jump to waitpid() at the bottom, where ms->exit_status was uninitialised according to VALGRIND (don't know why it's not in this case)
+			}
 		else
 		{
 			if (pipe(ms->pipe_fd) == -1)

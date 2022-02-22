@@ -30,7 +30,6 @@ static void	cut_infile_red(char **string)
 	char	*tmp;
 	int		i;
 
-	i = 0;
 	tmp = NULL;
 	while ((*string)[i] != '<')
 	{
@@ -78,9 +77,9 @@ void	input_redirection(t_vars *ms, char **string, int red_in)
 		if ((*string)[red_in] == '<')
 		{
 			if ((*string)[red_in + 1] == '<')
-				ms->info->input_op = -2;
+				ms->info.input_op = -2;
 			else
-				ms->info->input_op = -1;
+				ms->info.input_op = -1;
 		}
 		expansion_infile_red(string, ms);
 		cut_infile_red(string);

@@ -28,11 +28,11 @@ int	ft_strchr_pos(const char *s, int c)
 		return (-1);
 }
 
-void	ft_free_string(char *str)
+void	ft_free_string(char **str)
 {
-	if (str)
-		free(str);
-	str = NULL;
+	if (*str)
+		free(*str);
+	*str = NULL;
 }
 
 void	print_lst_last(t_vars *ms)
@@ -84,21 +84,31 @@ void	print_lst(t_vars *ms)
 void	free_cmd_struct(t_vars *ms)
 {
 	t_cmd	*current;
+	t_cmd	*tmp;
 
-	current = NULL;
-	while (current != NULL)								// Mio: Delete command table after each execution.
+	current = ms->cmd;
+	while (current != NULL)
 	{
-		ft_free_strarray(current->command);				// Mio: Replace by function to empty and free the complete list
+		tmp = current;
 		current = current->next;
+		ft_free_strarray(tmp->command);
+		ft_free_string(&tmp->execpath);
+		ft_free_string(&tmp->infile);
+		ft_free_string(&tmp->outfile);
+		ft_free_string(&tmp->error_msg);
+		// free(tmp);							// Mio: deleted to get rid of "invalid read" / "invalid write" (VALGRIND)
+		// tmp = NULL;
 	}
-	ms->cmd = NULL;										// Mio: Leaks?!
+	free(current);
+	current = NULL;
 }
 
-void	reset_info_struct(t_info *info)
+void	reset_info_struct(t_info *info)		// muss hier nicht vorher gefreed werden?
 {
-	info->command = NULL;
-	info->outfile = NULL;
-	info->infile = NULL;
+	
+	ft_free_strarray(info->command);
+	ft_free_string(&info->outfile);
+	ft_free_string(&info->infile);
 	info->input_op = 0;
 	info->output_op = 0;
 	info->pipe = 0;

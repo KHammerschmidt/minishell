@@ -5,10 +5,10 @@ void	cut_outfile_red(char **string)
 {
 	char	*tmp;
 	int		i;
-	int		p;
+	// int		p;
 
 	i = 0;
-	p = 0;
+	// p = 0;
 	tmp = NULL;
 	while ((*string)[i] != '>')
 	{
@@ -45,26 +45,26 @@ void expansion_outfile_red(char **string, t_vars *ms)
 	while ((*string)[k] != ' ' && (*string)[k] != '\0')
 		k++;
 	tmp = ft_substr((*string), j, k - j);
-	ms->info->outfile = tmp;
+	ms->info.outfile = tmp;
 }
 
 void	outfile_fd(t_vars *ms)
 {
-	if (ms->info->output_op == -1)
+	if (ms->info.output_op == -1)
 	{
 		if (ms->info->fd_out != STDOUT_FILENO)
 			close(ms->info->fd_out);
 		ms->info->fd_out = open(ms->info->outfile,
 			O_RDWR | O_CREAT | O_TRUNC, 0644);
 	}
-	if (ms->info->output_op == -2)
+	if (ms->info.output_op == -2)
 	{
 		if (ms->info->fd_out != STDOUT_FILENO)
 			close(ms->info->fd_out);
 		ms->info->fd_out = open(ms->info->outfile,
 			O_RDWR | O_CREAT | O_APPEND, 0644);
 	}
-	if (ms->info->fd_out == -1 || access(ms->info->outfile, W_OK) != 0)
+	if (ms->info.fd_out == -1 || access(ms->info.outfile, W_OK) != 0)
 		perror("Error");
 }
 
@@ -75,9 +75,9 @@ void	output_redirection(t_vars *ms, char **string, int red_out)
 		if ((*string)[red_out] == '>')
 		{
 			if ((*string)[red_out + 1] == '>')
-				ms->info->output_op = -2;
+				ms->info.output_op = -2;
 			else
-				ms->info->output_op = -1;
+				ms->info.output_op = -1;
 		}
 		expansion_outfile_red(string, ms);
 		cut_outfile_red(string);
