@@ -30,6 +30,7 @@ static void	cut_infile_red(char **string)
 	char	*tmp;
 	int		i;
 
+	i = 0;
 	tmp = NULL;
 	i = 0;
 	while ((*string)[i] != '<')
