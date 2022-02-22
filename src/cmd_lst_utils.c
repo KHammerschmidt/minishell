@@ -13,10 +13,33 @@ t_cmd	*ft_lstlast_cmd(t_cmd *lst)
 	return (last);
 }
 
+// int	ft_lstsize_cmd(t_cmd *lst)
+// {
+// 	t_cmd	*last;
+// 	int		counter;
+
+// 	counter = 0;
+// 	last = lst;
+// 	// if (last == NULL)		//can be deleted because *lst is never NULL
+// 	// 	return (0);
+// 	while (last != NULL)		//different while loop condition
+// 	{
+// 		last = last->next;
+// 		counter++;
+// 	}
+// 	// while (last->next != NULL)
+// 	// {
+// 	// 	last = last->next;
+// 	// 	counter++;
+// 	// }
+// 	return (counter + 1);
+// }
+
+
 /* Adds a node to the back of a list t_cmd. */
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 {
-	t_cmd *last;
+	t_cmd	*last;
 
 	if (*cmd == NULL)
 		*cmd = node;
@@ -28,12 +51,12 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 	}
 }
 
-/* Passes on the information from command, fds and redirections 
+/* Passes on the information from command, fds and redirections
 to the struct t_cmd. */
 void	pass_on_infos_node(t_info *info, t_cmd *node)
 {
 	node->command = copy_strarray(info->command);
-	node->pipe = info->pipe;
+// 	node->pipe = info->pipe;
 	node->input_op = info->input_op;
 	node->output_op = info->output_op;
 	node->fd_out = info->fd_out;
@@ -58,7 +81,7 @@ t_cmd	*ft_lstnew_cmd(t_info *info)
 	return (node);
 }
 
-int ft_lstsize_cmd(t_cmd *lst)
+int	ft_lstsize_cmd(t_cmd *lst)
 {
 	t_cmd	*last;
 	int		counter;

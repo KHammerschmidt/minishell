@@ -79,7 +79,8 @@ int	valid_dollar_sign(t_vars *ms, int i, int *quote_on, int quote_type)
 	return (quote_type);
 }
 
-/* Looks for $-signs and expands if respective variable is found in envar list. */
+/* Looks for $-signs and expands if respective variable is found in envar
+list. */
 void	dollar_expansion(t_vars *ms)
 {
 	int		i;

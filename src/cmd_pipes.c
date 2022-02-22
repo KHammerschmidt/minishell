@@ -1,6 +1,6 @@
 #include "../header/minishell.h"
 
-/* Checks if single and double quotes are even numbered until a 
+/* Checks if single and double quotes are even numbered until a
 pipe is hit. */
 int	pipe_validity(char *str)
 {
@@ -23,21 +23,3 @@ int	pipe_validity(char *str)
 		return (1);
 	return (0);
 }
-
-
-
-// int	check_pipes_in_quote(t_vars *ms)			//Kathi: not finished
-// {
-// 	int	i;
-// 	int	flag;
-
-// 	i = 0;
-// 	flag = 0;
-// 	while (ms->cmd_line[i] != '|')
-// 	{
-// 		if (ms->cmd_line[i] == 34 || ms->cmd_line[i] == 39)
-// 			flag++;
-// 		i++;
-// 	}
-// 	return (i);
-// }

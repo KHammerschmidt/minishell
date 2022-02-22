@@ -27,7 +27,8 @@ static int	stop_quotes(char *str, int start)
 	within_quotes = 0;
 	while (str[stop] != ' ' && str[stop] != '\0' && within_quotes == 0)
 	{
-		if ((str[stop] == 34 && within_quotes == 0 )|| (str[stop] == 39 && within_quotes == 0))
+		if ((str[stop] == 34 && within_quotes == 0)|| (str[stop] == 39
+			&& within_quotes == 0))
 			quote = str[stop];
 		quote_status(str, stop, &within_quotes, quote);
 		stop++;
@@ -104,7 +105,7 @@ char	**ft_split_quotes(char *str)
 	k = ft_count_substrings(str);
 	string = (char **)ft_calloc(sizeof(char *), k + 1);
 	if (string == NULL)
-		printf("MEM ALLOC ERROR\n");									//create exit function
+		printf("MEM ALLOC ERROR\n");//create exit function
 	k = 0;
 	while (str[start] != '\0')
 	{

@@ -3,9 +3,6 @@
 /* Splits the input cmd_line in according to the quotes. */
 static char *handle_quotes_pipe(int quotes, t_vars *ms, char *command_line, char *new_cmd_line)
 {
-	// int	pipe_marker;
-
-	// pipe_marker = ft_strchr_pos(ms->cmd_line, '|');
 	handle_redirections(&ms->cmd_line, ms);
 	if (quotes == 0)
 		ms->info.command = ft_split(command_line, ' ');
@@ -19,7 +16,6 @@ static char *handle_quotes_pipe(int quotes, t_vars *ms, char *command_line, char
 		ms->info.command = ft_split_quotes(command_line);
 	return (new_cmd_line);
 }
-
 
 /* Splits the input cmd_line in according to the quotes. */
 static char *handle_quotes(int quotes, t_vars *ms, char *command_line, char *new_cmd_line)
@@ -39,14 +35,14 @@ static char *handle_quotes(int quotes, t_vars *ms, char *command_line, char *new
 priorities (redirection, pipes and quotes). */
 char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *command_line)
 {
-	int	pipe_marker;
+	int	p_marker;
 
-	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');
-	ms->info.pipe = 1;
-	command_line = ft_substr(ms->cmd_line, 0, pipe_marker);
-	while (ms->cmd_line[pipe_marker] == ' ' || ms->cmd_line[pipe_marker] == '|')
-		pipe_marker++;
-	new_cmd_line = ft_substr(ms->cmd_line, pipe_marker, ft_strlen(ms->cmd_line) - pipe_marker);
+	p_marker = ft_strchr_pos(ms->cmd_line, '|');
+	ms->info->pipe = 1;
+	command_line = ft_substr(ms->cmd_line, 0, p_marker);
+	while (ms->cmd_line[p_marker] == ' ' || ms->cmd_line[p_marker] == '|')
+		p_marker++;
+	new_cmd_line = ft_substr(ms->cmd_line, p_marker, ft_strlen(ms->cmd_line) - p_marker);
 	handle_redirections(&command_line, ms);
 	ms->info.command = ft_split(command_line, ' ');
 	if (ft_strchr(command_line, 34) != NULL || ft_strchr(command_line, 39) != NULL)

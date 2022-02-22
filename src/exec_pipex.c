@@ -28,26 +28,21 @@ into the pipe. If a here_doc is found is opens it and reads it until the limiter
 has been found. */
 static void	ft_handle_stdin(t_cmd *current, t_vars *ms)
 {
-	if (current->input_op == -2)
-	{
-		printf("how to dup here_doc?\n");
-	}
-	else if (current->input_op == -1)
+	if (current->input_op == -1)
 	{
 		close(ms->pipe_fd[0]);
 		if (dup2(current->fd_in, STDIN_FILENO) < 0)
 			perror("dup2  infile1: ");
 		close(current->fd_in);
 	}
-	else if (current->input_op == 0)
+	else if (current->input_op == 0 || current->input_op == -2)
 	{
 		close(ms->pipe_fd[0]);
 		if (dup2(ms->tmp_fd, STDIN_FILENO) < 0)
 			perror("dup2 infile2: ");
-		// close(ms->tmp_fd);
+		close(ms->tmp_fd);
 	}
 }
-
 
 int	pipex(t_vars *ms)
 {

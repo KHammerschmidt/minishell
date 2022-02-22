@@ -90,6 +90,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		reset_info_struct(&ms.info);
 		i++;
+		// system("leaks minishell");
 	}
 	return (ms.exit_status);
 }
