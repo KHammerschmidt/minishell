@@ -94,25 +94,26 @@ static char	*substring_quotes(int *start, int *stop, char *str)
 /* Split the input string by its spaces and groups together input in quotes. */
 char	**ft_split_quotes(char *str)
 {
+	int		k;
 	int		start;
 	int		stop;
-	char	**string;
 	char	*tmp;
-	int		k;
+	char	**string;
 
+	k = 0;
 	stop = 0;
 	start = 0;
-	k = ft_count_substrings(str);
-	string = (char **)ft_calloc(sizeof(char *), k + 1);
+	tmp = NULL;
+	string = (char **)ft_calloc(sizeof(char *), ft_count_substrings(str) + 1);
 	if (string == NULL)
 		printf("MEM ALLOC ERROR\n");//create exit function
-	k = 0;
 	while (str[start] != '\0')
 	{
 		tmp = substring_quotes(&start, &stop, str);
 		if (tmp == NULL)
 			break ;
 		string[k++] = cut_quotes(tmp);
+		ft_free_string(&tmp);
 	}
 	string[k] = 0;
 	return (string);

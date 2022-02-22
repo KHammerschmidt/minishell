@@ -20,6 +20,7 @@ SRC_LIST	=	builtin_cd.c				\
 				builtin_pwd.c				\
 				builtin_unset.c				\
 				cmd_dollar_expansion.c		\
+				cmd_get_paths.c				\
 				cmd_lst_utils.c				\
 				cmd_pipes.c					\
 				cmd_quotes.c				\
@@ -32,16 +33,18 @@ SRC_LIST	=	builtin_cd.c				\
 				env_get_env_var.c			\
 				env_init.c					\
 				env_handling.c				\
-				env_utils.c					\
+				env_lst_utils.c				\
 				exec_builtin_parent.c		\
 				exec_builtin.c				\
+				exec_cmd.c					\
 				exec_here_doc.c				\
-				exec_input.c				\
 				exec_pipex.c				\
+				signals.c					\
 				start_create_prompt.c		\
 				start_main.c				\
+				start_readline.c			\
 				utils_free_memory.c			\
-				utils_utilities.c			\
+				utils_str_mngt.c			\
 				utils_utils.c
 
 # BONUS_LIST	=	minishell_bonus.c

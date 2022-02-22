@@ -1,30 +1,30 @@
 #include "../header/minishell.h"
 
 /* Splits the input cmd_line in according to the quotes. */
-static char *handle_quotes_pipe(int quotes, t_vars *ms, char *command_line, char *new_cmd_line)
+static char *handle_quotes_pipe(int quotes, t_vars *ms, char *curr_cmd_line, char *new_cmd_line)
 {
 	handle_redirections(&ms->cmd_line, ms);
 	if (quotes == 0)
-		ms->info.command = ft_split(command_line, ' ');
+		ms->info.command = ft_split(curr_cmd_line, ' ');
 	else if (quotes == -1)
 	{
 		ft_free_string(&new_cmd_line);
-		ft_free_string(&command_line);
+		ft_free_string(&curr_cmd_line);
 		return (NULL);
 	}
 	else
-		ms->info.command = ft_split_quotes(command_line);
+		ms->info.command = ft_split_quotes(curr_cmd_line);
 	return (new_cmd_line);
 }
 
 /* Splits the input cmd_line in according to the quotes. */
-static char *handle_quotes(int quotes, t_vars *ms, char *command_line, char *new_cmd_line)
+static char *handle_quotes(int quotes, t_vars *ms, char *curr_cmd_line, char *new_cmd_line)
 {
 	handle_redirections(&ms->cmd_line, ms);
 	if (quotes == -1)
 	{
 		ft_free_string(&new_cmd_line);
-		ft_free_string(&command_line);
+		ft_free_string(&curr_cmd_line);
 	}
 	else
 		ms->info.command = ft_split_quotes(ms->cmd_line);
@@ -33,20 +33,20 @@ static char *handle_quotes(int quotes, t_vars *ms, char *command_line, char *new
 
 /* Handles the input cmd_line which include a pipe and compares in accordance to the
 priorities (redirection, pipes and quotes). */
-char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *command_line)
+char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *curr_cmd_line)
 {
 	int	p_marker;
 
 	p_marker = ft_strchr_pos(ms->cmd_line, '|');
 	ms->info.pipe = 1;
-	command_line = ft_substr(ms->cmd_line, 0, p_marker);
+	curr_cmd_line = ft_substr(ms->cmd_line, 0, p_marker);
 	while (ms->cmd_line[p_marker] == ' ' || ms->cmd_line[p_marker] == '|')
 		p_marker++;
 	new_cmd_line = ft_substr(ms->cmd_line, p_marker, ft_strlen(ms->cmd_line) - p_marker);
-	handle_redirections(&command_line, ms);
-	ms->info.command = ft_split(command_line, ' ');
-	if (ft_strchr(command_line, 34) != NULL || ft_strchr(command_line, 39) != NULL)
-		return (handle_quotes_pipe(quotes, ms, command_line, new_cmd_line));
+	handle_redirections(&curr_cmd_line, ms);
+	ms->info.command = ft_split(curr_cmd_line, ' ');
+	if (ft_strchr(curr_cmd_line, 34) != NULL || ft_strchr(curr_cmd_line, 39) != NULL)
+		return (handle_quotes_pipe(quotes, ms, curr_cmd_line, new_cmd_line));
 	return (new_cmd_line);
 }
 
@@ -56,12 +56,12 @@ returns any following commands of cmd_line or NULL if tehre was only one
 command. */
 static char	*handle_input(t_vars *ms)
 {
-	int		pipe_marker;
 	int		quotes;
-	char	*command_line;
+	int		pipe_marker;
+	char	*curr_cmd_line;
 	char	*new_cmd_line;
 
-	command_line = NULL;
+	curr_cmd_line = NULL;
 	new_cmd_line = NULL;
 	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');
 	quotes = check_quote_status(ms->cmd_line);
@@ -72,9 +72,9 @@ static char	*handle_input(t_vars *ms)
 		return (NULL);
 	}
 	else if (pipe_marker != -1 && pipe_validity(ms->cmd_line) == 0)
-		return (handle_pipe(ms, quotes, new_cmd_line, command_line));
+		return (handle_pipe(ms, quotes, new_cmd_line, curr_cmd_line));
 	else
-		return (handle_quotes(quotes, ms, command_line, new_cmd_line));
+		return (handle_quotes(quotes, ms, curr_cmd_line, new_cmd_line));
 }
 
 /* Creates the simple command table, e.g. the char **command of struct t_cmd. */
@@ -86,8 +86,6 @@ void	create_cmd_table(t_vars *ms)
 	tmp = NULL;
 	new = NULL;
 	dollar_expansion(ms);
-	ft_free_string(&ms->cmd_line);
-	ms->cmd_line = ft_strdup(ms->line);
 	while (ms->cmd_line != NULL)
 	{
 		tmp = handle_input(ms);
@@ -95,9 +93,8 @@ void	create_cmd_table(t_vars *ms)
 		ft_lstadd_back_cmd(&ms->cmd, new);
 		if (tmp == NULL)
 			break ;
-		free(ms->cmd_line);
-		ms->cmd_line = NULL;
+		ft_free_string(&ms->cmd_line);
 		ms->cmd_line = ft_strdup(tmp);
-		free(tmp);
+		ft_free_string(&tmp);
 	}
 }

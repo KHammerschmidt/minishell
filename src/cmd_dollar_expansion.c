@@ -6,9 +6,9 @@ static char	*search_for_var(t_vars *ms, char *var)
 	char	*tmp;
 	char	*tmp2;
 
-	current = ms->env;
 	tmp = NULL;
 	tmp2 = NULL;
+	current = ms->env;
 	if (compare_str(var, "?") == 0)
 	{
 		tmp = ft_itoa(ms->exit_status);
@@ -25,28 +25,11 @@ static char	*search_for_var(t_vars *ms, char *var)
 	return (NULL);
 }
 
-static void	replicate_text(t_vars *ms, int *i, int *j)
-{
-	char	*tmp;
-
-	tmp = NULL;
-	tmp = ft_substr(ms->cmd_line, *j, *i - *j);
-	if (ms->line == NULL)
-		ms->line = ft_strdup(tmp);
-	else
-		ms->line = ft_strjoin(ms->line, tmp);
-	ft_free_string(&tmp);
-	(*i)++;
-	*j = *i;
-}
-
 static void	add_expanded_var(t_vars *ms, int *i, int *j)
 {
 	char	*tmp;
 	char	*var;
 
-	tmp = NULL;
-	var = NULL;
 	var = ft_substr(ms->cmd_line, *j, *i - *j);
 	tmp = ft_strdup(search_for_var(ms, var));
 	if (tmp == NULL)
@@ -61,8 +44,23 @@ static void	add_expanded_var(t_vars *ms, int *i, int *j)
 	ft_free_string(&tmp);
 }
 
+static void	replicate_text(t_vars *ms, int *i, int *j)
+{
+	char	*tmp;
+
+	tmp = ft_substr(ms->cmd_line, *j, *i - *j);
+	// KATHI: what happens if (tmp == NULL)?
+	if (ms->line == NULL)
+		ms->line = ft_strdup(tmp);
+	else
+		ms->line = ft_strjoin(ms->line, tmp);
+	ft_free_string(&tmp);
+	(*i)++;
+	*j = *i;
+}
+
 /* Checks if the dollar sign stands within double or single quotes
-and returns the respective quote_type. */
+and returns the respective quote_type. Returns 0 when no quotes. */
 int	valid_dollar_sign(t_vars *ms, int i, int *quote_on, int quote_type)
 {
 	if (ms->cmd_line[i] == 34 || ms->cmd_line[i] == 39)
@@ -106,4 +104,6 @@ void	dollar_expansion(t_vars *ms)
 			i++;
 	}
 	replicate_text(ms, &i, &j);
+	ft_free_string(&ms->cmd_line);
+	ms->cmd_line = ft_strdup(ms->line);
 }

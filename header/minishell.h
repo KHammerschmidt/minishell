@@ -50,7 +50,6 @@ typedef struct s_cmd
 	char			*outfile;
 	int				input_op;
 	int				output_op;
-	// int				pipe;
 	int				error_flag;
 	char			*error_msg;
 	struct s_cmd	*next;
@@ -87,20 +86,20 @@ typedef struct s_vars
 /* **************************************************************** */
 
 int		main(int argc, char **argv, char **envp);
-int		init_struct(t_vars *ms, char **envp);
 int		read_line(t_vars *ms);
 
 /* envp */
-int		init_env(t_vars *ms, char **envp);	//arr + lst
-t_env	*get_env_var(t_vars *ms, char *var_name);
+int		init_env(t_vars *ms, char **envp);
+void	free_t_env(t_env **env);
 t_env	*ft_lstnew_env(char *content);
-void	ft_lstadd_back_env(t_env **lst, t_env *new);
 t_env	*ft_lstlast_env(t_env *lst);
+void	ft_lstadd_back_env(t_env **lst, t_env *new);
+void	ft_free_lst_env(t_env **lst);
+t_env	*get_env_var(t_vars *ms, char *var_name);
 void	update_envp_array(t_vars *ms);
 
-/* builtins */
-void	init_builtin(t_vars *ms);				//arr + lst
-void	add_builtin(t_vars *ms, char *builtin);
+/* Builtins */
+int	init_builtin(t_vars *ms);
 int		builtin_cd(t_vars *ms, t_cmd *current);
 int		builtin_echo(t_vars *ms, t_cmd *current);
 int		builtin_env(t_vars *ms, t_cmd *current);
@@ -108,8 +107,10 @@ int		builtin_exit(t_vars *ms, t_cmd *current);
 int		builtin_export(t_vars *ms, t_cmd *current);
 int		builtin_pwd(t_vars *ms, t_cmd *current);
 int		builtin_unset(t_vars *ms, t_cmd *current);
-void	execute_cmd(t_vars *ms, t_cmd *current);
+
+
 void	execute_builtin(t_vars *ms, t_cmd *current);
+void	execute_cmd(t_vars *ms, t_cmd *current);
 int		is_builtin(t_vars *ms, char *cmd);
 
 /* prompt */
@@ -132,7 +133,8 @@ char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *command_line
 int		pipe_validity(char *str);
 int		check_quote_status(char *str);
 char	**ft_split_quotes(char *str);
-int		ft_strchr_pos(const char *s, int c);
+// int		ft_strchr_pos(const char *s, int c);
+int	ft_strchr_pos(const char *s, char c);
 int		ft_count_chars(char *str, t_vars *ms);
 
 /* command execution */
@@ -181,4 +183,7 @@ int	mem_alloc_hdoc(t_vars *ms, char **string);
 int		pipex(t_vars *ms);
 void	ft_builtin_parent(t_cmd *current, t_vars *ms);
 
+
+
+void	free_builtin_list(t_vars *ms);
 #endif
