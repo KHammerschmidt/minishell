@@ -4,22 +4,22 @@
 files are checked before it is opend and the fd is saved. */
 static void	infile_fd(t_vars *ms)
 {
-	if (ms->info->fd_in != STDIN_FILENO)
-		close(ms->info->fd_in);
-	if (access(ms->info->infile, F_OK) != 0)
+	if (ms->info.fd_in != STDIN_FILENO)
+		close(ms->info.fd_in);
+	if (access(ms->info.infile, F_OK) != 0)
 	{
-		if (access((ms->info->infile), R_OK) != 0)
+		if (access((ms->info.infile), R_OK) != 0)
 			perror("Error");
 		else
 		{
 			ft_putstr_fd("zsh: No such file or directory: ", 2);
-			ft_putendl_fd((ms->info->infile), 2);
+			ft_putendl_fd((ms->info.infile), 2);
 		}
 	}
 	else
 	{
-		ms->info->fd_in = open((ms->info->infile), O_RDONLY);
-		if (ms->info->fd_in == -1)
+		ms->info.fd_in = open((ms->info.infile), O_RDONLY);
+		if (ms->info.fd_in == -1)
 			perror("Error: ");
 	}
 }
@@ -31,6 +31,7 @@ static void	cut_infile_red(char **string)
 	int		i;
 
 	tmp = NULL;
+	i = 0;
 	while ((*string)[i] != '<')
 	{
 		tmp = ft_strnjoin(tmp, (*string)[i], 1);
@@ -47,7 +48,7 @@ static void	cut_infile_red(char **string)
 		i++;
 	while ((*string)[i] != '\0')
 		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
-	ft_free_string(*string);
+	ft_free_string(&(*string));
 	*string = tmp;
 }
 
@@ -65,7 +66,7 @@ static void	expansion_infile_red(char **string, t_vars *ms)
 	k = j;
 	while ((*string)[k] != ' ' && (*string)[k] != '\0')
 		k++;
-	ms->info->infile = ft_substr(*string, j, k - j);
+	ms->info.infile = ft_substr(*string, j, k - j);
 }
 
 /* Allocates memory for the info struct and extracts the redirections and
@@ -83,9 +84,9 @@ void	input_redirection(t_vars *ms, char **string, int red_in)
 		}
 		expansion_infile_red(string, ms);
 		cut_infile_red(string);
-		if (ms->info->input_op == -2)
-			ft_here_doc(ms, ms->info->infile);
-		else if (ms->info->input_op == -1)
+		if (ms->info.input_op == -2)
+			ft_here_doc(ms, ms->info.infile);
+		else if (ms->info.input_op == -1)
 			infile_fd(ms);
 		red_in = ft_strchr_pos(*string, '<');
 	}
