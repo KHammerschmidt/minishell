@@ -11,11 +11,13 @@
 # include <dirent.h>
 // # include <curses.h>
 // # include <term.h>
+#include <string.h>
 # include <termios.h>
 # include <limits.h>
 # include <errno.h>
 # include <signal.h>
 # include <sys/ioctl.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/libft/libft.h"

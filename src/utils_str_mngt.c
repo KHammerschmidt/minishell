@@ -7,6 +7,7 @@ char	**copy_strarray(char **strarray)
 	int		i;
 
 	i = 0;
+	ret = NULL;
 	while (strarray[i] != NULL)
 		i++;
 	ret = (char **)malloc((i + 1) * sizeof(char *));
@@ -16,6 +17,7 @@ char	**copy_strarray(char **strarray)
 	while (strarray[i] != NULL)
 	{
 		ret[i] = ft_strdup(strarray[i]);
+		printf("ret[i]%s\n", ret[i]);
 		i++;
 	}
 	ret[i] = NULL;

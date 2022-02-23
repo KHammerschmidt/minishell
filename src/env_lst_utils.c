@@ -14,13 +14,13 @@ t_env	*ft_lstnew_env(char *content)
 	if (split == NULL)
 	{
 		printf("Error\n");
-		ft_free_strarray(split);
+		ft_free_strarray(&split);
 		return (NULL);
 	}
 	new_element->name = ft_strdup(split[i]);
 	new_element->content = ft_strdup(split[i + 1]);
 	new_element->next = NULL;
-	ft_free_strarray(split);
+	ft_free_strarray(&split);
 	return (new_element);
 }
 
@@ -75,7 +75,7 @@ list t_env. */
 // 		free(temp->name);
 // 		free(temp->content);
 // 		temp = temp->next;
-// 	}	
+// 	}
 // }
 
 // /* Function deletes every element of the list t_env. */

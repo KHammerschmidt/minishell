@@ -23,7 +23,6 @@ int	get_paths(t_vars *ms)
 	while (ms->paths[i] != NULL)
 	{
 		ms->paths[i] = ft_strjoin(ms->paths[i], "/");
-		// printf("ms->paths[i] = %s\n", ms->paths[i]);
 		// if (!ms->paths)							// brauchen wir das? wozu?
 		// 	free_and_exit(ms, 1, 1);				// change to correct exit code
 		i++;

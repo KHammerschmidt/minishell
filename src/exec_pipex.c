@@ -19,6 +19,7 @@ static void	ft_handle_stdout(t_cmd *current, t_vars *ms)
 	{
 		if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
 			perror("dup2 outfile2: ");
+		current->fd_out = dup(ms->pipe_fd[1]);
 		close(ms->pipe_fd[1]);
 	}
 }
@@ -40,6 +41,7 @@ static void	ft_handle_stdin(t_cmd *current, t_vars *ms)
 		close(ms->pipe_fd[0]);
 		if (dup2(ms->tmp_fd, STDIN_FILENO) < 0)
 			perror("dup2 infile2: ");
+		current->fd_in = dup(ms->tmp_fd);
 		close(ms->tmp_fd);
 	}
 }
@@ -52,11 +54,13 @@ int	pipex(t_vars *ms)
 	current = ms->cmd;
 	while (current != NULL)
 	{
+		write(1, "HERE 2\n", 7);
 		if (current->next == NULL && current->previous == NULL
-			&& is_builtin(ms, current->command[0]) == 1)
+			&& is_builtin(ms, current->command[0]) == 1)			//hier kann er nicht drauf zugreifen
 			{
-			ft_builtin_parent(current, ms);
-			return (ms->exit_status);					// Mio: Added this line to prevent function to jump to waitpid() at the bottom, where ms->exit_status was uninitialised according to VALGRIND (don't know why it's not in this case)
+				write(1, "HERE ONLY BUILTIN\n", 18);
+				ft_builtin_parent(current, ms);
+				return (ms->exit_status);					// Mio: Added this line to prevent function to jump to waitpid() at the bottom, where ms->exit_status was uninitialised according to VALGRIND (don't know why it's not in this case)
 			}
 		else
 		{
@@ -83,10 +87,12 @@ int	pipex(t_vars *ms)
 				close(ms->pipe_fd[0]);
 			}
 		}
+		printf("HERE 2b\n");
 		// signal(SIGQUIT, SIG_IGN);
 		// signal(SIGINT, SIG_IGN);
 		current = current->next;
 	}
+	write(1, "HERE 4\n", 7);
 	waitpid(pid, &ms->exit_status, 0);
 	return (WEXITSTATUS(ms->exit_status));
 }

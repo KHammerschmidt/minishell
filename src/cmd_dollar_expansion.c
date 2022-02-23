@@ -49,7 +49,6 @@ static void	replicate_text(t_vars *ms, int *i, int *j)
 	char	*tmp;
 
 	tmp = ft_substr(ms->cmd_line, *j, *i - *j);
-	// KATHI: what happens if (tmp == NULL)?
 	if (ms->line == NULL)
 		ms->line = ft_strdup(tmp);
 	else
