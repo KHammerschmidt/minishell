@@ -16,13 +16,13 @@ t_env	*ft_lstnew_env(char *content)
 	if (tmp == NULL)
 	{
 		printf("Error\n");
-		ft_free_strarray(tmp);
+		ft_free_strarray(&tmp);
 		return (NULL);
 	}
 	new_element->name = ft_strdup(tmp[i]);
 	new_element->content = ft_strdup(tmp[i + 1]);
 	new_element->next = NULL;
-	ft_free_strarray(tmp);
+	ft_free_strarray(&tmp);
 	return (new_element);
 }
 

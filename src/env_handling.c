@@ -29,7 +29,7 @@ void	update_envp_array(t_vars *ms)
 	t_env	*current;
 	int		i;
 
-	ft_free_strarray(ms->envp);
+	ft_free_strarray(&ms->envp);
 	current = ms->env;
 	i = 0;
 	while (current != NULL)

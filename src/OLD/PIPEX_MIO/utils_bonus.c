@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/31 12:36:21 by mortmeie          #+#    #+#             */
-/*   Updated: 2021/11/19 16:33:33 by mortmeie         ###   ########.fr       */
+/*   Updated: 2022/02/23 12:29:35 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	init(t_vars *vars)
 /* Frees all allocated memory. */
 int	destroy_mem(t_vars *vars)
 {
-	ft_free_strarray(vars->my_paths);
-	ft_free_strarray(vars->cmd);
+	ft_free_strarray(&vars->my_paths);
+	ft_free_strarray(&vars->cmd);
 	free(vars->cmd_path);
 	vars->cmd_path = NULL;
 	return (0);

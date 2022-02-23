@@ -4,16 +4,15 @@
 static char *handle_quotes_pipe(int quotes, t_vars *ms, char *curr_cmd_line, char *new_cmd_line)
 {
 	handle_redirections(&ms->cmd_line, ms);
-	if (quotes == 0)
-		ms->info.command = ft_split(curr_cmd_line, ' ');
-	else if (quotes == -1)
+	if (quotes == -1)
 	{
 		ft_free_string(&new_cmd_line);
 		ft_free_string(&curr_cmd_line);
+		ms->info.command = NULL;
 		return (NULL);
 	}
-	else
-		ms->info.command = ft_split_quotes(curr_cmd_line);
+	ms->info.command = ft_split_quotes(curr_cmd_line);
+	ft_free_string(&curr_cmd_line);
 	return (new_cmd_line);
 }
 
@@ -24,10 +23,15 @@ static char *handle_quotes(int quotes, t_vars *ms, char *curr_cmd_line, char *ne
 	if (quotes == -1)
 	{
 		ft_free_string(&new_cmd_line);
-		ft_free_string(&curr_cmd_line);
+		ms->info.command = NULL;
 	}
 	else
+	{
 		ms->info.command = ft_split_quotes(ms->cmd_line);
+		printf("hihi %s\n", ms->info.command[0]);
+		printf("hihi %s\n", ms->info.command[1]);
+	}
+	ft_free_string(&curr_cmd_line);
 	return (NULL);
 }
 
@@ -44,9 +48,10 @@ char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *curr_cmd_lin
 		p_marker++;
 	new_cmd_line = ft_substr(ms->cmd_line, p_marker, ft_strlen(ms->cmd_line) - p_marker);
 	handle_redirections(&curr_cmd_line, ms);
-	ms->info.command = ft_split(curr_cmd_line, ' ');
-	if (ft_strchr(curr_cmd_line, 34) != NULL || ft_strchr(curr_cmd_line, 39) != NULL)
+	if (ft_strchr_pos(curr_cmd_line, 34) != -1 || ft_strchr_pos(curr_cmd_line, 39) != -1)
 		return (handle_quotes_pipe(quotes, ms, curr_cmd_line, new_cmd_line));
+	ms->info.command = ft_split(curr_cmd_line, ' ');
+	ft_free_string(&curr_cmd_line);
 	return (new_cmd_line);
 }
 
@@ -60,7 +65,9 @@ static char	*handle_input(t_vars *ms)
 	int		pipe_marker;
 	char	*curr_cmd_line;
 	char	*new_cmd_line;
+	char	*temp;
 
+	temp = NULL;
 	curr_cmd_line = NULL;
 	new_cmd_line = NULL;
 	pipe_marker = ft_strchr_pos(ms->cmd_line, '|');
@@ -72,9 +79,23 @@ static char	*handle_input(t_vars *ms)
 		return (NULL);
 	}
 	else if (pipe_marker != -1 && pipe_validity(ms->cmd_line) == 0)
-		return (handle_pipe(ms, quotes, new_cmd_line, curr_cmd_line));
+	{
+		printf("else if 1\n");
+		temp = handle_pipe(ms, quotes, new_cmd_line, curr_cmd_line);
+		return (temp);
+		// return (handle_pipe(ms, quotes, new_cmd_line, curr_cmd_line));
+	}
 	else
-		return (handle_quotes(quotes, ms, curr_cmd_line, new_cmd_line));
+	{
+		printf("else if 2\n");
+		temp = handle_quotes(quotes, ms, curr_cmd_line, new_cmd_line);
+		// printf("new_cmd: %s\n", new_cmd_line);
+		// printf("curr_cmd: %s\n", curr_cmd_line);
+		printf("hihi %s\n", ms->info.command[0]);
+		printf("hihi %s\n", ms->info.command[1]);
+		return (temp);
+		// return (handle_quotes(quotes, ms, curr_cmd_line, new_cmd_line));
+	}
 }
 
 /* Creates the simple command table, e.g. the char **command of struct t_cmd. */
@@ -91,10 +112,14 @@ void	create_cmd_table(t_vars *ms)
 		tmp = handle_input(ms);
 		new = ft_lstnew_cmd(&ms->info);
 		ft_lstadd_back_cmd(&ms->cmd, new);
-		if (tmp == NULL)
-			break ;
 		ft_free_string(&ms->cmd_line);
+		if (tmp == NULL)
+		{
+			ft_free_string(&tmp);
+			break ;
+		}
 		ms->cmd_line = ft_strdup(tmp);
 		ft_free_string(&tmp);
 	}
+
 }

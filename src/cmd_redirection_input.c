@@ -32,7 +32,6 @@ static void	cut_infile_red(char **string)
 
 	i = 0;
 	tmp = NULL;
-	i = 0;
 	while ((*string)[i] != '<')
 	{
 		tmp = ft_strnjoin(tmp, (*string)[i], 1);
@@ -51,6 +50,7 @@ static void	cut_infile_red(char **string)
 		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
 	ft_free_string(&(*string));
 	*string = tmp;
+	ft_free_string(&tmp);
 }
 
 /* Saves the infile in the t_info struct or the respective
