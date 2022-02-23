@@ -13,16 +13,15 @@ int	check_quote_status(char *str)
 	quote_type = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] == 34 && quote_on == 0)
-			quote_type = 34;
-		if (str[i] == 39 && quote_on == 0)
-			quote_type = 39;
-		if (str[i++] == quote_type)
+		if ((str[i] == 34 || str[i] == 39) && quote_on == 0)
+			quote_type = str[i];
+		if (str[i] == quote_type)
 		{
 			if (quote_on == 1)
 				quote_on = -1;
 			quote_on++;
 		}
+		i++;
 	}
 	if (quote_on == 1)
 		return (-1);

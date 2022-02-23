@@ -6,6 +6,7 @@ t_env	*get_env_var(t_vars *ms, char *var_name)
 {
 	t_env	*current;
 
+	current = NULL;
 	if (!var_name)
 		return (NULL);
 	current = ms->env;

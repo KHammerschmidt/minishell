@@ -1,56 +1,31 @@
 #include "../header/minishell.h"
 
-void	add_builtin(t_vars *ms, char *builtin)		//lst
+/* Creates a new node for every builtin and adds it to the end of t_list. */
+static int	add_builtin(t_vars *ms, char *builtin)
 {
 	t_list	*element;
 
 	element = ft_lstnew(builtin);
-	ft_lstadd_back(&ms->builtins, element);
-	// printf("%s\n", element->content);
-}
-
-void	init_builtin(t_vars *ms)
-{
-	int		i;
-
-	i = 0;
-	while (i < 7)
+	if (element == NULL)
 	{
-		if (i == 0)
-			add_builtin(ms, "echo");
-		if (i == 1)
-			add_builtin(ms, "cd");
-		if (i == 2)
-			add_builtin(ms, "pwd");
-		if (i == 3)
-			add_builtin(ms, "export");
-		if (i == 4)
-			add_builtin(ms, "unset");
-		if (i == 5)
-			add_builtin(ms, "env");
-		if (i == 6)
-			add_builtin(ms, "exit");
-		i++;
+		printf("Error\n");
+		free_builtin_list(ms);
+		return (1);
 	}
+	ft_lstadd_back(&ms->builtins, element);
+	return (0);
 }
 
-
-// ---------------------	---------------------	---------------------	---------------------
-// void	init_builtin(t_vars *ms)			//arr
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	ms->arr[i] = ft_strdup("echo");
-// 	ms->arr[i + 1] = ft_strdup("cd");
-// 	ms->arr[i + 2] = ft_strdup("pwd");
-// 	ms->arr[i + 3] = ft_strdup("export");;
-// 	ms->arr[i + 4] = ft_strdup("unset");
-// 	ms->arr[i + 5] = ft_strdup("env");
-// 	ms->arr[i + 6] = ft_strdup("exit");
-// 	ms->arr[i + 7] = NULL;
-
-// 	i = 0;
-// 	while (ms->arr[i])
-// 		printf("%s\n", ms->arr[i++]);
-// }
+/* Intialises the specified builtins. */
+int	init_builtin(t_vars *ms)
+{
+	if ((add_builtin(ms, "echo") != 0)
+	|| (add_builtin(ms, "cd") != 0)
+	|| (add_builtin(ms, "pwd") != 0) 
+	|| (add_builtin(ms, "export") != 0)
+	|| (add_builtin(ms, "unset") != 0)
+	|| (add_builtin(ms, "env") != 0)
+	|| (add_builtin(ms, "exit") != 0))
+		return (1);
+	return (0);
+}

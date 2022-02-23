@@ -21,15 +21,15 @@ void	ft_free_arr(char **arr)
 	}
 }
 
-void	reset_info_struct(t_info *info)
-{
-	info->command = NULL;
-	info->outfile = NULL;
-	info->infile = NULL;
-	info->input_op = 0;
-	info->output_op = 0;
-	info->pipe = 0;
-}
+// void	reset_info_struct(t_info *info)
+// {
+// 	info->command = NULL;
+// 	info->outfile = NULL;
+// 	info->infile = NULL;
+// 	info->input_op = 0;
+// 	info->output_op = 0;
+// 	info->pipe = 0;
+// }
 
 
 
