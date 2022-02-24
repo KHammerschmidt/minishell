@@ -2,7 +2,7 @@
 
 /* Indicates if the found quote is an opening (within_quotes == 0) or closing
 (within_quotes == 1) quote and changes the status of the status. */
-static int	quote_status(char *str, int stop, int *within_quotes, int quote)
+static int	check_quote_status(char *str, int stop, int *within_quotes, int quote)
 {
 	if (str[stop] == quote && (*within_quotes) == 0)
 		(*within_quotes)++;
@@ -30,14 +30,14 @@ static int	stop_quotes(char *str, int start)
 		if ((str[stop] == 34 && within_quotes == 0)|| (str[stop] == 39
 			&& within_quotes == 0))
 			quote = str[stop];
-		quote_status(str, stop, &within_quotes, quote);
+		check_quote_status(str, stop, &within_quotes, quote);
 		stop++;
 	}
 	while (within_quotes == 0 && str[stop] != ' ' && str[stop] != '\0')
 		stop++;
 	while (within_quotes != 0 && str[stop] != '\0')
 	{
-		quote_status(str, stop, &within_quotes, quote);
+		check_quote_status(str, stop, &within_quotes, quote);
 		stop++;
 	}
 	while ((str[stop] != ' ' || str[stop] == quote) && str[stop] != '\0')

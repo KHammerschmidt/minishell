@@ -40,4 +40,6 @@ void	execute_cmd(t_vars *ms, t_cmd *current)
 		perror("Error");
 		ms->exit_status = EXIT_FAILURE;
 	}
+	exit(ms->exit_status);
+
 }

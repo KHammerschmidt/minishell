@@ -127,13 +127,18 @@ void	signal_handler(int signum);
 /* input parsing, command table development */
 void	create_cmd_table(t_vars *ms);
 void	dollar_expansion(t_vars *ms);
-void	handle_redirections(char **string, t_vars *ms);
-char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *command_line);
-int		pipe_validity(char *str);
-int		check_quote_status(char *str);
+char	*lexer_parser(t_vars *ms);
+int		quote_status(char *str);
+int		valid_pipe(char *str);
+void	lexer_parser_redirections(char **string, t_vars *ms);
+char	*parser_lexer_pipe(t_vars *ms, int quotes, char *crr, char *nxt);
+
+
+// char	*hdl_input(t_vars *ms, int quotes, char *new_cmd_line, char *command_line);
+// int		quote_status(char *str);
 char	**ft_split_quotes(char *str);
-// int		ft_strchr_pos(const char *s, int c);
-int	ft_strchr_pos(const char *s, char c);
+
+int		ft_strchr_pos(const char *s, char c);
 int		ft_count_chars(char *str, t_vars *ms);
 
 /* command execution */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_redirections.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+        */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 10:01:57 by khammers          #+#    #+#             */
-/*   Updated: 2022/02/21 12:23:55 by mortmeie         ###   ########.fr       */
+/*   Updated: 2022/02/24 17:33:26 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /* Searches for redirections signs ('<' & '>') and saves information in t_info.
 Sets the fd for input and output to standard value. */
-void	handle_redirections(char **string, t_vars *ms)
+void	lexer_parser_redirections(char **string, t_vars *ms)
 {
 	int		red_in;
 	int		red_out;

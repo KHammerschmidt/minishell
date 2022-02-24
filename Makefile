@@ -21,6 +21,7 @@ SRC_LIST	=	builtin_cd.c				\
 				builtin_unset.c				\
 				cmd_dollar_expansion.c		\
 				cmd_get_paths.c				\
+				cmd_lexer_parser.c			\
 				cmd_lst_utils.c				\
 				cmd_pipes.c					\
 				cmd_quotes.c				\

@@ -13,6 +13,7 @@ int	read_line(t_vars *ms)
 		ms->cmd_line = readline(prompt);
 	else
 		ms->cmd_line = readline("minishell ॐ  ");
+	// ms->cmd_line = ft_strdup("echo \"hallo das ist ein test\"");
 	rl_reset();
 	if (ms->cmd_line == NULL)							// (x) Makes CTRL+D work.
 		free_and_exit(ms, 1, 0);
