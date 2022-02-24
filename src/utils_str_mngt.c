@@ -17,7 +17,6 @@ char	**copy_strarray(char **strarray)
 	while (strarray[i] != NULL)
 	{
 		ret[i] = ft_strdup(strarray[i]);
-		printf("ret[i]%s\n", ret[i]);
 		i++;
 	}
 	ret[i] = NULL;

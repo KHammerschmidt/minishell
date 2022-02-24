@@ -24,7 +24,7 @@ void	cut_outfile_red(char **string)
 		i++;
 	while ((*string)[i] != '\0')
 		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
-	ft_free_string(&(*string));
+	ft_free_string(string);
 	*string = tmp;
 }
 

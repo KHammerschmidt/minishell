@@ -68,14 +68,6 @@ to the struct t_cmd. */
 void	pass_on_infos_node(t_info *info, t_cmd *node)
 {
 	node->command = copy_strarray(info->command);
-	// node->command = (char **)ft_calloc(sizeof(char *), 3);
-	// node->command[0] = ft_strdup(info->command[0]);
-	// node->command[1] = ft_strdup(info->command[1]);
-	// node->command[2] = NULL;
-	printf("1 hihi %s\n", info->command[0]);
-	printf("2 hihi %s\n", info->command[1]);
-	printf("3 hihi %s\n", node->command[0]);
-	printf("4 hihi %s\n", node->command[1]);
 	node->input_op = info->input_op;
 	node->output_op = info->output_op;
 	node->fd_out = info->fd_out;
@@ -85,10 +77,6 @@ void	pass_on_infos_node(t_info *info, t_cmd *node)
 	node->execpath = NULL;							// Mio: added to initialise variable (VALGRIND)
 	node->error_msg = NULL;							// Mio: added to initialise variable (VALGRIND)
 	reset_info_struct(info);
-	// printf("5 hihi %s\n", info->command[0]);
-	// printf("6 hihi %s\n", info->command[1]);
-	printf("7 hihi %s\n", node->command[0]);
-	printf("8 hihi %s\n", node->command[1]);
 }
 
 /* Creates a new node of type t_cmd. */

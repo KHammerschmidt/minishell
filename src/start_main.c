@@ -32,7 +32,6 @@ void	reset(t_vars *ms)
 {
 	ft_free_strarray(&ms->paths);
 	free_cmd_struct(ms);
-	printf("Here 6\n");
 	ft_free_string(&ms->line);
 }
 
@@ -49,18 +48,9 @@ int	main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv, 
 	{
 		read_line(&ms);								// √
 		create_cmd_table(&ms);						// √
-		printf("HERE 1\n");
 		get_paths(&ms);
 		ms.exit_status = pipex(&ms);
-		printf("HERE 5\n");
 		reset(&ms);
-		printf("HERE 7\n");
-		// if (i == 1)
-		// {
-		// 	// system("leaks minishell");
-		// 	break ;
-		// // exit(ms.exit_status);
-		// }
 		i++;
 		system("leaks minishell > OUTFILE");
 	}
