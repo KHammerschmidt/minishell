@@ -11,11 +11,13 @@
 # include <dirent.h>
 // # include <curses.h>
 // # include <term.h>
+#include <string.h>
 # include <termios.h>
 # include <limits.h>
 # include <errno.h>
 # include <signal.h>
 # include <sys/ioctl.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
@@ -76,9 +78,6 @@ typedef struct s_vars
 	char	**paths;
 	char	**envp;
 	int		exit_status;
-	// char	*cwd;
-	// char	*new_wd;
-	// char	**execpath;
 }	t_vars;
 
 /* **************************************************************** */
@@ -173,11 +172,6 @@ void	handle_redirections(char **string, t_vars *ms);
 void	input_redirection(t_vars *ms, char **string, int red_in);
 void	output_redirection(t_vars *ms, char **string, int red_out);
 int		ft_here_doc(t_vars *ms, char *limiter);
-
-
-/* Heredoc */
-int	mem_alloc_hdoc(t_vars *ms, char **string);
-
 
 /* Processes */
 int		pipex(t_vars *ms);

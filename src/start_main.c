@@ -6,12 +6,12 @@
 void	last_free(t_vars *ms)
 {
 	free_t_env(&ms->env);			// ft_free_lst_env(&(*ms)->env);
-	ft_free_strarray(ms->envp);
+	ft_free_strarray(&ms->envp);
 	// free_env_list(ms);
 
 	free_builtin_list(ms);
 	// free_list(&(*ms)->builtins);
-	ft_free_strarray(ms->paths);
+	ft_free_strarray(&ms->paths);
 
 	// free_cmd_list(ms);
 	// reset_info_struct(&ms.info);
@@ -25,8 +25,14 @@ static int	init_struct(t_vars *ms, char **envp)	// √
 	init_builtin(ms);
 	ms->tmp_fd = dup(STDIN_FILENO);
 	ms->info = (t_info){0};
-	get_paths(ms);
 	return (0);
+}
+
+void	reset(t_vars *ms)
+{
+	ft_free_strarray(&ms->paths);
+	free_cmd_struct(ms);
+	ft_free_string(&ms->line);
 }
 
 int	main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv, char **envp)
@@ -41,23 +47,15 @@ int	main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv, 
 	while (1)
 	{
 		read_line(&ms);								// √
-		create_cmd_table(&ms);						// open
+		create_cmd_table(&ms);						// √
+		get_paths(&ms);
 		ms.exit_status = pipex(&ms);
-		free_cmd_struct(&ms);						//double free error bei i == 1
-		if (ms.line)
-		{
-			free(ms.line);
-			ms.line = NULL;
-		}
-		if (i == 1)
-		{
-			break ;
-		// exit(ms.exit_status);
-		}
+		reset(&ms);
 		i++;
+		system("leaks minishell > OUTFILE");
 	}
 	last_free(&ms);
 	close(ms.tmp_fd);
-	system("leaks minishell");
+	// system("leaks minishell");
 	return (ms.exit_status);
 }

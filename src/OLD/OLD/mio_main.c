@@ -49,7 +49,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_vars	ms;
 	// char	*prompt;
- 
+
 	argc = 0;
 	argv = NULL;
 	ms = (t_vars) {0};								// (x)
@@ -101,6 +101,6 @@ int	main(int argc, char **argv, char **envp)
 	free(ms.line);
 	free(ms.cwd);
 	ft_free_lst_env(&ms.env);
-	system("leaks minishell > leaks.txt");
+	// system("leaks minishell > leaks.txt");
 	return (0);
 }

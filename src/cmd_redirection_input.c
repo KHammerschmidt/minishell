@@ -32,7 +32,6 @@ static void	cut_infile_red(char **string)
 
 	i = 0;
 	tmp = NULL;
-	i = 0;
 	while ((*string)[i] != '<')
 	{
 		tmp = ft_strnjoin(tmp, (*string)[i], 1);
@@ -49,8 +48,10 @@ static void	cut_infile_red(char **string)
 		i++;
 	while ((*string)[i] != '\0')
 		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
-	ft_free_string(&(*string));
+	ft_free_string(string);
 	*string = tmp;
+	// ft_free_string(&tmp);
+	// *string = ft_strdup(tmp);
 }
 
 /* Saves the infile in the t_info struct or the respective
@@ -70,7 +71,7 @@ static void	expansion_infile_red(char **string, t_vars *ms)
 	ms->info.infile = ft_substr(*string, j, k - j);
 }
 
-/* Allocates memory for the info struct and extracts the redirections and
+/* Allocates memory for info.infile and extracts the redirections and
 associated files or limiters in a loop. */
 void	input_redirection(t_vars *ms, char **string, int red_in)
 {

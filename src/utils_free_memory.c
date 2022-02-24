@@ -62,7 +62,7 @@ static void	free_cmd_list(t_vars *ms)
 		current = current->next;
 		if (tmp->command != NULL)
 		{
-			ft_free_strarray(tmp->command);
+			ft_free_strarray(&tmp->command);
 			tmp->command = NULL;
 		}
 		if (tmp->execpath != NULL)
@@ -100,12 +100,12 @@ void	free_and_exit(t_vars *ms, int e_flag, int e_code)
 	}
 	if (ms->envp)
 	{
-		ft_free_strarray(ms->envp);
+		ft_free_strarray(&ms->envp);
 		ms->envp = NULL;
 	}
 	if (ms->paths)
 	{
-		ft_free_strarray(ms->paths);
+		ft_free_strarray(&ms->paths);
 		ms->paths = NULL;
 	}
 	if (e_flag == 1)

@@ -4,16 +4,15 @@
 static char *handle_quotes_pipe(int quotes, t_vars *ms, char *curr_cmd_line, char *new_cmd_line)
 {
 	handle_redirections(&ms->cmd_line, ms);
-	if (quotes == 0)
-		ms->info.command = ft_split(curr_cmd_line, ' ');
-	else if (quotes == -1)
+	if (quotes == -1)
 	{
 		ft_free_string(&new_cmd_line);
 		ft_free_string(&curr_cmd_line);
+		ms->info.command = NULL;
 		return (NULL);
 	}
-	else
-		ms->info.command = ft_split_quotes(curr_cmd_line);
+	ms->info.command = ft_split_quotes(curr_cmd_line);
+	ft_free_string(&curr_cmd_line);
 	return (new_cmd_line);
 }
 
@@ -24,10 +23,11 @@ static char *handle_quotes(int quotes, t_vars *ms, char *curr_cmd_line, char *ne
 	if (quotes == -1)
 	{
 		ft_free_string(&new_cmd_line);
-		ft_free_string(&curr_cmd_line);
+		ms->info.command = NULL;
 	}
 	else
 		ms->info.command = ft_split_quotes(ms->cmd_line);
+	ft_free_string(&curr_cmd_line);
 	return (NULL);
 }
 
@@ -36,7 +36,9 @@ priorities (redirection, pipes and quotes). */
 char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *curr_cmd_line)
 {
 	int	p_marker;
+	char	**array;
 
+	array = NULL;
 	p_marker = ft_strchr_pos(ms->cmd_line, '|');
 	ms->info.pipe = 1;
 	curr_cmd_line = ft_substr(ms->cmd_line, 0, p_marker);
@@ -44,10 +46,20 @@ char	*handle_pipe(t_vars *ms, int quotes, char *new_cmd_line, char *curr_cmd_lin
 		p_marker++;
 	new_cmd_line = ft_substr(ms->cmd_line, p_marker, ft_strlen(ms->cmd_line) - p_marker);
 	handle_redirections(&curr_cmd_line, ms);
-	ms->info.command = ft_split(curr_cmd_line, ' ');
-	if (ft_strchr(curr_cmd_line, 34) != NULL || ft_strchr(curr_cmd_line, 39) != NULL)
+	if (ft_strchr_pos(curr_cmd_line, 34) != -1 || ft_strchr_pos(curr_cmd_line, 39) != -1)
 		return (handle_quotes_pipe(quotes, ms, curr_cmd_line, new_cmd_line));
-	return (new_cmd_line);
+	else
+	{
+		ms->info.command = ft_split(curr_cmd_line, ' ');
+		ft_free_strarray(&array);
+		ft_free_string(&curr_cmd_line);
+		return (new_cmd_line);
+	}
+	// array = ft_split(curr_cmd_line, ' ');
+	// ms->info.command = copy_strarray(array);		// ms->info.command = ft_split(curr_cmd_line, ' ');
+	// ft_free_strarray(&array);
+	// ft_free_string(&curr_cmd_line);
+	// return (new_cmd_line);
 }
 
 /* Handles pipes, dollar signs, quotes and splits the string accordingly while
@@ -91,10 +103,14 @@ void	create_cmd_table(t_vars *ms)
 		tmp = handle_input(ms);
 		new = ft_lstnew_cmd(&ms->info);
 		ft_lstadd_back_cmd(&ms->cmd, new);
-		if (tmp == NULL)
-			break ;
 		ft_free_string(&ms->cmd_line);
+		if (tmp == NULL)
+		{
+			ft_free_string(&tmp);
+			break ;
+		}
 		ms->cmd_line = ft_strdup(tmp);
 		ft_free_string(&tmp);
 	}
+
 }

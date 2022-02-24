@@ -53,7 +53,7 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 
 void	reset_info_struct(t_info *info)
 {
-	ft_free_string(info->command);
+	ft_free_strarray(&info->command);
 	ft_free_string(&info->infile);
 	ft_free_string(&info->outfile);
 	info->input_op = 0;

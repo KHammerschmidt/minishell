@@ -68,7 +68,10 @@ static char	*cut_quotes(char *str)
 			quote_on++;
 			i++;
 		}
+		if (str[i] == '\0')
+			break ;
 		line = ft_strjoin_2(line, str, i);
+
 		i++;
 	}
 	return (line);
@@ -106,14 +109,18 @@ char	**ft_split_quotes(char *str)
 	tmp = NULL;
 	string = (char **)ft_calloc(sizeof(char *), ft_count_substrings(str) + 1);
 	if (string == NULL)
-		printf("MEM ALLOC ERROR\n");//create exit function
+		printf("Error\n");
 	while (str[start] != '\0')
 	{
 		tmp = substring_quotes(&start, &stop, str);
+		// printf("tmp: ..%s..\n", tmp);
 		if (tmp == NULL)
 			break ;
-		string[k++] = cut_quotes(tmp);
+		string[k] = ft_strdup(cut_quotes(tmp));
+		// printf("string[k] = %s\n", string[k]);
+		k++;
 		ft_free_string(&tmp);
+		// printf("start %c\n", str[start]);
 	}
 	string[k] = 0;
 	return (string);

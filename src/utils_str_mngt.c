@@ -7,6 +7,7 @@ char	**copy_strarray(char **strarray)
 	int		i;
 
 	i = 0;
+	ret = NULL;
 	while (strarray[i] != NULL)
 		i++;
 	ret = (char **)malloc((i + 1) * sizeof(char *));
