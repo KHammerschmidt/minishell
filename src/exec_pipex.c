@@ -50,7 +50,9 @@ int	pipex(t_vars *ms)
 {
 	t_cmd	*current;
 	pid_t	pid;
+	int		i;
 
+	i = 0;
 	current = ms->cmd;
 	while (current != NULL)
 	{
@@ -89,6 +91,8 @@ int	pipex(t_vars *ms)
 		// signal(SIGINT, SIG_IGN);
 		current = current->next;
 	}
-	waitpid(pid, &ms->exit_status, 0);
+	while (i != -1)
+		i = waitpid(pid, &ms->exit_status, 0);
 	return (WEXITSTATUS(ms->exit_status));
 }
+// int mit return value von pid und darauf warten

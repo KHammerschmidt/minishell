@@ -7,6 +7,7 @@ int	get_paths(t_vars *ms)
 
 	i = 0;
 	current = ms->env;
+	ms->paths = ft_calloc(sizeof(char *), 28 + 1);
 	while (current != NULL)
 	{
 		if (compare_str(current->name, "PATH") == 0)

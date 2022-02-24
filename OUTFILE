@@ -1,0 +1,26 @@
+Process:         minishell [31784]
+Path:            /Volumes/VOLUME/*/minishell
+Load Address:    0x10ffaa000
+Identifier:      minishell
+Version:         ???
+Code Type:       X86-64
+Parent Process:  zsh [27557]
+
+Date/Time:       2022-02-24 18:31:03.432 +0100
+Launch Time:     2022-02-24 18:30:52.406 +0100
+OS Version:      Mac OS X 10.15.7 (19H1713)
+Report Version:  7
+Analysis Tool:   /usr/bin/leaks
+----
+
+leaks Report Version: 4.0
+Process 31784: 505 nodes malloced for 313 KB
+Process 31784: 5 leaks for 1200 total leaked bytes.
+
+    5 (1.17K) << TOTAL >>
+      1 (240 bytes) ROOT LEAK: 0x7ffd49c07d80 [240]
+      1 (240 bytes) ROOT LEAK: 0x7ffd49e04200 [240]
+      1 (240 bytes) ROOT LEAK: 0x7ffd49e043f0 [240]
+      1 (240 bytes) ROOT LEAK: 0x7ffd49f04160 [240]
+      1 (240 bytes) ROOT LEAK: 0x7ffd4aa04160 [240]
+

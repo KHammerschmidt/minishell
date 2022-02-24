@@ -17,7 +17,8 @@ void	last_free(t_vars *ms)
 	// reset_info_struct(&ms.info);
 }
 
-/* Initialises main struct ms as well as builtin and env. */
+/* Initialises main struct ms, sets struct t_info to 0 and duplicates
+the temporary fd into STDIN. */
 static int	init_struct(t_vars *ms, char **envp)	// √
 {
 	if (init_env(ms, envp) != 0)
@@ -28,6 +29,7 @@ static int	init_struct(t_vars *ms, char **envp)	// √
 	return (0);
 }
 
+/* Resets the allocated memory and variables needed for the next input. */
 void	reset(t_vars *ms)
 {
 	ft_free_strarray(&ms->paths);
@@ -56,6 +58,5 @@ int	main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv, 
 	}
 	last_free(&ms);
 	close(ms.tmp_fd);
-	// system("leaks minishell");
 	return (ms.exit_status);
 }

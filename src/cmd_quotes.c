@@ -2,7 +2,7 @@
 
 /* Checks the quote status, returns (0) for no quotes, (1) for valid
 quotes and (-1) for open quotes. */
-int	check_quote_status(char *str)
+int	quote_status(char *str)
 {
 	int	i;
 	int	quote_on;
