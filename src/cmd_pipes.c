@@ -2,7 +2,7 @@
 
 /* Checks if single and double quotes are even numbered until a
 pipe is hit. */
-int	pipe_validity(char *str)
+int	valid_pipe(char *str)
 {
 	int	i;
 	int	double_quote;
