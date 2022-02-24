@@ -35,14 +35,17 @@ void	reset(t_vars *ms)
 	ft_free_strarray(&ms->paths);
 	free_cmd_struct(ms);
 	ft_free_string(&ms->line);
+	if (ms->tmp_fd != STDIN_FILENO)
+	{
+		close(ms->tmp_fd);
+		ms->tmp_fd = dup(STDIN_FILENO);
+	}
 }
 
 int	main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv, char **envp)
 {
 	t_vars	ms;
-	int		i;
 
-	i = 0;
 	ms = (t_vars){0};
 	if (init_struct(&ms, envp) != 0)				// √
 		return (-1);
@@ -53,8 +56,7 @@ int	main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv, 
 		get_paths(&ms);
 		ms.exit_status = pipex(&ms);
 		reset(&ms);
-		i++;
-		system("leaks minishell > OUTFILE");
+		// system("leaks minishell > OUTFILE");
 	}
 	last_free(&ms);
 	close(ms.tmp_fd);

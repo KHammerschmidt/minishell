@@ -71,7 +71,6 @@ static char	*cut_quotes(char *str)
 		if (str[i] == '\0')
 			break ;
 		line = ft_strjoin_2(line, str, i);
-
 		i++;
 	}
 	return (line);

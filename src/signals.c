@@ -1,7 +1,7 @@
 #include "../header/minishell.h"
 
 /* Intercepts SIGINT (CTRL+C) and prevents minishell from quitting, prints */
-/* empty new line instead. Does nothing for SIGQUIT (CTRL+/).              */
+/* empty new line instead. Does nothing for SIGQUIT (CTRL+\).              */
 void	signal_handler(int signum)
 {
 	if (signum == SIGINT)

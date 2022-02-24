@@ -32,9 +32,10 @@ int	builtin_exit(t_vars *ms, t_cmd *current)
 		ft_putendl_fd(": numeric argument required", 2);
 		e_code = 255;
 	}
-	if (current->command[1] != NULL && validate_arg(current->command[1]) == 0)
+	if (current->command[1] != NULL && validate_arg(current->command[1]) == 0 \
+			&& current->command[2] == NULL)
 		e_code = ft_atoi(current->command[1]);
 	rl_clear_history();
-	free_and_exit(ms, 1, e_code);
-	return (e_code);
+	last_free(ms);
+	exit(e_code);
 }

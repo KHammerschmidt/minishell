@@ -21,7 +21,10 @@ void	create_cmd_table(t_vars *ms)
 	nxt_cmd_line = NULL;
 	new = NULL;
 	if (ft_strchr_pos(ms->cmd_line, '$') != -1)
+  {
 		dollar_expansion(ms);
+    ms->cmd_line = cut_unused_envar(ms->cmd_line);
+  }
 	while (ms->cmd_line != NULL)
 	{
 		nxt_cmd_line = lexer_parser(ms);

@@ -84,10 +84,11 @@ typedef struct s_vars
 /*							PROTOYPES								*/
 /* **************************************************************** */
 
+/* start */
 int		main(int argc, char **argv, char **envp);
 int		read_line(t_vars *ms);
 
-/* envp */
+/* environment variables */
 int		init_env(t_vars *ms, char **envp);
 void	free_t_env(t_env **env);
 t_env	*ft_lstnew_env(char *content);
@@ -97,8 +98,8 @@ void	ft_free_lst_env(t_env **lst);
 t_env	*get_env_var(t_vars *ms, char *var_name);
 void	update_envp_array(t_vars *ms);
 
-/* Builtins */
-int	init_builtin(t_vars *ms);
+/* builtins */
+int		init_builtin(t_vars *ms);
 int		builtin_cd(t_vars *ms, t_cmd *current);
 int		builtin_echo(t_vars *ms, t_cmd *current);
 int		builtin_env(t_vars *ms, t_cmd *current);
@@ -106,11 +107,15 @@ int		builtin_exit(t_vars *ms, t_cmd *current);
 int		builtin_export(t_vars *ms, t_cmd *current);
 int		builtin_pwd(t_vars *ms, t_cmd *current);
 int		builtin_unset(t_vars *ms, t_cmd *current);
+int		is_builtin(t_vars *ms, char *cmd);
 
-
+/* command execution */
+int		get_paths(t_vars *ms);
+int		check_cmd(t_vars *ms, t_cmd *current);
+int		pipex(t_vars *ms);
+void	ft_builtin_parent(t_cmd *current, t_vars *ms);
 void	execute_builtin(t_vars *ms, t_cmd *current);
 void	execute_cmd(t_vars *ms, t_cmd *current);
-int		is_builtin(t_vars *ms, char *cmd);
 
 /* prompt */
 char	*get_user(t_vars *ms);
@@ -141,10 +146,6 @@ char	**ft_split_quotes(char *str);
 int		ft_strchr_pos(const char *s, char c);
 int		ft_count_chars(char *str, t_vars *ms);
 
-/* command execution */
-int		get_paths(t_vars *ms);
-int		check_cmd(t_vars *ms, t_cmd *current);
-
 /* cmd utils */
 t_cmd	*ft_lstnew_cmd(t_info *info);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
@@ -155,12 +156,14 @@ int		ft_count_substrings(char *str);
 void	pass_on_infos_node(t_info *info, t_cmd *node);
 char	**copy_strarray(char **strarray);
 
-/* Free and exit */
+/* free and exit */
+void	last_free(t_vars *ms);
 void	free_and_exit(t_vars *ms, int e_flag, int e_code);
 void	ft_free_string(char **str);
 void	reset_info_struct(t_info *info);
+void	free_builtin_list(t_vars *ms);
 
-/* Printing utils */
+/* printi utils */
 void	print_lst(t_vars *ms);
 void	print_arr(char **arr);
 void	print_lst_last(t_vars *ms);
@@ -171,18 +174,13 @@ void	ft_free_lst_env(t_env **lst);
 void	ft_free_arr(char **arr);
 int		compare_str(char *s1, char *s2);
 void	free_cmd_struct(t_vars *ms);
+int		valid_dollar_sign(t_vars *ms, int i, int *quote_on, int quote_type);
+char	*cut_unused_envar(char *str);
 
-/* Redirections */
+/* redirections */
 void	handle_redirections(char **string, t_vars *ms);
 void	input_redirection(t_vars *ms, char **string, int red_in);
 void	output_redirection(t_vars *ms, char **string, int red_out);
 int		ft_here_doc(t_vars *ms, char *limiter);
 
-/* Processes */
-int		pipex(t_vars *ms);
-void	ft_builtin_parent(t_cmd *current, t_vars *ms);
-
-
-
-void	free_builtin_list(t_vars *ms);
 #endif

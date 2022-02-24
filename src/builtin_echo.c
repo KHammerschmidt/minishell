@@ -34,7 +34,8 @@ int	builtin_echo(t_vars *ms, t_cmd *current)
 	while (current->command[i] != NULL)
 	{
 		ft_putstr_fd(current->command[i], current->fd_out);
-		ft_putchar_fd(' ', current->fd_out);
+		if (current->command[i + 1] != NULL)
+			ft_putchar_fd(' ', current->fd_out);
 		i++;
 	}
 	if (n_flag == 0)

@@ -46,6 +46,18 @@ static void	ft_handle_stdin(t_cmd *current, t_vars *ms)
 	}
 }
 
+/* Intercepts SIGINT (CTRL+C) and SIGQUIT (CTRL+\) and prevents */
+/*  minishell from quitting, prints empty new line instead.     */
+static void	signal_handler2(int signum)
+{
+	if (signum == SIGINT || signum == SIGQUIT)
+	{
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+	}
+	rl_redisplay();
+}
+
 int	pipex(t_vars *ms)
 {
 	t_cmd	*current;
@@ -80,6 +92,8 @@ int	pipex(t_vars *ms)
 					else
 						execute_cmd(ms, current);
 				}
+				signal(SIGQUIT, signal_handler2);
+				signal(SIGINT, signal_handler2);
 				close(ms->pipe_fd[1]);
 				close(ms->tmp_fd);
 				if (dup2(ms->pipe_fd[0], ms->tmp_fd) < 0)
@@ -87,8 +101,6 @@ int	pipex(t_vars *ms)
 				close(ms->pipe_fd[0]);
 			}
 		}
-		// signal(SIGQUIT, SIG_IGN);
-		// signal(SIGINT, SIG_IGN);
 		current = current->next;
 	}
 	while (i != -1)

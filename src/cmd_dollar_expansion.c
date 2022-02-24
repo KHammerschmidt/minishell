@@ -34,11 +34,24 @@ static void	add_expanded_var(t_vars *ms, int *i, int *j)
 	tmp = ft_strdup(search_for_var(ms, var));
 	if (tmp == NULL)
 	{
-		ms->line = ft_strjoin(ms->line, "$");
-		ms->line = ft_strjoin(ms->line, var);
+		if (ms->line == NULL)
+		{
+			ms->line = ft_strdup("$");
+			ms->line = ft_strjoin(ms->line, var);
+		}
+		else
+		{
+			ms->line = ft_strjoin(ms->line, "$");
+			ms->line = ft_strjoin(ms->line, var);
+		}
 	}
 	else
-		ms->line = ft_strjoin(ms->line, tmp);
+	{
+		if (ms->line == NULL)
+			ms->line = ft_strdup(tmp);
+		else
+			ms->line = ft_strjoin(ms->line, tmp);
+	}
 	*j = *i;
 	ft_free_string(&var);
 	ft_free_string(&tmp);
@@ -56,24 +69,6 @@ static void	replicate_text(t_vars *ms, int *i, int *j)
 	ft_free_string(&tmp);
 	(*i)++;
 	*j = *i;
-}
-
-/* Checks if the dollar sign stands within double or single quotes
-and returns the respective quote_type. Returns 0 when no quotes. */
-int	valid_dollar_sign(t_vars *ms, int i, int *quote_on, int quote_type)
-{
-	if (ms->cmd_line[i] == 34 || ms->cmd_line[i] == 39)
-	{
-		if (*quote_on == 0)
-			quote_type = ms->cmd_line[i];
-		if (*quote_on == 1 && ms->cmd_line[i] == quote_type)
-		{
-			*quote_on = -1;
-			quote_type = 0;
-		}
-		(*quote_on)++;
-	}
-	return (quote_type);
 }
 
 /* Looks for $-signs and expands if respective variable is found in envar

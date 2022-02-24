@@ -12,8 +12,6 @@ int	check_cmd(t_vars *ms, t_cmd *current)
 			|| current->command[0][0] == '~')
 	{
 		current->execpath = ft_strdup(current->command[0]);						//mem alloc
-		// if (!current->execpath)
-		// 	free_and_exit(ms, 0, 1);	//hier gucken was weiter gegeben wird
 		return (0);
 	}
 	while (ms->paths[i] != NULL)
@@ -34,12 +32,18 @@ int	check_cmd(t_vars *ms, t_cmd *current)
 
 void	execute_cmd(t_vars *ms, t_cmd *current)
 {
+	if (ms->paths == NULL)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(current->command[0], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		ms->exit_status = 127;
+		exit(ms->exit_status);
+	}
 	if (check_cmd(ms, current) == 0)
 	{
 		execve(current->execpath, current->command, ms->envp);
 		perror("Error");
-		ms->exit_status = EXIT_FAILURE;
 	}
 	exit(ms->exit_status);
-
 }
