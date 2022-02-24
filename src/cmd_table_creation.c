@@ -98,6 +98,7 @@ void	create_cmd_table(t_vars *ms)
 	tmp = NULL;
 	new = NULL;
 	dollar_expansion(ms);
+	ms->cmd_line = cut_unused_envar(ms->cmd_line);
 	while (ms->cmd_line != NULL)
 	{
 		tmp = handle_input(ms);

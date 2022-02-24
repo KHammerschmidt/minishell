@@ -2,7 +2,7 @@ NAME		=	minishell
 # BONUS		=	minishell_bonus
 
 CC			=	gcc
-CFLAGS		=	-Wall -Werror -Wextra - g
+CFLAGS		=	-Wall -Werror -Wextra
 L_FLAGS		=	-lreadline -L /goinfre/$(USER)/.brew/opt/readline/lib
 C_FLAG		=	-I /goinfre/$(USER)/.brew/opt/readline/include
 
@@ -20,6 +20,7 @@ SRC_LIST	=	builtin_cd.c				\
 				builtin_pwd.c				\
 				builtin_unset.c				\
 				cmd_dollar_expansion.c		\
+				cmd_dollar_expand_utils.c	\
 				cmd_get_paths.c				\
 				cmd_lst_utils.c				\
 				cmd_pipes.c					\
