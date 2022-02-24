@@ -63,6 +63,15 @@ int	check_other_elements(t_env **prev, t_env **current, char *command)
 	return (0);
 }
 
+static void	auxiliary(t_env *prev, t_env *tmp, t_cmd *current, int *i)
+{
+	prev = tmp;
+	tmp = tmp->next;
+	while (tmp != NULL)
+		check_other_elements(&prev, &tmp, current->command[*i]);
+	(*i)++;
+}
+
 /* Looks for var_name in envar list and deletes the respective node if found. */
 int	builtin_unset(t_vars *ms, t_cmd *current)
 {
@@ -83,13 +92,7 @@ int	builtin_unset(t_vars *ms, t_cmd *current)
 		else if (check_first_element(ms, current->command[i]) == 2)
 			return (1);
 		else
-		{
-			prev = tmp;
-			tmp = tmp->next;
-			while (tmp != NULL)
-				check_other_elements(&prev, &tmp, current->command[i]);
-			i++;
-		}
+			auxiliary(prev, tmp, current, &i);
 	}
 	update_envp_array(ms);
 	return (0);
