@@ -108,6 +108,7 @@ int		builtin_export(t_vars *ms, t_cmd *current);
 int		builtin_pwd(t_vars *ms, t_cmd *current);
 int		builtin_unset(t_vars *ms, t_cmd *current);
 int		is_builtin(t_vars *ms, char *cmd);
+void	create_old_pwd(t_vars *ms, int flag, char *start_wd);
 
 /* command execution */
 int		get_paths(t_vars *ms);

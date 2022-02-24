@@ -33,10 +33,10 @@ static int	create_variable(char **var_name, char **var_val, \
 	j = 0;
 	*var_name = malloc(i + 1);
 	if (*var_name == NULL)
-		return (1);													// TODO: exit status
+		return (1);
 	*var_val = malloc(ft_strlen(command) - i);
 	if (*var_val == NULL)
-		return (1);													// TODO: exit status
+		return (1);
 	i = 0;
 	while (command[i] != '=')
 	{
@@ -55,7 +55,8 @@ static int	create_variable(char **var_name, char **var_val, \
 	return (0);
 }
 
-static int	insert_variable(t_vars *ms, char *var_name, char *var_val, char *command)
+static int	insert_variable(t_vars *ms, char *var_name,
+		char *var_val, char *command)
 {
 	t_env	*current;
 	t_env	*new;
@@ -82,6 +83,12 @@ static int	insert_variable(t_vars *ms, char *var_name, char *var_val, char *comm
 	return (0);
 }
 
+void	free_strings(char **var_name, char **var_val)
+{
+	ft_free_string(var_name);
+	ft_free_string(var_val);
+}
+
 /* Looks for var_name in envar list. If found, changes var_value or, if not */
 /* found, creates new node with respective name and content.                */
 int	builtin_export(t_vars *ms, t_cmd *current)
@@ -102,11 +109,11 @@ int	builtin_export(t_vars *ms, t_cmd *current)
 			k++;
 			continue ;
 		}
-		create_variable(&var_name, &var_val, current->command[k], i);
+		if (create_variable(&var_name, &var_val, current->command[k], i) == 1)
+			return (1);
 		if (insert_variable(ms, var_name, var_val, current->command[k]) == 1)
-			return (1);													// TODO: exit status
-		free(var_name);
-		free(var_val);
+			return (1);
+		free_strings(&var_name, &var_val);
 		k++;
 	}
 	update_envp_array(ms);

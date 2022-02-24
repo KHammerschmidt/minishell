@@ -1,23 +1,5 @@
 #include "../header/minishell.h"
 
-static void	create_old_pwd(t_vars *ms, int flag, char *start_wd)
-{
-	t_env	*new;
-	char	*tmp;
-
-	tmp = NULL;
-	new = NULL;
-	if (flag == 0)
-	{
-		tmp = ft_strdup("OLDPWD=");
-		tmp = ft_strjoin(tmp, start_wd);
-		new = ft_lstnew_env(tmp);
-		ft_lstadd_back_env(&ms->env, new);
-		free(tmp);
-		tmp = NULL;
-	}
-}
-
 static void	adjust_envar_list(t_vars *ms, char *start_wd)
 {
 	t_env	*current;
@@ -66,16 +48,15 @@ int	validate_and_change_path(t_vars *ms, char *new_path, char *start_wd)
 	chdir(new_path);
 	adjust_envar_list(ms, start_wd);
 	update_envp_array(ms);
-	if (flag == 1)
-		free(tmp);
-	if (start_wd)
-		free(start_wd);
+	ft_free_string(&tmp);
+	ft_free_string(&start_wd);
 	return (0);
 }
 
 static int	check_special_cases(t_vars *ms, char **new_path, t_env *home)
 {
-	if ((*new_path == NULL && home->content) || (compare_str(*new_path, "~") == 0 && home->content))
+	if ((*new_path == NULL && home->content) \
+			|| (compare_str(*new_path, "~") == 0 && home->content))
 		*new_path = home->content;
 	if (compare_str(*new_path, "-") == 0 && get_env_var(ms, "OLDPWD") == NULL)
 	{
@@ -83,7 +64,27 @@ static int	check_special_cases(t_vars *ms, char **new_path, t_env *home)
 		return (1);
 	}
 	if (compare_str(*new_path, "-") == 0 && get_env_var(ms, "OLDPWD") != NULL)
-		printf("%s\n" ,*new_path = get_env_var(ms, "OLDPWD")->content);
+		printf("%s\n", *new_path = get_env_var(ms, "OLDPWD")->content);
+	return (0);
+}
+
+int	check_home_and_path(char *new_path, t_env *home)
+{
+	if (new_path == NULL || compare_str(new_path, "~") == 0)
+	{
+		if (home == NULL)
+		{
+			printf("Error: HOME not set\n");
+			return (1);
+		}
+		else if (home->content[0] == '\0')
+		{
+			printf("Error: HOME not set\n");
+			return (1);
+		}
+		else
+			new_path = home->content;
+	}
 	return (0);
 }
 
@@ -105,28 +106,8 @@ int	builtin_cd(t_vars *ms, t_cmd *current)
 	new_path = NULL;
 	new_path = current->command[1];
 	home = get_env_var(ms, "HOME");
-	// create separate function to check home directory:
-	if (new_path == NULL || compare_str(new_path, "~") == 0)
-	{
-		if (home == NULL)
-		{
-			current->error_flag = 1;									// Brauchen wir oder koennen wir einfach mit prinft arbeiten.
-			current->error_msg = ft_strdup("Error: HOME not set");		// Dito.
-			// for testing until error handling complete:
-			printf("Error: HOME not set\n");
-			return (1);
-		}
-		else if (home->content[0] == '\0')
-		{
-			current->error_flag = 1;
-			current->error_msg = ft_strdup("Error: HOME not set");
-			// for testing until error handling complete:
-			printf("Error: HOME not set\n");
-			return (1);
-		}
-		else
-			new_path = home->content;
-	}
+	if (check_home_and_path(new_path, home) == 1)
+		return (1);
 	if (check_special_cases(ms, &new_path, home) == 1)
 		return (1);
 	if (validate_and_change_path(ms, new_path, start_wd) == 1)

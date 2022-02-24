@@ -19,6 +19,7 @@ SRC_LIST	=	builtin_cd.c				\
 				builtin_init.c 				\
 				builtin_pwd.c				\
 				builtin_unset.c				\
+				builtin_utils.c				\
 				cmd_dollar_expansion.c		\
 				cmd_dollar_expand_utils.c	\
 				cmd_get_paths.c				\
