@@ -116,7 +116,6 @@ void	free_cmd_struct(t_vars *ms)
 		ft_free_string(&current->execpath);
 		ft_free_string(&current->infile);
 		ft_free_string(&current->outfile);
-		ft_free_string(&current->error_msg);
 		current = current->next;
 		// tmp = current->next;
 		// free(current);							// Mio: deleted to get rid of "invalid read" / "invalid write" (VALGRIND)

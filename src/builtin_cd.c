@@ -96,9 +96,8 @@ int	builtin_cd(t_vars *ms, t_cmd *current)
 	start_wd = getcwd(NULL, PATH_MAX);
 	if (start_wd == NULL)
 	{
-		current->error_flag = 1;
-		current->error_msg = ft_strdup(strerror(errno));
-		return (1);
+		ms->exit_status = errno;
+		return (ms->exit_status);
 	}
 	new_path = NULL;
 	new_path = current->command[1];

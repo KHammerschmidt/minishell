@@ -74,8 +74,6 @@ void	pass_on_infos_node(t_info *info, t_cmd *node)
 	node->fd_in = info->fd_in;
 	node->infile = ft_strdup(info->infile);
 	node->outfile = ft_strdup(info->outfile);
-	node->execpath = NULL;							// Mio: added to initialise variable (VALGRIND)
-	node->error_msg = NULL;							// Mio: added to initialise variable (VALGRIND)
 	reset_info_struct(info);
 }
 

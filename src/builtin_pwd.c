@@ -9,9 +9,8 @@ int	builtin_pwd(t_vars *ms, t_cmd *current)
 	cwd = getcwd(NULL, PATH_MAX);
 	if (cwd == NULL)
 	{
-		current->error_flag = 1;
-		current->error_msg = ft_strdup(strerror(errno));
-		return (1);
+		ms->exit_status = errno;
+		return (ms->exit_status);
 	}
 	write(current->fd_out, cwd, ft_strlen(cwd));
 	write(current->fd_out, "\n", 1);
