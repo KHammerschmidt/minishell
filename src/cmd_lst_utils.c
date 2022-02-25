@@ -82,7 +82,7 @@ t_cmd	*ft_lstnew_cmd(t_vars *ms)
 {
 	t_cmd	*node;
 
-	node = malloc(sizeof(t_cmd));
+	node = ft_calloc(sizeof(t_cmd), 1);
 	if (node == NULL)
 		return (NULL);
 	pass_on_infos_node(ms, node);
