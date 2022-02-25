@@ -36,6 +36,6 @@ int	builtin_exit(t_vars *ms, t_cmd *current)
 			&& current->command[2] == NULL)
 		e_code = ft_atoi(current->command[1]);
 	rl_clear_history();
-	last_free(ms);
+	last_free(ms, 0);
 	exit(e_code);
 }

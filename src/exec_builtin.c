@@ -31,11 +31,6 @@ void	execute_builtin(t_vars *ms, t_cmd *current)
 		ms->exit_status = builtin_unset(ms, current);
 	else if (compare_str(current->command[0], "exit") == 0)
 		ms->exit_status = builtin_exit(ms, current);
-	else
-	{
-		current->error_flag = 1;							//error handling when builting failed
-		current->error_msg = ft_strdup(strerror(errno));
-	}
 	if (current->previous != NULL || current->next != NULL)
 		exit(ms->exit_status);
 }

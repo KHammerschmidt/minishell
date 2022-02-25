@@ -8,6 +8,8 @@ char	**copy_strarray(char **strarray)
 
 	i = 0;
 	ret = NULL;
+	if (strarray == NULL)
+		return (NULL);
 	while (strarray[i] != NULL)
 		i++;
 	ret = (char **)malloc((i + 1) * sizeof(char *));

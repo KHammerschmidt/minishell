@@ -16,7 +16,7 @@ int	read_line(t_vars *ms)
 	// ms->cmd_line = ft_strdup("echo \"hallo das ist ein test\"");
 	rl_reset();
 	if (ms->cmd_line == NULL)							// (x) Makes CTRL+D work.
-		free_and_exit(ms, 1, 0);
+		last_free(ms, 1);
 	if (ms->cmd_line && *ms->cmd_line)
 		add_history (ms->cmd_line);
 	ft_free_string(&prompt);

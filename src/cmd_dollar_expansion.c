@@ -4,22 +4,18 @@ static char	*search_for_var(t_vars *ms, char *var)
 {
 	t_env	*current;
 	char	*tmp;
-	char	*tmp2;
 
 	tmp = NULL;
-	tmp2 = NULL;
 	current = ms->env;
 	if (compare_str(var, "?") == 0)
 	{
 		tmp = ft_itoa(ms->exit_status);
-		tmp2 = tmp;
-		ft_free_string(&tmp);
-		return (tmp2);
+		return (tmp);
 	}
 	while (current != NULL)
 	{
 		if (compare_str(current->name, var) == 0)
-			return (current->content);
+			return (ft_strdup(current->content));
 		current = current->next;
 	}
 	return (NULL);
@@ -31,7 +27,7 @@ static void	add_expanded_var(t_vars *ms, int *i, int *j)
 	char	*var;
 
 	var = ft_substr(ms->cmd_line, *j, *i - *j);
-	tmp = ft_strdup(search_for_var(ms, var));
+	tmp = search_for_var(ms, var);
 	if (tmp == NULL)
 	{
 		if (ms->line == NULL)
@@ -99,5 +95,5 @@ void	dollar_expansion(t_vars *ms)
 	}
 	replicate_text(ms, &i, &j);
 	ft_free_string(&ms->cmd_line);
-	ms->cmd_line = ft_strdup(ms->line);
+	ms->cmd_line = ms->line;
 }
