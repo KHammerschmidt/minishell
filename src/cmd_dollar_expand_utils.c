@@ -38,22 +38,36 @@ char	*cut_unused_envar(char *str)
 		if (str[i] == quote_type)
 		{
 			if (quote_on == 1)
+			{
 				quote_on = -1;
+				quote_type = 0;
+			}
 			quote_on++;
 		}
 		if (str[i] == '\0')
 			break ;
-		if (str[i] == '$' && quote_type == 39)
-			line = ft_strjoin_2(line, str, i);
-		else if (str[i] == '$')
+		if (str[i] == quote_type)
 		{
-			while (str[i] != ' ' && str[i] != '\0' && str[i] != quote_type)
-				i++;
-			continue ;
+			if (str[i] == '$' && quote_type == 39)
+				line = ft_strjoin_2(line, str, i);
+			else if (str[i] == '$')
+			{
+				while (str[i] != ' ' && str[i] != '\0')
+				{
+					// if (quote_type != 0 && str[i] == quote_type)
+					// {
+					// 	line = ft_strjoin_2(line, str, i);
+					// 	i++;
+					// 	continue ;
+					// }
+					i++;
+				}
+				continue ;
+			}
+			else
+				line = ft_strjoin_2(line, str, i);
+			i++;
 		}
-		else
-			line = ft_strjoin_2(line, str, i);
-		i++;
 	}
 	ft_free_string(&str);
 	return (line);

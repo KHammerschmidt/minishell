@@ -1,14 +1,14 @@
 #include "../header/minishell.h"
 
 /* Cuts out the redirections associated with the outfile from the cmd_line. */
-void	cut_outfile_red(char **string)
+void	cut_outfile_red(char **string, int fd_out)
 {
-	char	*tmp;
 	int		i;
+	char	*tmp;
 
 	i = 0;
 	tmp = NULL;
-	while ((*string)[i] != '>')
+	while (i < fd_out)
 	{
 		tmp = ft_strnjoin(tmp, (*string)[i], 1);
 		i++;
@@ -29,14 +29,12 @@ void	cut_outfile_red(char **string)
 }
 
 /* Saves the outfile in the t_info struct. */
-void expansion_outfile_red(char **string, t_vars *ms)
+void	expansion_outfile_red(char **string, t_vars *ms, int j)
 {
 	int		k;
-	int		j;
 	char	*tmp;
 
 	k = 0;
-	j = ft_strchr_pos((*string), '>');
 	while (((*string)[j] == '>' || (*string)[j] == ' ') && (*string)[j] != '\0')
 		j++;
 	k = j;
@@ -53,14 +51,14 @@ void	outfile_fd(t_vars *ms)
 		if (ms->info.fd_out != STDOUT_FILENO)
 			close(ms->info.fd_out);
 		ms->info.fd_out = open(ms->info.outfile,
-			O_RDWR | O_CREAT | O_TRUNC, 0644);
+				O_RDWR | O_CREAT | O_TRUNC, 0644);
 	}
 	if (ms->info.output_op == -2)
 	{
 		if (ms->info.fd_out != STDOUT_FILENO)
 			close(ms->info.fd_out);
 		ms->info.fd_out = open(ms->info.outfile,
-			O_RDWR | O_CREAT | O_APPEND, 0644);
+				O_RDWR | O_CREAT | O_APPEND, 0644);
 	}
 	if (ms->info.fd_out == -1 || access(ms->info.outfile, W_OK) != 0)
 		perror("Error");
@@ -70,16 +68,21 @@ void	output_redirection(t_vars *ms, char **string, int red_out)
 {
 	while (red_out != -1)
 	{
-		if ((*string)[red_out] == '>')
+		if ((*string)[red_out] == '>' && valid_red(*string, red_out) == 0)
 		{
 			if ((*string)[red_out + 1] == '>')
 				ms->info.output_op = -2;
 			else
 				ms->info.output_op = -1;
 		}
-		expansion_outfile_red(string, ms);
-		cut_outfile_red(string);
+		else
+		{
+			red_out = ft_strchr_pos_red(*string, '>', red_out + 2);
+			continue ;
+		}
+		expansion_outfile_red(string, ms, red_out);
+		cut_outfile_red(string, red_out);
 		outfile_fd(ms);
-		red_out = ft_strchr_pos(*string, '>');
+		red_out = ft_strchr_pos(string[red_out + 1], '>');
 	}
 }

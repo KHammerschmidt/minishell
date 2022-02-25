@@ -1,26 +1,11 @@
 #include "../header/minishell.h"
 
 /* Splits the input cmd_line in according to the quotes. */
-static char *lexer_parser_quotes(int quotes, t_vars *ms, char *crr, char *nxt)
+// wenn in quotes keine redirection abfangen
+static char	*lexer_parser_quotes(t_vars *ms, char *crr)
 {
-	if ((ft_strchr_pos(ms->cmd_line, '<') != -1)
-		|| ft_strchr_pos(ms->cmd_line, '>') != -1)
-		lexer_parser_redirections(&ms->cmd_line, ms);
-	else
-	{
-		ms->info.fd_in = STDIN_FILENO;
-		ms->info.fd_out = STDOUT_FILENO;
-	}
-	if (quotes == -1)
-	{
-		ft_free_string(&nxt);
-		ft_free_string(&crr);
-		ms->info.command = NULL;
-		ms->flag = 1;
-		return (NULL);
-	}
-	else
-		ms->info.command = ft_split_quotes(ms->cmd_line);
+	lexer_parser_redirections(&ms->cmd_line, ms);
+	ms->info.command = ft_split_quotes(ms->cmd_line);
 	ft_free_string(&ms->cmd_line);
 	if (crr == NULL)
 	{
@@ -31,24 +16,17 @@ static char *lexer_parser_quotes(int quotes, t_vars *ms, char *crr, char *nxt)
 }
 
 /* Splits the input cmd_line in according to the quotes. */
-static char *lexer_parser_quotes_pipe(t_vars *ms, int quotes, char *crr, char *nxt)
+static char	*lexer_parser_quotes_pipe(t_vars *ms, char *crr, char *nxt)
 {
-	if (quotes == -1)
-	{
-		ft_free_string(&nxt);
-		ft_free_string(&crr);
-		ms->info.command = NULL;
-		return (NULL);
-	}
 	ms->info.command = ft_split_quotes(crr);
 	ft_free_string(&crr);
 	ft_free_string(&ms->cmd_line);
 	return (nxt);
 }
 
-/* Handles the input cmd_line which include a pipe and compares in accordance to the
-priorities (redirection, pipes and quotes). */
-char	*lexer_parser_pipe(t_vars *ms, int quotes, char *nxt, char *crr)
+/* Handles the input cmd_line which include a pipe and compares in accordance
+to the priorities (redirection, pipes and quotes). */
+static char	*lexer_parser_pipe(t_vars *ms, char *nxt, char *crr)
 {
 	int		p_index;
 
@@ -58,15 +36,9 @@ char	*lexer_parser_pipe(t_vars *ms, int quotes, char *nxt, char *crr)
 	while (ms->cmd_line[p_index] == ' ' || ms->cmd_line[p_index] == '|')
 		p_index++;
 	nxt = ft_substr(ms->cmd_line, p_index, ft_strlen(ms->cmd_line) - p_index);
-	if ((ft_strchr_pos(crr, '<') != -1) || ft_strchr_pos(crr, '>') != -1)
-		lexer_parser_redirections(&crr, ms);
-	else
-	{
-		ms->info.fd_in = STDIN_FILENO;
-		ms->info.fd_out = STDOUT_FILENO;
-	}
+	lexer_parser_redirections(&crr, ms);
 	if (ft_strchr_pos(crr, 34) != -1 || ft_strchr_pos(crr, 39) != -1)
-		return (lexer_parser_quotes_pipe(ms, quotes, crr, nxt));
+		return (lexer_parser_quotes_pipe(ms, crr, nxt));
 	else
 	{
 		ms->info.command = ft_split(crr, ' ');
@@ -79,14 +51,7 @@ char	*lexer_parser_pipe(t_vars *ms, int quotes, char *nxt, char *crr)
 it in t_info command. It returns NULL as there is no next command. */
 static char	*lexer_parser_smple(t_vars *ms)
 {
-	if ((ft_strchr_pos(ms->cmd_line, '<') != -1)
-		|| ft_strchr_pos(ms->cmd_line, '>') != -1)
-		lexer_parser_redirections(&ms->cmd_line, ms);
-	else
-	{
-		ms->info.fd_in = STDIN_FILENO;
-		ms->info.fd_out = STDOUT_FILENO;
-	}
+	lexer_parser_redirections(&ms->cmd_line, ms);
 	ms->info.command = ft_split(ms->cmd_line, ' ');
 	return (NULL);
 }
@@ -97,7 +62,6 @@ returns any following commands of cmd_line or NULL if tehre was only one
 command. */
 char	*lexer_parser(t_vars *ms)
 {
-	int		quotes;
 	int		p_index;
 	char	*crr;
 	char	*nxt;
@@ -105,11 +69,16 @@ char	*lexer_parser(t_vars *ms)
 	crr = NULL;
 	nxt = NULL;
 	p_index = ft_strchr_pos(ms->cmd_line, '|');
-	quotes = quote_status(ms->cmd_line);
-	if (p_index == -1 && quotes == 0)
+	if (quote_status(ms->cmd_line) == -1)
+	{
+		ms->info.command = NULL;
+		ms->flag = 1;
+		return (NULL);
+	}
+	if (p_index == -1 && quote_status(ms->cmd_line) == 0)
 		return (lexer_parser_smple(ms));
 	if (p_index != -1 && valid_pipe(ms->cmd_line) == 0)
-		return (lexer_parser_pipe(ms, quotes, nxt, crr));
+		return (lexer_parser_pipe(ms, nxt, crr));
 	else
-		return (lexer_parser_quotes(quotes, ms, crr, nxt));
+		return (lexer_parser_quotes(ms, crr));
 }

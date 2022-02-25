@@ -106,13 +106,12 @@ int		builtin_unset(t_vars *ms, t_cmd *current);
 int		is_builtin(t_vars *ms, char *cmd);
 void	create_old_pwd(t_vars *ms, int flag, char *start_wd);
 
-/* command execution */
-int		get_paths(t_vars *ms);
-int		check_cmd(t_vars *ms, t_cmd *current);
-int		pipex(t_vars *ms);
-void	ft_builtin_parent(t_cmd *current, t_vars *ms);
-void	execute_builtin(t_vars *ms, t_cmd *current);
-void	execute_cmd(t_vars *ms, t_cmd *current);
+/* cmd utils */
+t_cmd	*ft_lstnew_cmd(t_vars *ms);
+t_cmd	*ft_lstlast_cmd(t_cmd *lst);
+void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *element);
+void	reset_info_struct(t_vars *ms);;
+void	pass_on_infos_node(t_vars *ms, t_cmd *node);
 
 /* prompt */
 char	*get_user(t_vars *ms);
@@ -133,46 +132,46 @@ int		valid_pipe(char *str);
 void	lexer_parser_redirections(char **string, t_vars *ms);
 char	*parser_lexer_pipe(t_vars *ms, int quotes, char *crr, char *nxt);
 char	**ft_split_quotes(char *str);
-int		ft_strchr_pos(const char *s, char c);
 int		ft_count_chars(char *str, t_vars *ms);
-// char	*hdl_input(t_vars *ms, int quotes, char *new_cmd_line, char *command_line);
-// int		quote_status(char *str);
+int		check_open_closed_quote(char *str, int stop,
+			int *within_quotes, int quote);
 
 /* redirections */
 void	handle_redirections(char **string, t_vars *ms);
 void	input_redirection(t_vars *ms, char **string, int red_in);
 void	output_redirection(t_vars *ms, char **string, int red_out);
 int		ft_here_doc(t_vars *ms, char *limiter);
+int		valid_red(char *str, int pos);
+int		ft_strchr_pos_red(char *s, char c, int i);
 
-/* cmd utils */
-t_cmd	*ft_lstnew_cmd(t_vars *ms);
-t_cmd	*ft_lstlast_cmd(t_cmd *lst);
-void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *element);
-int 	ft_lstsize_cmd(t_cmd *lst);
-char 	*ft_strjoin_2(char *line, char *str, int i);
+/* command execution */
+int		get_paths(t_vars *ms);
+int		check_cmd(t_vars *ms, t_cmd *current);
+int		pipex(t_vars *ms);
+void	ft_builtin_parent(t_cmd *current, t_vars *ms);
+void	execute_builtin(t_vars *ms, t_cmd *current);
+void	execute_cmd(t_vars *ms, t_cmd *current);
+
+/* str handling quoting */
+int		compare_str(char *s1, char *s2);
+int		ft_strchr_pos(char *s, char c);
+char	*ft_strjoin_2(char *line, char *str, int i);
 int		ft_count_substrings(char *str);
-void	pass_on_infos_node(t_vars *ms, t_cmd *node);
 char	**copy_strarray(char **strarray);
+
+/* Dollar sign */
+int		valid_dollar_sign(t_vars *ms, int i, int *quote_on, int quote_type);
+char	*cut_unused_envar(char *str);
 
 /* free and exit */
 void	last_free(t_vars *ms, int e_code);
-// void	free_and_exit(t_vars *ms, int e_flag, int e_code);
-void	ft_free_string(char **str);
-void	reset_info_struct(t_vars *ms);
+void	free_t_env(t_env **env);
 void	free_builtin_list(t_vars *ms);
-
-/* printi utils */							// Mio: delete before submission
-void	print_lst(t_vars *ms);
-void	print_arr(char **arr);
-void	print_lst_last(t_vars *ms);
-
-/* utils */
 void	ft_free_lst(t_list **lst);
-void	ft_free_lst_env(t_env **lst);
-void	ft_free_arr(char **arr);
-int		compare_str(char *s1, char *s2);
+void	ft_free_string(char **str);
+
+/* Resetting after every input line */
+void	reset(t_vars *ms);
 void	free_cmd_struct(t_vars *ms);
-int		valid_dollar_sign(t_vars *ms, int i, int *quote_on, int quote_type);
-char	*cut_unused_envar(char *str);
 
 #endif
