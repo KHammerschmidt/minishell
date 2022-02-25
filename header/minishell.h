@@ -49,8 +49,6 @@ typedef struct s_cmd
 	char			*outfile;
 	int				input_op;
 	int				output_op;
-	// int				error_flag;
-	// char			*error_msg;
 	struct s_cmd	*next;
 	struct s_cmd	*previous;
 }	t_cmd;
