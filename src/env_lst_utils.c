@@ -1,26 +1,60 @@
 #include "../header/minishell.h"
 
+static void	create_element_name(char *content, char *tmp, \
+	t_env *new_element, int *i)
+{
+	while (content[*i] != '=')
+		(*i)++;
+	tmp = malloc(*i * sizeof(char) + 1);
+	*i = 0;
+	while (content[*i] != '=')
+	{
+		tmp[*i] = content[*i];
+		(*i)++;
+	}
+	tmp[*i] = '\0';
+	new_element->name = ft_strdup(tmp);
+	ft_free_string(&tmp);
+	(*i)++;
+}
+
+static void	create_element_content(char *content, char *tmp, \
+	t_env *new_element, int i)
+{
+	int		j;
+
+	j = i;
+	i = 0;
+	while (content[i] != '\0')
+		i++;
+	tmp = malloc(i * sizeof(char) + 1);
+	i = j;
+	j = 0;
+	while (content[i] != '\0')
+	{
+		tmp[j] = content[i];
+		i++;
+		j++;
+	}
+	tmp[j] = '\0';
+	new_element->content = ft_strdup(tmp);
+	ft_free_string(&tmp);
+}
+
 t_env	*ft_lstnew_env(char *content)
 {
 	t_env	*new_element;
-	char	**split;
+	char	*tmp;
 	int		i;
 
 	i = 0;
-	new_element = malloc(sizeof(t_env));			//malloc new element env
+	tmp = NULL;
+	new_element = malloc(sizeof(t_env));
 	if (new_element == NULL)
 		return (NULL);
-	split = ft_split(content, '=');
-	if (split == NULL)
-	{
-		printf("Error\n");
-		ft_free_strarray(&split);
-		return (NULL);
-	}
-	new_element->name = ft_strdup(split[i]);
-	new_element->content = ft_strdup(split[i + 1]);
+	create_element_name(content, tmp, new_element, &i);
+	create_element_content(content, tmp, new_element, i);
 	new_element->next = NULL;
-	ft_free_strarray(&split);
 	return (new_element);
 }
 
@@ -48,47 +82,3 @@ void	ft_lstadd_back_env(t_env **lst, t_env *new)
 		last->next = new;
 	}
 }
-
-// void	ft_free_lst_env(t_env **lst)		//OLD
-// {
-// 	t_env	*temp;
-
-// 	while (*lst != NULL)
-// 	{
-// 		temp = *lst;
-// 		*lst = (*lst)->next;
-// 		free(temp->name);
-// 		free(temp->content);
-// 		free(temp);
-// 	}
-// }
-
-/* Function deletes content of every element in the
-list t_env. */
-// void	ft_free_env_content(t_env **lst)
-// {
-// 	t_env	*temp;
-
-// 	temp = *lst;
-// 	while (temp != NULL)
-// 	{
-// 		free(temp->name);
-// 		free(temp->content);
-// 		temp = temp->next;
-// 	}
-// }
-
-// /* Function deletes every element of the list t_env. */
-// void	ft_free_env_list(t_env **lst)
-// {
-// 	t_env	*temp;
-
-// 	temp = NULL;
-// 	while (*lst != NULL)
-// 	{
-// 		temp = (*lst)->next;
-// 		free((*lst));
-// 		(*lst) = NULL;
-// 		(*lst) = temp;
-// 	}
-// }
