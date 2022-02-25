@@ -112,7 +112,6 @@ char	**ft_split_quotes(char *str)
 	while (str[start] != '\0')
 	{
 		tmp = substring_quotes(&start, &stop, str);
-		// printf("tmp: ..%s..\n", tmp);
 		if (tmp == NULL)
 			break ;
 		// string[k] = ft_strdup(cut_quotes(tmp));					// Mio: ersetzt gegen Zeile drunter wegen Leaks
@@ -120,7 +119,6 @@ char	**ft_split_quotes(char *str)
 		// printf("string[k] = %s\n", string[k]);
 		k++;
 		ft_free_string(&tmp);
-		// printf("start %c\n", str[start]);
 	}
 	string[k] = NULL;
 	return (string);

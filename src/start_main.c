@@ -49,21 +49,20 @@ int	main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv, 
 	t_vars	ms;
 
 	ms = (t_vars){0};
-	if (init_struct(&ms, envp) != 0)				// √
+	if (init_struct(&ms, envp) != 0)
 		return (-1);
 	while (1)
 	{
-		read_line(&ms);								// √
+		read_line(&ms);
 		if (compare_str(ms.cmd_line, "") == 0)
 			continue ;
-		// create_cmd_table(&ms);
-		if (create_cmd_table(&ms) != 1)				// √
+		if (create_cmd_table(&ms) != 1)
 		{
 			get_paths(&ms);
 			ms.exit_status = pipex(&ms);
 		}
 		reset(&ms);
-		system("leaks minishell");
+		system("leaks minishell > OUTFILE");
 	}
 	last_free(&ms, 0);
 	close(ms.tmp_fd);

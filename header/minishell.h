@@ -145,20 +145,20 @@ void	output_redirection(t_vars *ms, char **string, int red_out);
 int		ft_here_doc(t_vars *ms, char *limiter);
 
 /* cmd utils */
-t_cmd	*ft_lstnew_cmd(t_info *info);
+t_cmd	*ft_lstnew_cmd(t_vars *ms);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
 void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *element);
 int 	ft_lstsize_cmd(t_cmd *lst);
 char 	*ft_strjoin_2(char *line, char *str, int i);
 int		ft_count_substrings(char *str);
-void	pass_on_infos_node(t_info *info, t_cmd *node);
+void	pass_on_infos_node(t_vars *ms, t_cmd *node);
 char	**copy_strarray(char **strarray);
 
 /* free and exit */
 void	last_free(t_vars *ms, int e_code);
 // void	free_and_exit(t_vars *ms, int e_flag, int e_code);
 void	ft_free_string(char **str);
-void	reset_info_struct(t_info *info);
+void	reset_info_struct(t_vars *ms);
 void	free_builtin_list(t_vars *ms);
 
 /* printi utils */							// Mio: delete before submission
