@@ -12,6 +12,14 @@ int	check_cmd(t_vars *ms, t_cmd *current)
 			|| current->command[0][0] == '~')
 	{
 		current->execpath = ft_strdup(current->command[0]);						//mem alloc
+		printf("%s\n", current->execpath);
+		printf("%d\n", access(current->execpath, X_OK));
+		if (access(current->execpath, X_OK) != 0)
+		{
+			perror("Error");
+			ms->exit_status = errno;
+			return (1);
+		}
 		return (0);
 	}
 	while (ms->paths[i] != NULL)
@@ -43,7 +51,7 @@ void	execute_cmd(t_vars *ms, t_cmd *current)
 	if (check_cmd(ms, current) == 0)
 	{
 		execve(current->execpath, current->command, ms->envp);
-		printf("Error: execve failed\n");
+		perror("Error");
 		ms->exit_status = errno;
 	}
 	exit(ms->exit_status);

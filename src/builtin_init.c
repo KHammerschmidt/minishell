@@ -20,12 +20,12 @@ static int	add_builtin(t_vars *ms, char *builtin)
 int	init_builtin(t_vars *ms)
 {
 	if ((add_builtin(ms, "echo") != 0)
-	|| (add_builtin(ms, "cd") != 0)
-	|| (add_builtin(ms, "pwd") != 0) 
-	|| (add_builtin(ms, "export") != 0)
-	|| (add_builtin(ms, "unset") != 0)
-	|| (add_builtin(ms, "env") != 0)
-	|| (add_builtin(ms, "exit") != 0))
+		|| (add_builtin(ms, "cd") != 0)
+		|| (add_builtin(ms, "pwd") != 0)
+		|| (add_builtin(ms, "export") != 0)
+		|| (add_builtin(ms, "unset") != 0)
+		|| (add_builtin(ms, "env") != 0)
+		|| (add_builtin(ms, "exit") != 0))
 		return (1);
 	return (0);
 }

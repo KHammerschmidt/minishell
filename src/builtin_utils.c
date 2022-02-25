@@ -18,3 +18,29 @@ void	create_old_pwd(t_vars *ms, int flag, char *start_wd)
 		tmp = NULL;
 	}
 }
+
+int	export_aux(char *command, int *i)
+{
+	while (command[*i] != '=' && command[*i] != '\0')
+	{
+		if (ft_isalpha(command[*i]) == 0 && command[*i] != '=' \
+				&& command[*i] != '_' && ft_isdigit(command[*i]) == 0)
+		{
+			printf("minishell: export: `%s': not a valid identifier\n", command);
+			return (1);
+		}
+		(*i)++;
+	}
+	while (command[*i] != '\0')
+	{
+		if (ft_isalpha(command[*i]) == 0 && command[*i] != '=' \
+				&& command[*i] != '_' && ft_isdigit(command[*i]) == 0 \
+				&& command[*i] != '/')
+		{
+			printf("minishell: export: `%s': not a valid identifier\n", command);
+			return (1);
+		}
+		(*i)++;
+	}
+	return (0);
+}
