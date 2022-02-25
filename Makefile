@@ -32,7 +32,6 @@ SRC_LIST	=	builtin_cd.c				\
 				cmd_redirections.c			\
 				cmd_splitting_quotes.c		\
 				cmd_table_creation.c		\
-				cmd_utils.c 				\
 				env_get_env_var.c			\
 				env_init.c					\
 				env_handling.c				\
