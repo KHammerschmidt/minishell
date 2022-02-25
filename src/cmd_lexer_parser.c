@@ -24,7 +24,6 @@ static char *lexer_parser_quotes(int quotes, t_vars *ms, char *crr, char *nxt)
 	ft_free_string(&ms->cmd_line);
 	if (crr == NULL)
 	{
-		// ft_free_string(&ms->cmd_line);
 		ft_free_string(&crr);
 		return (NULL);
 	}
@@ -34,14 +33,6 @@ static char *lexer_parser_quotes(int quotes, t_vars *ms, char *crr, char *nxt)
 /* Splits the input cmd_line in according to the quotes. */
 static char *lexer_parser_quotes_pipe(t_vars *ms, int quotes, char *crr, char *nxt)
 {
-	if ((ft_strchr_pos(crr, '<') != -1)
-		|| ft_strchr_pos(crr, '>') != -1)
-		lexer_parser_redirections(&crr, ms);
-	else
-	{
-		ms->info.fd_in = STDIN_FILENO;
-		ms->info.fd_out = STDOUT_FILENO;
-	}
 	if (quotes == -1)
 	{
 		ft_free_string(&nxt);
@@ -51,6 +42,7 @@ static char *lexer_parser_quotes_pipe(t_vars *ms, int quotes, char *crr, char *n
 	}
 	ms->info.command = ft_split_quotes(crr);
 	ft_free_string(&crr);
+	ft_free_string(&ms->cmd_line);
 	return (nxt);
 }
 
@@ -77,8 +69,6 @@ char	*lexer_parser_pipe(t_vars *ms, int quotes, char *nxt, char *crr)
 		return (lexer_parser_quotes_pipe(ms, quotes, crr, nxt));
 	else
 	{
-		// if ((ft_strchr_pos(crr, '<') != -1) || ft_strchr_pos(crr, '>') != -1)
-		// 	lexer_parser_redirections(&crr, ms);
 		ms->info.command = ft_split(crr, ' ');
 		ft_free_string(&crr);
 		return (nxt);
