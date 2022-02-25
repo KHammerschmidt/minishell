@@ -16,6 +16,7 @@ static char *lexer_parser_quotes(int quotes, t_vars *ms, char *crr, char *nxt)
 		ft_free_string(&nxt);
 		ft_free_string(&crr);
 		ms->info.command = NULL;
+		ms->flag = 1;
 		return (NULL);
 	}
 	else

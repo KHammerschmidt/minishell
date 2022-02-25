@@ -28,17 +28,14 @@ static void	adjust_envar_list(t_vars *ms, char *start_wd)
 int	validate_and_change_path(t_vars *ms, char *new_path, char *start_wd)
 {
 	char	*tmp;
-	int		flag;
 
 	tmp = NULL;
-	flag = 0;
 	if (!(ft_strncmp(new_path, "/", 1) == 0) \
 			&& !(ft_strncmp(new_path, ".", 1) == 0))
 	{
 		tmp = malloc(ft_strlen(new_path) + 3);
 		ft_strlcat(tmp, "./", 3);
 		ft_strlcat(tmp, new_path, ft_strlen(new_path) + 3);
-		flag = 1;
 	}
 	if (access(new_path, F_OK) != 0)
 	{

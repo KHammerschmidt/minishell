@@ -3,7 +3,7 @@
 /* Frees:
 - struct t_env (content & every element),
 - builtin list t_list (content & element), */
-void	last_free(t_vars *ms)
+void	last_free(t_vars *ms, int e_flag)
 {
 	free_t_env(&ms->env);			// ft_free_lst_env(&(*ms)->env);
 	ft_free_strarray(&ms->envp);
@@ -15,6 +15,8 @@ void	last_free(t_vars *ms)
 
 	// free_cmd_list(ms);
 	// reset_info_struct(&ms.info);
+	if (e_flag == 1)
+		exit(ms->exit_status);
 }
 
 /* Initialises main struct ms, sets struct t_info to 0 and duplicates
@@ -52,13 +54,18 @@ int	main(__attribute__((unused)) int argc, __attribute__((unused)) char **argv, 
 	while (1)
 	{
 		read_line(&ms);								// √
-		create_cmd_table(&ms);						// √
-		get_paths(&ms);
-		ms.exit_status = pipex(&ms);
+		if (compare_str(ms.cmd_line, "") == 0)
+			continue ;
+		// create_cmd_table(&ms);
+		if (create_cmd_table(&ms) != 1)				// √
+		{
+			get_paths(&ms);
+			ms.exit_status = pipex(&ms);
+		}
 		reset(&ms);
-		// system("leaks minishell > OUTFILE");
+		// system("leaks minishell");
 	}
-	last_free(&ms);
+	last_free(&ms, 0);
 	close(ms.tmp_fd);
 	return (ms.exit_status);
 }
