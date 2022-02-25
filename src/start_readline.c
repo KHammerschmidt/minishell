@@ -13,7 +13,9 @@ int	read_line(t_vars *ms)
 		ms->cmd_line = readline(prompt);
 	else
 		ms->cmd_line = readline("minishell ॐ  ");
-	// ms->cmd_line = ft_strdup("echo \"hallo das ist ein test\"");
+	// char	*temp;
+	// temp = "echo \"hallo\" test";
+	// ms->cmd_line = ft_strdup(temp);
 	rl_reset();
 	if (ms->cmd_line == NULL)							// (x) Makes CTRL+D work.
 		last_free(ms, 1);

@@ -82,25 +82,25 @@ void	ft_free_lst_cmd(t_cmd **element)
 	}
 }
 
-// void	free_cmd_command(t_cmd **current)
-// {
-// 	int	i;
+void	free_cmd_command(t_cmd **current)
+{
+	int	i;
 
-// 	i = 0;
-// 	if (!current)
-// 		return ;
-// 	while ((*current)->command[i] != NULL)
-// 	{
-// 		printf("FREE\n");
-// 		printf("current->command[i]%s\n", (*current)->command[0]);
-// 		free((*current)->command[i]);
-// 		printf("FREE\n");
-// 		(*current)->command[i] = NULL;
-// 		i++;
-// 	}
-// 	free((*current)->command);
-// 	(*current)->command = NULL;
-// }
+	i = 0;
+	if (!current)
+		return ;
+	while ((*current)->command[i] != NULL)
+	{
+		printf("FREE\n");
+		printf("current->command[i]%s\n", (*current)->command[0]);
+		free((*current)->command[i]);
+		printf("FREE\n");
+		(*current)->command[i] = NULL;
+		i++;
+	}
+	free((*current)->command);
+	(*current)->command = NULL;
+}
 
 void	free_cmd_struct(t_vars *ms)
 {
@@ -109,18 +109,11 @@ void	free_cmd_struct(t_vars *ms)
 	current = ms->cmd;
 	while (current != NULL)
 	{
-		// printf("HERE 8\n");
-		// free_cmd_command(&current);
-		ft_free_strarray(&current->command);		//es steht etwas drin was nicht allokiert wurde
-		// printf("HERE 9\n");							//wir können im element von t_cmd nicht den command freen
+		ft_free_strarray(&current->command);
 		ft_free_string(&current->execpath);
 		ft_free_string(&current->infile);
 		ft_free_string(&current->outfile);
 		current = current->next;
-		// tmp = current->next;
-		// free(current);							// Mio: deleted to get rid of "invalid read" / "invalid write" (VALGRIND)
-		// current = NULL;							// Wirklich auf NULL setzen?!
-		// current = tmp;
 	}
 	ft_free_lst_cmd(&ms->cmd);
 }

@@ -51,41 +51,41 @@ void	ft_lstadd_back_cmd(t_cmd **cmd, t_cmd *node)
 	}
 }
 
-void	reset_info_struct(t_info *info)
+void	reset_info_struct(t_vars *ms)
 {
-	ft_free_strarray(&info->command);
-	ft_free_string(&info->infile);
-	ft_free_string(&info->outfile);
-	info->input_op = 0;
-	info->output_op = 0;
-	info->pipe = 0;
-	info->fd_in = 0;
-	info->fd_out = 1;
+	ft_free_strarray(&ms->info.command);
+	ft_free_string(&ms->info.infile);
+	ft_free_string(&ms->info.outfile);
+	ms->info.input_op = 0;
+	ms->info.output_op = 0;
+	ms->info.pipe = 0;
+	ms->info.fd_in = 0;
+	ms->info.fd_out = 1;
 }
 
 /* Passes on the information from command, fds and redirections
 to the struct t_cmd. */
-void	pass_on_infos_node(t_info *info, t_cmd *node)
+void	pass_on_infos_node(t_vars *ms, t_cmd *node)
 {
-	node->command = copy_strarray(info->command);
-	node->input_op = info->input_op;
-	node->output_op = info->output_op;
-	node->fd_out = info->fd_out;
-	node->fd_in = info->fd_in;
-	node->infile = ft_strdup(info->infile);
-	node->outfile = ft_strdup(info->outfile);
-	reset_info_struct(info);
+	node->command = copy_strarray(ms->info.command);
+	node->input_op = ms->info.input_op;
+	node->output_op = ms->info.output_op;
+	node->fd_out = ms->info.fd_out;
+	node->fd_in = ms->info.fd_in;
+	node->infile = ft_strdup(ms->info.infile);
+	node->outfile = ft_strdup(ms->info.outfile);
+	reset_info_struct(ms);
 }
 
 /* Creates a new node of type t_cmd. */
-t_cmd	*ft_lstnew_cmd(t_info *info)
+t_cmd	*ft_lstnew_cmd(t_vars *ms)
 {
 	t_cmd	*node;
 
 	node = malloc(sizeof(t_cmd));
 	if (node == NULL)
 		return (NULL);
-	pass_on_infos_node(info, node);
+	pass_on_infos_node(ms, node);
 	node->next = NULL;
 	node->previous = NULL;
 	return (node);
