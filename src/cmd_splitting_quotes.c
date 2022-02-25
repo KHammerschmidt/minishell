@@ -115,12 +115,13 @@ char	**ft_split_quotes(char *str)
 		// printf("tmp: ..%s..\n", tmp);
 		if (tmp == NULL)
 			break ;
-		string[k] = ft_strdup(cut_quotes(tmp));
+		// string[k] = ft_strdup(cut_quotes(tmp));					// Mio: ersetzt gegen Zeile drunter wegen Leaks
+		string[k] = cut_quotes(tmp);
 		// printf("string[k] = %s\n", string[k]);
 		k++;
 		ft_free_string(&tmp);
 		// printf("start %c\n", str[start]);
 	}
-	string[k] = 0;
+	string[k] = NULL;
 	return (string);
 }

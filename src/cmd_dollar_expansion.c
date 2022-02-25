@@ -95,5 +95,5 @@ void	dollar_expansion(t_vars *ms)
 	}
 	replicate_text(ms, &i, &j);
 	ft_free_string(&ms->cmd_line);
-	ms->cmd_line = ms->line;
+	ms->cmd_line = ft_strdup(ms->line);
 }

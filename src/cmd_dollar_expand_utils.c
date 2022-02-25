@@ -55,5 +55,6 @@ char	*cut_unused_envar(char *str)
 			line = ft_strjoin_2(line, str, i);
 		i++;
 	}
+	ft_free_string(&str);
 	return (line);
 }
