@@ -84,7 +84,7 @@ static char	*substring_quotes(int *start, int *stop, char *str)
 
 	tmp = NULL;
 	*start = *stop;
-	while (str[*start] == ' ' && str[*start] != '\0')
+	while (str[*start] == ' ' && str[*start] != '\0') //hier werden spaces gelöscht für den start wert, aber echo löscht auch alle spaces?
 		(*start)++;
 	*stop = stop_quotes(str, *start);
 	if (*start == *stop)
