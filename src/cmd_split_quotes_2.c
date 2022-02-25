@@ -1,5 +1,16 @@
 #include "../header/minishell.h"
 
+/* Indicates if the found quote is an opening (within_quotes == 0) or closing
+(within_quotes == 1) quote and changes the status. */
+int	check_open_closed_quote(char *str, int stop, int *within_quotes, int quote)
+{
+	if (str[stop] == quote && (*within_quotes) == 0)
+		(*within_quotes)++;
+	else if (str[stop] == quote)
+		(*within_quotes) = 0;
+	return (*within_quotes);
+}
+
 /* Checks the quote status, returns (0) for no quotes, (1) for valid
 quotes and (-1) for open quotes. */
 int	quote_status(char *str)

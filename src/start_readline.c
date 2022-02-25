@@ -13,11 +13,8 @@ int	read_line(t_vars *ms)
 		ms->cmd_line = readline(prompt);
 	else
 		ms->cmd_line = readline("minishell ॐ  ");
-	// char	*temp;
-	// temp = "echo \"hallo\" test";
-	// ms->cmd_line = ft_strdup(temp);
 	rl_reset();
-	if (ms->cmd_line == NULL)							// (x) Makes CTRL+D work.
+	if (ms->cmd_line == NULL)
 		last_free(ms, 1);
 	if (ms->cmd_line && *ms->cmd_line)
 		add_history (ms->cmd_line);

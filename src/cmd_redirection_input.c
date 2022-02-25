@@ -24,15 +24,21 @@ static void	infile_fd(t_vars *ms)
 	}
 }
 
+	// while ((*string)[i] != '<')
+	// {
+	// 	tmp = ft_strnjoin(tmp, (*string)[i], 1);
+	// 	i++;
+	// }
+
 /* Cuts out the redirections associated with the infile from the cmd_line. */
-static void	cut_infile_red(char **string)
+static void	cut_infile_red(char **string, int fd_in)
 {
-	char	*tmp;
 	int		i;
+	char	*tmp;
 
 	i = 0;
 	tmp = NULL;
-	while ((*string)[i] != '<')
+	while (i < fd_in)
 	{
 		tmp = ft_strnjoin(tmp, (*string)[i], 1);
 		i++;
@@ -55,13 +61,11 @@ static void	cut_infile_red(char **string)
 
 /* Saves the infile in the t_info struct or the respective
 limiter for a here_doc. */
-static void	expansion_infile_red(char **string, t_vars *ms)
+static void	expansion_infile_red(char **string, t_vars *ms, int j)
 {
-	int		k;
-	int		j;
+	int	k;
 
 	k = 0;
-	j = ft_strchr_pos(*string, '<');
 	while (((*string)[j] == '<' || (*string)[j] == ' ') && (*string)[j] != '\0')
 		j++;
 	k = j;
@@ -72,23 +76,28 @@ static void	expansion_infile_red(char **string, t_vars *ms)
 
 /* Allocates memory for info.infile and extracts the redirections and
 associated files or limiters in a loop. */
-void input_redirection(t_vars *ms, char **string, int red_in)
+void	input_redirection(t_vars *ms, char **string, int red_in)
 {
 	while (red_in != -1)
 	{
-		if ((*string)[red_in] == '<')
+		if ((*string)[red_in] == '<' && valid_red(*string, red_in) == 0)
 		{
 			if ((*string)[red_in + 1] == '<')
 				ms->info.input_op = -2;
 			else
 				ms->info.input_op = -1;
 		}
-		expansion_infile_red(string, ms);
-		cut_infile_red(string);					//ändert string
+		else
+		{
+			red_in = ft_strchr_pos_red(*string, '<', red_in + 2);
+			continue ;
+		}
+		expansion_infile_red(string, ms, red_in);
+		cut_infile_red(string, red_in);
 		if (ms->info.input_op == -2)
 			ft_here_doc(ms, ms->info.infile);
 		else if (ms->info.input_op == -1)
 			infile_fd(ms);
-		red_in = ft_strchr_pos(*string, '<');
+		red_in = ft_strchr_pos(string[red_in + 1], '<');
 	}
 }

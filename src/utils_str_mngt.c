@@ -26,7 +26,7 @@ char	**copy_strarray(char **strarray)
 }
 
 /* Returns the position of character in a string or -1 if not found. */
-int	ft_strchr_pos(const char *s, char c)
+int	ft_strchr_pos(char *s, char c)
 {
 	int	i;
 
@@ -75,8 +75,7 @@ char	*ft_strjoin_2(char *line, char *str, int i)
 	return (line);
 }
 
-/* Counts amount of substrings by counting spaces except for when there are
-quotes, then it counts the part in quotes as one substring. */
+/* Counts amount of substrings separated by spaces and quotes. */
 int	ft_count_substrings(char *str)
 {
 	int	i;

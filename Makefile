@@ -23,14 +23,15 @@ SRC_LIST	=	builtin_cd.c				\
 				cmd_dollar_expansion.c		\
 				cmd_dollar_expand_utils.c	\
 				cmd_get_paths.c				\
+				cmd_info.c					\
 				cmd_lexer_parser.c			\
 				cmd_lst_utils.c				\
 				cmd_pipes.c					\
-				cmd_quotes.c				\
 				cmd_redirection_input.c		\
 				cmd_redirection_output.c	\
 				cmd_redirections.c			\
-				cmd_splitting_quotes.c		\
+				cmd_split_quotes_1.c		\
+				cmd_split_quotes_2.c		\
 				cmd_table_creation.c		\
 				env_get_env_var.c			\
 				env_init.c					\
@@ -46,8 +47,8 @@ SRC_LIST	=	builtin_cd.c				\
 				start_main.c				\
 				start_readline.c			\
 				utils_free_memory.c			\
-				utils_str_mngt.c			\
-				utils_utils.c
+				utils_reset.c				\
+				utils_str_mngt.c
 
 # BONUS_LIST	=	minishell_bonus.c
 
