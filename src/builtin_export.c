@@ -80,6 +80,11 @@ void	free_strings(char **var_name, char **var_val)
 	ft_free_string(var_val);
 }
 
+// int	declare_x(t_vars *ms, t_cmd *current)
+// {
+
+// }
+
 /* Looks for var_name in envar list. If found, changes var_value or, if not */
 /* found, creates new node with respective name and content.                */
 int	builtin_export(t_vars *ms, t_cmd *current)
@@ -90,6 +95,11 @@ int	builtin_export(t_vars *ms, t_cmd *current)
 	int		k;
 
 	k = 1;
+	// if (current->command[k] == NULL)
+	// {
+	// 	declare_x(ms, current);
+	// 	return (0);
+	// }
 	while (current->command[k] != NULL)
 	{
 		var_name = NULL;

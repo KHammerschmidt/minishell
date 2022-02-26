@@ -51,6 +51,18 @@ int	ft_strncmp_pipex(const char *s1, const char *s2, size_t n)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
+// static void	signal_handler3(int signum)
+// {
+// 	if (signum == SIGINT)
+// 	{
+// 		close_pipes();
+// 		write(1, "\n", 1);
+// 		rl_replace_line("", 0);
+// 	}
+// 	rl_on_new_line();
+// 	rl_redisplay();
+// }
+
 /* Creates a new pipe, reading part of the part is connected to pipe
 in struct. GNL writes into fd[1] and breaks when the delimiter is found. */
 int	ft_here_doc(t_vars *ms, char *limiter)
@@ -69,13 +81,19 @@ int	ft_here_doc(t_vars *ms, char *limiter)
 	if (dup2(hdoc_pipe_fd[0], ms->tmp_fd) < 0)
 		perror("dup2 hdoc_fd into tmp_fd: ");
 	close(hdoc_pipe_fd[0]);
+	// signal(SIGINT, signal_handler3);
+	// signal(SIGQUIT, signal_handler3);
 	while (1)
 	{
 		line = get_next_line_pipex(0);
+		// if (line[0] == EOF)
+		// 	printf("TEST\n");
 		if (ft_strncmp_pipex(line, limiter, ft_strlen(limiter)) == 0)
 			break ;
 		write(hdoc_pipe_fd[1], line, ft_strlen(line));
 	}
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
 	close(hdoc_pipe_fd[1]);
 	return (0);
 }

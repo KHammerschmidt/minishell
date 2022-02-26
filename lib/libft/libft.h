@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/14 14:45:50 by mortmeie          #+#    #+#             */
-/*   Updated: 2022/02/23 12:23:32 by khammers         ###   ########.fr       */
+/*   Updated: 2022/02/26 17:09:50 by mortmeie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isprint(int c);
+int		ft_isspace(int c);
 char	*ft_itoa(int n);
 int		ft_itob(int x);
 void	ft_lstadd_back(t_list **lst, t_list *new);

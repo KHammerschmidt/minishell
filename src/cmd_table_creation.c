@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cmd_table_creation.c                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 16:42:52 by khammers          #+#    #+#             */
-/*   Updated: 2022/02/26 15:33:55 by khammers         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../header/minishell.h"
 
 //add: don't interate when quotes in quotes
@@ -115,7 +103,7 @@ int	create_cmd_table(t_vars *ms)
 	while (ms->cmd_line != NULL)
 	{
 		nxt_cmd_line = lexer_parser(ms);
-		nxt_cmd_line = cut_unused_quotes(ms);
+		// nxt_cmd_line = cut_unused_quotes(ms);
 		if (ms->flag == 1)
 		{
 			printf("Error: Open quotes\n");

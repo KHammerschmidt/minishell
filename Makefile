@@ -27,6 +27,7 @@ SRC_LIST	=	builtin_cd.c				\
 				cmd_lexer_parser.c			\
 				cmd_lst_utils.c				\
 				cmd_pipes.c					\
+				cmd_qhandling.c				\
 				cmd_redirection_input.c		\
 				cmd_redirection_output.c	\
 				cmd_redirections.c			\

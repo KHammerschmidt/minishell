@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: khammers <khammers@student.42.fr>          +#+  +:+       +#+         #
+#    By: mortmeie <mortmeie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/07/14 14:46:00 by mortmeie          #+#    #+#              #
-#    Updated: 2022/02/07 17:59:17 by khammers         ###   ########.fr        #
+#    Updated: 2022/02/26 17:08:19 by mortmeie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRC_LIST	=	ft_atoi.c			\
 				ft_isascii.c		\
 				ft_isdigit.c		\
 				ft_isprint.c		\
+				ft_isspace.c		\
 				ft_itoa.c			\
 				ft_itob.c			\
 				ft_memchr.c			\
