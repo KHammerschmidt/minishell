@@ -1,10 +1,39 @@
 #include "../header/minishell.h"
 
-int	validate_arg(char *arg)
+static long double	ft_atoll(char *arg)
+{
+	long long	i;
+	long long	sign_flag;
+	long double	n;
+
+	n = 0;
+	i = 0;
+	sign_flag = 1;
+	while (ft_isspace(arg[i]))
+		i++;
+	if (arg[i] == '-')
+	{
+		sign_flag = -1;
+		i++;
+	}
+	else if (arg[i] == '+')
+		i++;
+	while (ft_isdigit(arg[i]))
+	{
+		n = (n * 10) + (arg[i] - 48);
+		i++;
+	}
+	return (n * sign_flag);
+}
+
+static int	validate_arg(char *arg)
 {
 	int	i;
 
 	i = 0;
+	if (ft_atoll(arg) > 9223372036854775807 \
+		|| ft_atoll(arg) < -9223372036854775807)
+		return (1);
 	while (arg[i] != '\0')
 	{
 		if (ft_isdigit(arg[i]) == 0)

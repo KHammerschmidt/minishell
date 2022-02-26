@@ -35,7 +35,8 @@ int	export_aux(char *command, int *i)
 	{
 		if (ft_isalpha(command[*i]) == 0 && command[*i] != '=' \
 				&& command[*i] != '_' && ft_isdigit(command[*i]) == 0 \
-				&& command[*i] != '/')
+				&& command[*i] != '/' && command[*i] != '-' \
+				&& command[*i] != ' ')
 		{
 			printf("minishell: export: `%s': not a valid identifier\n", command);
 			return (1);
