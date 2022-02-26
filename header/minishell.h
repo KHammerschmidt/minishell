@@ -135,6 +135,7 @@ void	rl_reset(void);
 
 /* input parsing, command table development */
 int		create_cmd_table(t_vars *ms);
+int		ft_syntax_check(char *str, t_vars *ms);
 void	dollar_expansion(t_vars *ms);
 char	*lexer_parser(t_vars *ms);
 int		quote_status(char *str);
@@ -161,7 +162,7 @@ int		ft_strchr_pos_red(char *s, char c, int i);
 /* command execution */
 int		get_paths(t_vars *ms);
 int		pipex(t_vars *ms);
-void	ft_builtin_parent(t_cmd *current, t_vars *ms);
+int		ft_builtin_parent(t_cmd *current, t_vars *ms);
 void	execute_builtin(t_vars *ms, t_cmd *current);
 void	execute_cmd(t_vars *ms, t_cmd *current);
 
