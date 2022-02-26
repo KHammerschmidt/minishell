@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/24 16:42:52 by khammers          #+#    #+#             */
-/*   Updated: 2022/02/25 22:29:27 by khammers         ###   ########.fr       */
+/*   Updated: 2022/02/26 15:33:55 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 //add: don't interate when quotes in quotes
 // auch aufrufen bei einem normalen string wie echo ""
+//hier ein segfault
 char	*cut_unused_quotes(t_vars *ms)
 {
 	int		i;
@@ -25,7 +26,6 @@ char	*cut_unused_quotes(t_vars *ms)
 	quote_on = 0;
 	quote_type = 0;
 	temp = ft_strdup("");
-	printf("cmd_line: %s\n", ms->cmd_line);
 	while (ms->cmd_line[i] != '\0')
 	{
 		// if (ms->cmd_line[i] == 34 || ms->cmd_line[i] == 39)
@@ -51,45 +51,6 @@ char	*cut_unused_quotes(t_vars *ms)
 	}
 	ft_free_string(&ms->cmd_line);
 	return (temp);
-}
-
-/* Creates the simple command table, e.g. the char **command of struct t_cmd. */
-int	create_cmd_table(t_vars *ms)
-{
-	char	*nxt_cmd_line;
-	t_cmd	*new;
-
-	new = NULL;
-	nxt_cmd_line = NULL;
-	if (ft_strchr_pos(ms->cmd_line, '$') != -1)
-	{
-		dollar_expansion(ms);
-		ms->cmd_line = cut_unused_envar(ms->cmd_line);
-		ms->cmd_line = cut_unused_quotes(ms);
-	}
-	while (ms->cmd_line != NULL)
-	{
-		nxt_cmd_line = lexer_parser(ms);
-		if (nxt_cmd_line == NULL && ms->flag == 1)
-		{
-			printf("Error: Open quotes\n");
-			ms->exit_status = 1;
-			ms->flag = 0;
-			return (1);
-		}
-		new = ft_lstnew_cmd(ms);
-		ft_lstadd_back_cmd(&ms->cmd, new);
-		if (nxt_cmd_line == NULL)
-		{
-			ft_free_string(&nxt_cmd_line);
-			ft_free_string(&ms->cmd_line);
-			break ;
-		}
-		ft_free_string(&ms->cmd_line);
-		ms->cmd_line = ft_strdup(nxt_cmd_line);
-		ft_free_string(&nxt_cmd_line);
-	}
-	return (0);
 }
 
 /* Cuts empty quotes when necessary. */
@@ -121,7 +82,10 @@ char	*cut_empty_quotes(t_vars *ms)
 		{
 			i++;
 			if (ms->cmd_line[i] == '\0')
+			{
+				temp = ft_strjoin_2(temp, NULL, 1);
 				break ;
+			}
 		}
 		else
 			temp = ft_strjoin_2(temp, ms->cmd_line, i);
@@ -129,4 +93,47 @@ char	*cut_empty_quotes(t_vars *ms)
 	}
 	ft_free_string(&ms->cmd_line);
 	return (temp);
+}
+
+
+/* Creates the simple command table, e.g. the char **command of struct t_cmd. */
+int	create_cmd_table(t_vars *ms)
+{
+	char	*nxt_cmd_line;
+	t_cmd	*new;
+
+	new = NULL;
+	nxt_cmd_line = NULL;
+	if (ft_strchr_pos(ms->cmd_line, '$') != -1)
+	{
+		dollar_expansion(ms);
+		if (ft_strchr_pos(ms->cmd_line, '$') != -1)
+			ms->cmd_line = cut_unused_envar(ms->cmd_line);
+		ms->cmd_line = cut_unused_quotes(ms);
+		ms->cmd_line = cut_empty_quotes(ms);
+	}
+	while (ms->cmd_line != NULL)
+	{
+		nxt_cmd_line = lexer_parser(ms);
+		nxt_cmd_line = cut_unused_quotes(ms);
+		if (ms->flag == 1)
+		{
+			printf("Error: Open quotes\n");
+			ms->exit_status = 1;
+			ms->flag = 0;
+			return (1);
+		}
+		new = ft_lstnew_cmd(ms);
+		ft_lstadd_back_cmd(&ms->cmd, new);
+		if (nxt_cmd_line == NULL)
+		{
+			ft_free_string(&nxt_cmd_line);
+			ft_free_string(&ms->cmd_line);
+			break ;
+		}
+		ft_free_string(&ms->cmd_line);
+		ms->cmd_line = ft_strdup(nxt_cmd_line);
+		ft_free_string(&nxt_cmd_line);
+	}
+	return (0);
 }

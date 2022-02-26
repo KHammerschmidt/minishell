@@ -83,7 +83,7 @@ void	dollar_expansion(t_vars *ms)
 	while (ms->cmd_line[i] != '\0')
 	{
 		quote_type = valid_dollar_sign(ms, i, &quote_on, quote_type);
-		if (ms->cmd_line[i] == '$')// && quote_type != 39)
+		if (ms->cmd_line[i] == '$' && quote_type != 39)
 		{
 			replicate_text(ms, &i, &j);
 			while (ft_isalpha(ms->cmd_line[i]) == 1 || ms->cmd_line[i] == '?')
