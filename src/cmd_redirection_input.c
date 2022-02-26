@@ -24,12 +24,6 @@ static void	infile_fd(t_vars *ms)
 	}
 }
 
-	// while ((*string)[i] != '<')
-	// {
-	// 	tmp = ft_strnjoin(tmp, (*string)[i], 1);
-	// 	i++;
-	// }
-
 /* Cuts out the redirections associated with the infile from the cmd_line. */
 static void	cut_infile_red(char **string, int fd_in)
 {
@@ -71,6 +65,7 @@ static void	expansion_infile_red(char **string, t_vars *ms, int j)
 	k = j;
 	while ((*string)[k] != ' ' && (*string)[k] != '\0')
 		k++;
+	ft_free_string(&ms->info.infile);
 	ms->info.infile = ft_substr(*string, j, k - j);
 }
 
@@ -98,6 +93,6 @@ void	input_redirection(t_vars *ms, char **string, int red_in)
 			ft_here_doc(ms, ms->info.infile);
 		else if (ms->info.input_op == -1)
 			infile_fd(ms);
-		red_in = ft_strchr_pos(string[red_in + 1], '<');
+		red_in = ft_strchr_pos(&(*string)[red_in], '<');
 	}
 }
