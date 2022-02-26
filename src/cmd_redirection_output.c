@@ -1,52 +1,6 @@
 #include "../header/minishell.h"
 
-/* Cuts out the redirections associated with the outfile from the cmd_line. */
-void	cut_outfile_red(char **string, int fd_out)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	tmp = NULL;
-	while (i < fd_out)
-	{
-		tmp = ft_strnjoin(tmp, (*string)[i], 1);
-		i++;
-	}
-	while ((*string)[i] == '>')
-		i++;
-	while ((*string)[i] == ' ' && (*string)[i] != '\0')
-		i++;
-	i++;
-	while ((*string)[i] != ' ' && (*string)[i] != '\0')
-		i++;
-	while ((*string)[i] == ' ' && (*string)[i] != '\0')
-		i++;
-	while ((*string)[i] != '\0')
-		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
-	ft_free_string(string);
-	*string = tmp;
-}
-
-/* Saves the outfile in the t_info struct. */
-void	expansion_outfile_red(char **string, t_vars *ms, int j)
-{
-	int		k;
-	char	*tmp;
-
-	k = 0;
-	while (((*string)[j] == '>' || (*string)[j] == ' ') && (*string)[j] != '\0')
-		j++;
-	k = j;
-	while ((*string)[k] != ' ' && (*string)[k] != '\0')
-		k++;
-	tmp = ft_substr((*string), j, k - j);
-	// if (ms->info.outfile != NULL)
-	ft_free_string(&ms->info.outfile);
-	ms->info.outfile = tmp;
-}
-
-void	outfile_fd(t_vars *ms)
+int	outfile_fd(t_vars *ms)
 {
 	if (ms->info.fd_out != STDOUT_FILENO)
 		close(ms->info.fd_out);
@@ -64,12 +18,69 @@ void	outfile_fd(t_vars *ms)
 	}
 	if (ms->info.fd_out == -1 || access(ms->info.outfile, W_OK) != 0)
 	{
-		perror("Error");
-		ft_free_string(&ms->info.outfile);
+		ft_putstr_fd("Error: permission denied: ", 2);
+		ft_putendl_fd((ms->info.outfile), 2);
+		ms->exit_status = 1;
+		ms->flag = -1;
+		return (1);
 	}
+	return (0);
 }
 
-void	output_redirection(t_vars *ms, char **string, int red_out)
+/* Cuts out the redirections associated with the outfile from the cmd_line. */
+void	cut_outfile_red(char **string, int fd_out)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	tmp = NULL;
+	while (i < fd_out)
+	{
+		tmp = ft_strnjoin(tmp, (*string)[i], 1);
+		i++;
+	}
+	printf("1..%c..\n", (*string)[i]);
+	while ((*string)[i] == '>')
+		i++;
+	while ((*string)[i] != '\0' && (*string)[i] != '>' && (*string)[i] != ' ')
+		i++;
+
+	// while ((*string)[i] == ' ' && (*string)[i] != '>' && (*string)[i] != '\0')
+	// 	i++;
+	// printf("2..%c..\n", (*string)[i]);
+	// i++;
+	// while ((*string)[i] != ' ' && (*string)[i] != '>' && (*string)[i] != '\0')
+	// 	i++;
+	printf("3..%c..\n", (*string)[i]);
+	// while ((*string)[i] == ' ' && (*string)[i] != '\0')
+	// 	i++;
+	printf("4..%c..\n", (*string)[i]);
+	while ((*string)[i] != '\0')
+		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
+	ft_free_string(string);
+	*string = ft_strdup(tmp);
+	ft_free_string(&tmp);
+}
+
+/* Saves the outfile in the t_info struct. */
+void	expansion_outfile_red(char **string, t_vars *ms, int j)
+{
+	int		k;
+	char	*tmp;
+
+	k = 0;
+	while (((*string)[j] == '>' || (*string)[j] == ' ') && (*string)[j] != '\0')
+		j++;
+	k = j;
+	while ((*string)[k] != ' ' && (*string)[k] != '\0')
+		k++;
+	tmp = ft_substr((*string), j, k - j);
+	ft_free_string(&ms->info.outfile);
+	ms->info.outfile = tmp;
+}
+
+int	output_redirection(t_vars *ms, char **string, int red_out)
 {
 	while (red_out != -1)
 	{
@@ -87,7 +98,9 @@ void	output_redirection(t_vars *ms, char **string, int red_out)
 		}
 		expansion_outfile_red(string, ms, red_out);
 		cut_outfile_red(string, red_out);
-		outfile_fd(ms);
+		if (outfile_fd(ms) == 1)
+			return (1);
 		red_out = ft_strchr_pos(&(*string)[red_out], '>');
 	}
+	return (0);
 }

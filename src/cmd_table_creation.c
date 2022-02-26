@@ -63,13 +63,6 @@ int	create_cmd_table(t_vars *ms)
 	while (ms->cmd_line != NULL)
 	{
 		nxt_cmd_line = lexer_parser(ms);
-		if (ms->flag == 1)
-		{
-			printf("Error: Open quotes\n");
-			ms->exit_status = 1;
-			ms->flag = 0;
-			return (1);
-		}
 		new = ft_lstnew_cmd(ms);
 		ft_lstadd_back_cmd(&ms->cmd, new);
 		if (nxt_cmd_line == NULL)
