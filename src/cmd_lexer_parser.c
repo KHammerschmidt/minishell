@@ -70,12 +70,12 @@ char	*lexer_parser(t_vars *ms)
 	crr = NULL;
 	nxt = NULL;
 	p_index = ft_strchr_pos(ms->cmd_line, '|');
-	if (quote_status(ms->cmd_line) == -1)
-	{
-		ms->info.command = NULL;
-		ms->flag = 1;
-		return (NULL);
-	}
+	// if (quote_status(ms->cmd_line) == -1)
+	// {
+	// 	ms->info.command = NULL;
+	// 	ms->flag = 1;
+	// 	return (NULL);
+	// }
 	if (p_index == -1 && quote_status(ms->cmd_line) == 0)
 		return (lexer_parser_smple(ms));
 	if (p_index != -1 && valid_pipe(ms->cmd_line) == 0)

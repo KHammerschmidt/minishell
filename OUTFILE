@@ -1,19 +1,19 @@
-Process:         minishell [21508]
+Process:         minishell [17334]
 Path:            /Volumes/VOLUME/*/minishell
-Load Address:    0x1032b0000
+Load Address:    0x102fdf000
 Identifier:      minishell
 Version:         ???
 Code Type:       X86-64
-Parent Process:  zsh [10077]
+Parent Process:  zsh [1173]
 
-Date/Time:       2022-02-26 18:40:53.371 +0100
-Launch Time:     2022-02-26 18:40:44.350 +0100
+Date/Time:       2022-02-26 23:09:10.657 +0100
+Launch Time:     2022-02-26 23:07:41.908 +0100
 OS Version:      Mac OS X 10.15.7 (19H1713)
 Report Version:  7
 Analysis Tool:   /usr/bin/leaks
 ----
 
 leaks Report Version: 4.0
-Process 21508: 492 nodes malloced for 312 KB
-Process 21508: 0 leaks for 0 total leaked bytes.
+Process 17334: 501 nodes malloced for 312 KB
+Process 17334: 0 leaks for 0 total leaked bytes.
 
