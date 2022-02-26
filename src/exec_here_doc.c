@@ -73,6 +73,18 @@ if s1 is greater than, equal to or less than s2.  */
 // 	return (0);
 // }
 
+// static void	signal_handler3(int signum)
+// {
+// 	if (signum == SIGINT)
+// 	{
+// 		close_pipes();
+// 		write(1, "\n", 1);
+// 		rl_replace_line("", 0);
+// 	}
+// 	rl_on_new_line();
+// 	rl_redisplay();
+// }
+
 /* Creates a new pipe, reading part of the part is connected to pipe
 in struct. GNL writes into fd[1] and breaks when the delimiter is found. */
 // int	ft_here_doc(t_vars *ms, char *limiter)
@@ -124,6 +136,8 @@ int	ft_here_doc(t_vars *ms, char *limiter)
 	if (dup2(hdoc_pipe_fd[0], ms->tmp_fd) < 0)
 		perror("dup2 hdoc_fd into tmp_fd: ");
 	close(hdoc_pipe_fd[0]);
+	// signal(SIGINT, signal_handler3);
+	// signal(SIGQUIT, signal_handler3);
 	while (1)
 	{
 		line = readline("heredoc> ");	// line = dollar_expansion();	//für string umschreiben
@@ -132,6 +146,8 @@ int	ft_here_doc(t_vars *ms, char *limiter)
 		write(hdoc_pipe_fd[1], line, ft_strlen(line));
 		free(line);
 	}
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
 	close(hdoc_pipe_fd[1]);
 	free(line);
 	return (0);

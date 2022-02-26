@@ -60,6 +60,15 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_quotes
+{
+	int		i;
+	int		quote_on;
+	int		quote_type;
+	int		quote_2;
+	char	*line;
+}	t_quotes;
+
 typedef struct s_vars
 {
 	t_env	*env;
@@ -137,6 +146,10 @@ char	**ft_split_quotes(char *str);
 int		ft_count_chars(char *str, t_vars *ms);
 int		check_open_closed_quote(char *str, int stop,
 			int *within_quotes, int quote);
+void	handle_dquotes(char *str, int *i, int quote_type, char **line);
+void	handle_squotes(char *str, int *i, int quote_2, char **line);
+void	handle_dsign(t_quotes *qt, char *str);
+int		closed_single_quote_in_double_quote(char *str, int i);
 
 /* redirections */
 void	handle_redirections(char **string, t_vars *ms);
@@ -148,7 +161,6 @@ int		ft_strchr_pos_red(char *s, char c, int i);
 
 /* command execution */
 int		get_paths(t_vars *ms);
-int		check_cmd(t_vars *ms, t_cmd *current);
 int		pipex(t_vars *ms);
 int		ft_builtin_parent(t_cmd *current, t_vars *ms);
 void	execute_builtin(t_vars *ms, t_cmd *current);

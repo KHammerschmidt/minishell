@@ -21,6 +21,20 @@ static char	*search_for_var(t_vars *ms, char *var)
 	return (NULL);
 }
 
+void	no_envar_found(t_vars *ms, char *var)
+{
+	if (ms->line == NULL)
+	{
+		ms->line = ft_strdup("$");
+		ms->line = ft_strjoin(ms->line, var);
+	}
+	else
+	{
+		ms->line = ft_strjoin(ms->line, "$");
+		ms->line = ft_strjoin(ms->line, var);
+	}
+}
+
 static void	add_expanded_var(t_vars *ms, int *i, int *j)
 {
 	char	*tmp;
@@ -29,18 +43,7 @@ static void	add_expanded_var(t_vars *ms, int *i, int *j)
 	var = ft_substr(ms->cmd_line, *j, *i - *j);
 	tmp = search_for_var(ms, var);
 	if (tmp == NULL)
-	{
-		if (ms->line == NULL)
-		{
-			ms->line = ft_strdup("$");
-			ms->line = ft_strjoin(ms->line, var);
-		}
-		else
-		{
-			ms->line = ft_strjoin(ms->line, "$");
-			ms->line = ft_strjoin(ms->line, var);
-		}
-	}
+		no_envar_found(ms, var);
 	else
 	{
 		if (ms->line == NULL)
@@ -86,7 +89,8 @@ void	dollar_expansion(t_vars *ms)
 		if (ms->cmd_line[i] == '$' && quote_type != 39)
 		{
 			replicate_text(ms, &i, &j);
-			while (ft_isalpha(ms->cmd_line[i]) == 1 || ms->cmd_line[i] == '?')
+			while (ft_isspace(ms->cmd_line[i]) == 0 && ms->cmd_line[i] != '\0' \
+				&& ms->cmd_line[i] != 34 && ms->cmd_line[i] != 39)
 				i++;
 			add_expanded_var(ms, &i, &j);
 		}
