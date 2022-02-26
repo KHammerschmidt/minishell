@@ -52,6 +52,7 @@ it in t_info command. It returns NULL as there is no next command. */
 static char	*lexer_parser_smple(t_vars *ms)
 {
 	lexer_parser_redirections(&ms->cmd_line, ms);
+	//dollar sign expandle?
 	ms->info.command = ft_split(ms->cmd_line, ' ');
 	return (NULL);
 }
