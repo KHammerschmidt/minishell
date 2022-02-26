@@ -8,6 +8,7 @@ int	ft_syntax_check(char *str, t_vars *ms)
 	i = 0;
 	if (quote_status(str) == -1)
 	{
+		printf("Syntax error\n");
 		ms->exit_status = 258;
 		return (1);
 	}

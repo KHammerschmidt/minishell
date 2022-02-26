@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 21:48:24 by khammers          #+#    #+#             */
-/*   Updated: 2022/02/26 22:03:59 by khammers         ###   ########.fr       */
+/*   Updated: 2022/02/27 00:07:17 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,11 @@ int	pipex(t_vars *ms)
 	current = ms->cmd;
 	while (current != NULL)
 	{
+		if (ms->flag == -1)
+		{
+			ms->exit_status = 1;
+			return (ms->exit_status);
+		}
 		if (current->next == NULL && current->previous == NULL
 			&& is_builtin(ms, current->command[0]) == 1)
 			return (ft_builtin_parent(current, ms));
