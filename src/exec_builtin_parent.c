@@ -19,14 +19,14 @@ static void	dup2_fd_parent_builtin(int fd_in, int standard)
 /* Duplicates the STDIN/STDOUT fds into temp fds in case of an infile/
 outfile redirection. Executes the builtin and swaps STDIN/STDOUT back
 to its standard value. */
-void	ft_builtin_parent(t_cmd *current, t_vars *ms)
+int	ft_builtin_parent(t_cmd *current, t_vars *ms)
 {
 	int	temp_fd_in;
 	int	temp_fd_out;
 
 	temp_fd_in = dup(STDIN_FILENO);
 	temp_fd_out = dup(STDOUT_FILENO);
-	if (temp_fd_in == -1 || temp_fd_out == -1)
+		if (temp_fd_in == -1 || temp_fd_out == -1)
 		perror("Error: dup standard fd failed\n");
 	else
 	{
@@ -42,4 +42,5 @@ void	ft_builtin_parent(t_cmd *current, t_vars *ms)
 	}
 	close(temp_fd_in);
 	close(temp_fd_out);
+	return (ms->exit_status);
 }

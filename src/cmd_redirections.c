@@ -38,7 +38,7 @@ int	valid_red(char *str, int pos)
 
 /* Searches for redirections signs ('<' & '>') and saves information in t_info.
 Sets the fd for input and output to standard value. */
-void	lexer_parser_redirections(char **string, t_vars *ms)
+int	lexer_parser_redirections(char **string, t_vars *ms)
 {
 	int		red_in;
 	int		red_out;
@@ -50,7 +50,14 @@ void	lexer_parser_redirections(char **string, t_vars *ms)
 	ms->info.input_op = 0;
 	ms->info.output_op = 0;
 	if (red_in != -1)
-		input_redirection(ms, string, red_in);
+	{
+		if (input_redirection(ms, string, red_in) == 1)
+			return (1);
+	}
 	if (red_out != -1)
-		output_redirection(ms, string, red_out);
+	{
+		if (output_redirection(ms, string, red_out) == 1)
+			return (1);
+	}
+	return (0);
 }

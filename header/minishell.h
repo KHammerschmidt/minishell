@@ -135,11 +135,12 @@ void	rl_reset(void);
 
 /* input parsing, command table development */
 int		create_cmd_table(t_vars *ms);
+int		ft_syntax_check(char *str, t_vars *ms);
 void	dollar_expansion(t_vars *ms);
 char	*lexer_parser(t_vars *ms);
 int		quote_status(char *str);
 int		valid_pipe(char *str);
-void	lexer_parser_redirections(char **string, t_vars *ms);
+int		lexer_parser_redirections(char **string, t_vars *ms);
 char	*parser_lexer_pipe(t_vars *ms, int quotes, char *crr, char *nxt);
 char	**ft_split_quotes(char *str);
 int		ft_count_chars(char *str, t_vars *ms);
@@ -151,9 +152,9 @@ void	handle_dsign(t_quotes *qt, char *str);
 int		closed_single_quote_in_double_quote(char *str, int i);
 
 /* redirections */
-void	handle_redirections(char **string, t_vars *ms);
-void	input_redirection(t_vars *ms, char **string, int red_in);
-void	output_redirection(t_vars *ms, char **string, int red_out);
+// void	handle_redirections(char **string, t_vars *ms);
+int		input_redirection(t_vars *ms, char **string, int red_in);
+int		output_redirection(t_vars *ms, char **string, int red_out);
 int		ft_here_doc(t_vars *ms, char *limiter);
 int		valid_red(char *str, int pos);
 int		ft_strchr_pos_red(char *s, char c, int i);
@@ -161,7 +162,7 @@ int		ft_strchr_pos_red(char *s, char c, int i);
 /* command execution */
 int		get_paths(t_vars *ms);
 int		pipex(t_vars *ms);
-void	ft_builtin_parent(t_cmd *current, t_vars *ms);
+int		ft_builtin_parent(t_cmd *current, t_vars *ms);
 void	execute_builtin(t_vars *ms, t_cmd *current);
 void	execute_cmd(t_vars *ms, t_cmd *current);
 

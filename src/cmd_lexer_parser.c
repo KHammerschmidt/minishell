@@ -4,7 +4,12 @@
 // wenn in quotes keine redirection abfangen
 static char	*lexer_parser_quotes(t_vars *ms, char *crr)
 {
-	lexer_parser_redirections(&ms->cmd_line, ms);
+	if (lexer_parser_redirections(&ms->cmd_line, ms) == 1)
+	{
+		ms->info.command = NULL;
+		ft_free_string(&crr);
+		return (NULL);
+	}
 	ms->info.command = ft_split_quotes(ms->cmd_line);
 	ft_free_string(&ms->cmd_line);
 	if (crr == NULL)
@@ -36,7 +41,13 @@ static char	*lexer_parser_pipe(t_vars *ms, char *nxt, char *crr)
 	while (ms->cmd_line[p_index] == ' ' || ms->cmd_line[p_index] == '|')
 		p_index++;
 	nxt = ft_substr(ms->cmd_line, p_index, ft_strlen(ms->cmd_line) - p_index);
-	lexer_parser_redirections(&crr, ms);
+	if (lexer_parser_redirections(&crr, ms) == 1)
+	{
+		ms->info.command = NULL;
+		ft_free_string(&crr);
+		ft_free_string(&nxt);
+		return (NULL);
+	}
 	if (ft_strchr_pos(crr, 34) != -1 || ft_strchr_pos(crr, 39) != -1)
 		return (lexer_parser_quotes_pipe(ms, crr, nxt));
 	else
@@ -51,7 +62,8 @@ static char	*lexer_parser_pipe(t_vars *ms, char *nxt, char *crr)
 it in t_info command. It returns NULL as there is no next command. */
 static char	*lexer_parser_smple(t_vars *ms)
 {
-	lexer_parser_redirections(&ms->cmd_line, ms);
+	if (lexer_parser_redirections(&ms->cmd_line, ms) == 1)
+		ms->info.command = NULL;
 	//dollar sign expandle?
 	ms->info.command = ft_split(ms->cmd_line, ' ');
 	return (NULL);
@@ -70,12 +82,6 @@ char	*lexer_parser(t_vars *ms)
 	crr = NULL;
 	nxt = NULL;
 	p_index = ft_strchr_pos(ms->cmd_line, '|');
-	if (quote_status(ms->cmd_line) == -1)
-	{
-		ms->info.command = NULL;
-		ms->flag = 1;
-		return (NULL);
-	}
 	if (p_index == -1 && quote_status(ms->cmd_line) == 0)
 		return (lexer_parser_smple(ms));
 	if (p_index != -1 && valid_pipe(ms->cmd_line) == 0)
