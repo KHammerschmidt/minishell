@@ -3,8 +3,11 @@ NAME		=	minishell
 
 CC			=	gcc
 CFLAGS		=	-Wall -Werror -Wextra
-L_FLAGS		=	-lreadline -L /goinfre/$(USER)/.brew/opt/readline/lib
-C_FLAG		=	-I /goinfre/$(USER)/.brew/opt/readline/include
+# L_FLAGS		=	-lreadline -L /goinfre/$(USER)/.brew/opt/readline/lib
+# C_FLAG		=	-I /goinfre/$(USER)/.brew/opt/readline/include
+# /Users/katharinahammerschmidt/.brew
+L_FLAGS		=	-lreadline -L //Users/katharinahammerschmidt/.brew/opt/readline/lib
+C_FLAG		=	-I //Users/katharinahammerschmidt/.brew/opt/readline/include
 
 SRC_DIR		=	./src/
 OBJ_DIR		=	./obj/

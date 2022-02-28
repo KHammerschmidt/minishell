@@ -1,0 +1,21 @@
+Process:         minishell [10818]
+Path:            /Users/USER/Documents/*/minishell
+Load Address:    0x10cfa0000
+Identifier:      minishell
+Version:         ???
+Code Type:       X86-64
+Parent Process:  zsh [4959]
+
+Date/Time:       2022-02-28 23:02:31.100 +0100
+Launch Time:     2022-02-28 23:02:24.135 +0100
+OS Version:      macOS 11.5.1 (20G80)
+Report Version:  7
+Analysis Tool:   /usr/bin/leaks
+
+Physical footprint:         696K
+Physical footprint (peak):  696K
+----
+
+leaks Report Version: 4.0
+Process 10818: 496 nodes malloced for 313 KB
+Process 10818: 0 leaks for 0 total leaked bytes.

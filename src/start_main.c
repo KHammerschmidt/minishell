@@ -25,7 +25,7 @@ int	main(__attribute__((unused)) int argc, __attribute__((unused))
 		read_line(&ms);
 		if (compare_str(ms.cmd_line, "") == 0)
 			continue ;
-		if (create_cmd_table(&ms) != 1)
+		if (create_cmd_table(&ms) == 0)
 		{
 			get_paths(&ms);
 			ms.exit_status = pipex(&ms);

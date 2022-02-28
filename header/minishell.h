@@ -35,6 +35,7 @@ typedef struct s_info
 	int				input_op;
 	int				output_op;
 	int				pipe;
+	int				flag;
 	int				fd_in;
 	int				fd_out;
 }	t_info;
@@ -49,6 +50,7 @@ typedef struct s_cmd
 	char			*outfile;
 	int				input_op;
 	int				output_op;
+	int				flag;
 	struct s_cmd	*next;
 	struct s_cmd	*previous;
 }	t_cmd;
