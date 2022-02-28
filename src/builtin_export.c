@@ -74,48 +74,46 @@ static int	insert_variable(t_vars *ms, char *var_name,
 	return (0);
 }
 
-void	free_strings(char **var_name, char **var_val)
+static int	export_loop(t_vars *ms, t_cmd *current, int *k)
 {
-	ft_free_string(var_name);
-	ft_free_string(var_val);
+	char	*var_name;
+	char	*var_val;
+	int		i;
+
+	var_name = NULL;
+	var_val = NULL;
+	i = 0;
+	if (validate_arg(current->command[*k], &i) == 1)
+	{
+		(*k)++;
+		return (0);
+	}
+	if (create_variable(&var_name, &var_val, current->command[*k], i) == 1)
+		return (1);
+	if (insert_variable(ms, var_name, var_val, current->command[*k]) == 1)
+		return (1);
+	ft_free_string(&var_name);
+	ft_free_string(&var_val);
+	(*k)++;
+	return (0);
 }
-
-// int	declare_x(t_vars *ms, t_cmd *current)
-// {
-
-// }
 
 /* Looks for var_name in envar list. If found, changes var_value or, if not */
 /* found, creates new node with respective name and content.                */
 int	builtin_export(t_vars *ms, t_cmd *current)
 {
-	char	*var_name;
-	char	*var_val;
-	int		i;
 	int		k;
 
 	k = 1;
-	// if (current->command[k] == NULL)
-	// {
-	// 	declare_x(ms, current);
-	// 	return (0);
-	// }
+	if (current->command[k] == NULL)
+	{
+		declare_x(ms, current);
+		return (0);
+	}
 	while (current->command[k] != NULL)
 	{
-		var_name = NULL;
-		var_val = NULL;
-		i = 0;
-		if (validate_arg(current->command[k], &i) == 1)
-		{
-			k++;
-			continue ;
-		}
-		if (create_variable(&var_name, &var_val, current->command[k], i) == 1)
+		if (export_loop(ms, current, &k) == 1)
 			return (1);
-		if (insert_variable(ms, var_name, var_val, current->command[k]) == 1)
-			return (1);
-		free_strings(&var_name, &var_val);
-		k++;
 	}
 	update_envp_array(ms);
 	return (0);
