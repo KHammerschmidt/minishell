@@ -16,7 +16,6 @@ static int	infile_fd(t_vars *ms)
 			ft_putendl_fd((ms->info.infile), 2);
 		}
 		ms->exit_status = 1;
-		ms->flag = -1;
 		return (1);
 	}
 	else
@@ -27,7 +26,6 @@ static int	infile_fd(t_vars *ms)
 			ft_putstr_fd("Error: permission denied: ", 2);
 			ft_putendl_fd((ms->info.infile), 2);
 			ms->exit_status = 1;
-			ms->flag = -1;
 			return (1);
 		}
 	}
@@ -49,11 +47,16 @@ static void	cut_infile_red(char **string, int fd_in)		//spaces!!!!
 	}
 	while ((*string)[i] == '<')
 		i++;
-	while ((*string)[i] == ' ' && (*string)[i] != '<' && (*string)[i] != '\0')
+	while ((*string)[i] == ' ')
 		i++;
-	i++;
 	while ((*string)[i] != ' ' && (*string)[i] != '<' && (*string)[i] != '\0')
 		i++;
+
+	// while ((*string)[i] == ' ' && (*string)[i] != '<' && (*string)[i] != '\0')
+	// 	i++;
+	// i++;
+	// while ((*string)[i] != ' ' && (*string)[i] != '<' && (*string)[i] != '\0')
+	// 	i++;
 	while ((*string)[i] == ' ' && (*string)[i] != '\0')
 		i++;
 	while ((*string)[i] != '\0')

@@ -43,17 +43,17 @@ int	lexer_parser_redirections(char **string, t_vars *ms)
 	int		red_in;
 	int		red_out;
 
-	red_in = ft_strchr_pos(*string, '<');
-	red_out = ft_strchr_pos(*string, '>');
 	ms->info.fd_in = STDIN_FILENO;
 	ms->info.fd_out = STDOUT_FILENO;
 	ms->info.input_op = 0;
 	ms->info.output_op = 0;
+	red_in = ft_strchr_pos(*string, '<');
 	if (red_in != -1)
 	{
 		if (input_redirection(ms, string, red_in) == 1)
 			return (1);
 	}
+	red_out = ft_strchr_pos(*string, '>');
 	if (red_out != -1)
 	{
 		if (output_redirection(ms, string, red_out) == 1)

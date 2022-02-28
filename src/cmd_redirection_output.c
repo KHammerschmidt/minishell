@@ -3,11 +3,15 @@
 int	outfile_fd(t_vars *ms)
 {
 	if (ms->info.fd_out != STDOUT_FILENO)
+	{
 		close(ms->info.fd_out);
+		ms->info.fd_out = STDOUT_FILENO;
+	}
 	if (ms->info.output_op == -1)
 	{
-		ms->info.fd_out = open(ms->info.outfile,
+		ms->info.fd_out = open(ms->info.outfile, 
 				O_RDWR | O_CREAT | O_TRUNC, 0644);
+
 	}
 	if (ms->info.output_op == -2)
 	{
@@ -19,9 +23,11 @@ int	outfile_fd(t_vars *ms)
 	if (ms->info.fd_out == -1 || access(ms->info.outfile, W_OK) != 0)
 	{
 		ft_putstr_fd("Error: permission denied: ", 2);
+		// printf("HERE\n");
 		ft_putendl_fd((ms->info.outfile), 2);
 		ms->exit_status = 1;
-		ms->flag = -1;
+		ms->info.fd_out = STDOUT_FILENO;
+		ms->info.flag = -1;
 		return (1);
 	}
 	return (0);
@@ -40,22 +46,12 @@ void	cut_outfile_red(char **string, int fd_out)
 		tmp = ft_strnjoin(tmp, (*string)[i], 1);
 		i++;
 	}
-	printf("1..%c..\n", (*string)[i]);
 	while ((*string)[i] == '>')
 		i++;
-	while ((*string)[i] != '\0' && (*string)[i] != '>' && (*string)[i] != ' ')
+	while ((*string)[i] == ' ')
 		i++;
-
-	// while ((*string)[i] == ' ' && (*string)[i] != '>' && (*string)[i] != '\0')
-	// 	i++;
-	// printf("2..%c..\n", (*string)[i]);
-	// i++;
-	// while ((*string)[i] != ' ' && (*string)[i] != '>' && (*string)[i] != '\0')
-	// 	i++;
-	printf("3..%c..\n", (*string)[i]);
-	// while ((*string)[i] == ' ' && (*string)[i] != '\0')
-	// 	i++;
-	printf("4..%c..\n", (*string)[i]);
+	while ((*string)[i] != ' ' && (*string)[i] != '>' && (*string)[i] != '\0')
+		i++;
 	while ((*string)[i] != '\0')
 		tmp = ft_strnjoin(tmp, (*string)[i++], 1);
 	ft_free_string(string);
@@ -73,7 +69,7 @@ void	expansion_outfile_red(char **string, t_vars *ms, int j)
 	while (((*string)[j] == '>' || (*string)[j] == ' ') && (*string)[j] != '\0')
 		j++;
 	k = j;
-	while ((*string)[k] != ' ' && (*string)[k] != '\0')
+	while ((*string)[k] != ' ' && (*string)[k] != '>' && (*string)[k] != '\0')
 		k++;
 	tmp = ft_substr((*string), j, k - j);
 	ft_free_string(&ms->info.outfile);

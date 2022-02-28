@@ -42,7 +42,6 @@ char	*cut_empty_quotes(t_vars *ms)
 	return (temp);
 }
 
-
 /* Creates the simple command table, e.g. the char **command of struct t_cmd. */
 int	create_cmd_table(t_vars *ms)
 {
