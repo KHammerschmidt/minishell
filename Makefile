@@ -19,6 +19,7 @@ SRC_LIST	=	builtin_cd.c				\
 				builtin_env.c				\
 				builtin_exit.c				\
 				builtin_export.c			\
+				builtin_export_abc.c		\
 				builtin_init.c 				\
 				builtin_pwd.c				\
 				builtin_unset.c				\

@@ -112,6 +112,7 @@ int		builtin_echo(t_vars *ms, t_cmd *current);
 int		builtin_env(t_vars *ms, t_cmd *current);
 int		builtin_exit(t_vars *ms, t_cmd *current);
 int		builtin_export(t_vars *ms, t_cmd *current);
+void	declare_x(t_vars *ms, t_cmd *current);
 int		builtin_pwd(t_vars *ms, t_cmd *current);
 int		builtin_unset(t_vars *ms, t_cmd *current);
 int		is_builtin(t_vars *ms, char *cmd);

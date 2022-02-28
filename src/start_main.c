@@ -31,7 +31,7 @@ int	main(__attribute__((unused)) int argc, __attribute__((unused))
 			ms.exit_status = pipex(&ms);
 		}
 		reset(&ms);
-		system("leaks minishell > OUTFILE");
+		// system("leaks minishell > OUTFILE");
 	}
 	last_free(&ms, 0);
 	close(ms.tmp_fd);
