@@ -23,7 +23,6 @@ int	outfile_fd(t_vars *ms)
 	if (ms->info.fd_out == -1 || access(ms->info.outfile, W_OK) != 0)
 	{
 		ft_putstr_fd("Error: permission denied: ", 2);
-		// printf("HERE\n");
 		ft_putendl_fd((ms->info.outfile), 2);
 		ms->exit_status = 1;
 		ms->info.fd_out = STDOUT_FILENO;

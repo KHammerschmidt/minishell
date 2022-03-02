@@ -13,7 +13,6 @@ int	read_line(t_vars *ms)
 		ms->cmd_line = readline(prompt);
 	else
 		ms->cmd_line = readline("minishell ॐ  ");
-	// ms->cmd_line = ft_strdup("echo \" \"");
 	rl_reset();
 	if (ms->cmd_line == NULL)
 		last_free(ms, 1);

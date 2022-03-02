@@ -46,7 +46,7 @@ static void	set_quote_index(char *str, int *i, int *quote_type, int *quote_on)
 }
 
 /* Cuts the quotes out of the string. */
-static char	*cut_quotes(char *str)
+char	*cut_quotes(char *str)
 {
 	int		i;
 	int		quote_on;

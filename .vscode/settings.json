@@ -4,6 +4,7 @@
 		"chrono": "c",
 		"__node_handle": "c",
 		"string": "c",
-		"iosfwd": "c"
+		"iosfwd": "c",
+		"sstream": "c"
 	}
 }
