@@ -10,6 +10,10 @@ C_FLAG		=	-I /goinfre/$(USER)/.brew/opt/readline/include
 # L_FLAGS		=	-lreadline -L //Users/katharinahammerschmidt/.brew/opt/readline/lib
 # C_FLAG		=	-I //Users/katharinahammerschmidt/.brew/opt/readline/include
 
+# Mio's brew Ordner <3
+# L_FLAGS			= -L/usr/local/opt/readline/lib -lreadline
+# C_FLAG			= -I/usr/local/opt/readline/include
+
 SRC_DIR		=	./src/
 OBJ_DIR		=	./obj/
 BONUS_DIR	=	./src/bonus/

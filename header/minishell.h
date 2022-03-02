@@ -133,7 +133,7 @@ char	*create_prompt(t_vars *ms);
 
 /* signal handling */
 void	signal_handler(int signum);
-void	rl_init(void);
+void	rl_init(int i);
 void	rl_reset(void);
 
 /* input parsing, command table development */

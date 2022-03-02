@@ -56,24 +56,29 @@ int	ft_here_doc(t_vars *ms, char *limiter)
 {
 	int		dollar_flag;
 	int		hdoc_pipe_fd[2];
+	int		fd;
 	char	*line;
 
 	line = NULL;
 	dollar_flag = 0;
+	hdoc_pipe_fd[0] = 0;						// Mio: Diese drei Zeilen braucht's wahrtscheinlich nicht. Habe ich hinzugefügt zum Testen.
+	hdoc_pipe_fd[1] = 0;						// Mio: so. o.
+	fd = 0;										// Mio: so. o.
+	fd = dup(STDIN_FILENO);
 	if (prepare_hdoc_expansion(ms, &dollar_flag, &limiter) == -1)
 		return (-1);
-	if (ms->tmp_fd != STDIN_FILENO)
-	{
-		close(ms->tmp_fd);
-		ms->tmp_fd = dup(STDIN_FILENO);
-	}
+	// if (ms->tmp_fd != STDIN_FILENO)			// Mio: Glaub, das brauchen wir gar nicht - falls du Zeilen sparen willst. Dafür den Einzeiler unten.
+	// {
+	// 	close(ms->tmp_fd);
+	// 	ms->tmp_fd = dup(STDIN_FILENO);
+	// }
+	ms->tmp_fd = dup(STDIN_FILENO);				// Mio: s. o.
 	if (pipe(hdoc_pipe_fd) == -1)
 		printf("PIPE ERROR\n");
 	if (dup2(hdoc_pipe_fd[0], ms->tmp_fd) < 0)
 		perror("dup2 hdoc_fd into tmp_fd: ");
 	close(hdoc_pipe_fd[0]);
-	// signal(SIGINT, signal_handler3);
-	// signal(SIGQUIT, signal_handler3);
+	rl_init(1);
 	while (1)
 	{
 		line = readline("heredoc> ");
@@ -85,9 +90,9 @@ int	ft_here_doc(t_vars *ms, char *limiter)
 		write(hdoc_pipe_fd[1], "\n", 1);
 		free(line);
 	}
-	// signal(SIGINT, SIG_DFL);
-	// signal(SIGQUIT, SIG_DFL);
+	rl_reset();
 	close(hdoc_pipe_fd[1]);
+	dup2(fd, STDIN_FILENO);
 	free(line);
 	return (0);
 }
