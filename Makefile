@@ -3,11 +3,12 @@ NAME		=	minishell
 
 CC			=	gcc
 CFLAGS		=	-Wall -Werror -Wextra
-# L_FLAGS		=	-lreadline -L /goinfre/$(USER)/.brew/opt/readline/lib
-# C_FLAG		=	-I /goinfre/$(USER)/.brew/opt/readline/include
-# /Users/katharinahammerschmidt/.brew
-L_FLAGS		=	-lreadline -L //Users/katharinahammerschmidt/.brew/opt/readline/lib
-C_FLAG		=	-I //Users/katharinahammerschmidt/.brew/opt/readline/include
+L_FLAGS		=	-lreadline -L /goinfre/$(USER)/.brew/opt/readline/lib
+C_FLAG		=	-I /goinfre/$(USER)/.brew/opt/readline/include
+
+# //Kathi's brew Ordner <3
+# L_FLAGS		=	-lreadline -L //Users/katharinahammerschmidt/.brew/opt/readline/lib
+# C_FLAG		=	-I //Users/katharinahammerschmidt/.brew/opt/readline/include
 
 SRC_DIR		=	./src/
 OBJ_DIR		=	./obj/
@@ -27,6 +28,7 @@ SRC_LIST	=	builtin_cd.c				\
 				cmd_dollar_expansion.c		\
 				cmd_dollar_expand_utils.c	\
 				cmd_get_paths.c				\
+				cmd_hdoc_dollar_expansion.c	\
 				cmd_info.c					\
 				cmd_lexer_parser.c			\
 				cmd_lst_utils.c				\

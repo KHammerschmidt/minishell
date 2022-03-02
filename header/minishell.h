@@ -153,6 +153,8 @@ void	handle_dquotes(char *str, int *i, int quote_type, char **line);
 void	handle_squotes(char *str, int *i, int quote_2, char **line);
 void	handle_dsign(t_quotes *qt, char *str);
 int		closed_single_quote_in_double_quote(char *str, int i);
+char	*cut_quotes(char *str);
+char	*hdoc_dollar_expansion(t_vars *ms, char *line);
 
 /* redirections */
 // void	handle_redirections(char **string, t_vars *ms);

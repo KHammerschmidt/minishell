@@ -5,27 +5,22 @@ files are checked before it is opend and the fd is saved. */
 static int	infile_fd(t_vars *ms)
 {
 	if (ms->info.fd_in != STDIN_FILENO)
-		close(ms->info.fd_in);
+		close(ms->info.fd_in);			//muss ich das hier == STDIN setzen?
 	if (access(ms->info.infile, F_OK) != 0)
 	{
-		if (access((ms->info.infile), R_OK) != 0)
-			perror("Error");
-		else
-		{
-			ft_putstr_fd("zsh: No such file or directory: ", 2);
-			ft_putendl_fd((ms->info.infile), 2);
-		}
-		ms->exit_status = 1;
+		ft_putstr_fd("zsh: No such file or directory: ", 2);
+		ft_putendl_fd((ms->info.infile), 2);
+		ms->info.flag = -1;
 		return (1);
 	}
 	else
 	{
 		ms->info.fd_in = open((ms->info.infile), O_RDONLY);
-		if (ms->info.fd_in == -1)
+		if (ms->info.fd_in == -1 || access((ms->info.infile), R_OK) != 0)
 		{
 			ft_putstr_fd("Error: permission denied: ", 2);
 			ft_putendl_fd((ms->info.infile), 2);
-			ms->exit_status = 1;
+			ms->info.flag = -1;
 			return (1);
 		}
 	}
@@ -51,12 +46,6 @@ static void	cut_infile_red(char **string, int fd_in)		//spaces!!!!
 		i++;
 	while ((*string)[i] != ' ' && (*string)[i] != '<' && (*string)[i] != '\0')
 		i++;
-
-	// while ((*string)[i] == ' ' && (*string)[i] != '<' && (*string)[i] != '\0')
-	// 	i++;
-	// i++;
-	// while ((*string)[i] != ' ' && (*string)[i] != '<' && (*string)[i] != '\0')
-	// 	i++;
 	while ((*string)[i] == ' ' && (*string)[i] != '\0')
 		i++;
 	while ((*string)[i] != '\0')
@@ -64,6 +53,23 @@ static void	cut_infile_red(char **string, int fd_in)		//spaces!!!!
 	ft_free_string(string);
 	*string = ft_strdup(tmp);
 	ft_free_string(&tmp);
+}
+
+/* Either receives input via here_doc or redirects the fds in case
+of infile redirection. */
+int	redirect_input(t_vars *ms)
+{
+	if (ms->info.input_op == -2)
+	{
+		if (ft_here_doc(ms, ms->info.infile) != 0)
+			return (1);
+	}
+	else if (ms->info.input_op == -1)
+	{
+		if (infile_fd(ms) == 1)
+			return (1);
+	}
+	return (0);
 }
 
 /* Saves the infile in the t_info struct. */
@@ -100,13 +106,8 @@ int	input_redirection(t_vars *ms, char **string, int red_in)
 		}
 		expansion_infile_red(string, ms, red_in);
 		cut_infile_red(string, red_in);
-		if (ms->info.input_op == -2)
-			ft_here_doc(ms, ms->info.infile);
-		else if (ms->info.input_op == -1)
-		{
-			if (infile_fd(ms) == 1)
-				return (1);
-		}
+		if (redirect_input(ms) != 0)
+			return (1);
 		red_in = ft_strchr_pos(&(*string)[red_in], '<');
 	}
 	return (0);

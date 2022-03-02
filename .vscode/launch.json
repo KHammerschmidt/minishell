@@ -8,7 +8,7 @@
 			"name": "(lldb) Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "/Users/khammers/Documents/42/minishell/minishell",
+			"program": "/Users/katharinahammerschmidt/Documents/42/minishell/minishell",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${fileDirname}",
