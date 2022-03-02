@@ -36,12 +36,16 @@ char	*hdoc_dollar_expansion(t_vars *ms, char *line)
 	i = 0;
 	j = 0;
 	envar = NULL;
-	cpy = NULL;
+	cpy = ft_strdup("");
 	while (line[i] != '\0')
 	{
+		j = i;
 		while (line[i] != '$' && line[i] != '\0')
 			i++;
-		cpy = ft_substr(line, j, i);
+		if (line[i] == '\0' && cpy == NULL)
+			cpy = ft_strdup(line);
+		else if (cpy != NULL)
+			cpy = ft_strjoin(cpy, ft_substr(line, j, i));
 		if (line[i] == '$')
 		{
 			i++;
@@ -54,14 +58,8 @@ char	*hdoc_dollar_expansion(t_vars *ms, char *line)
 			{
 				j = ft_strlen(envar);
 				cpy = ft_strjoin(cpy, envar);
-				while (j-- != 0)
-					i++;
 			}
-			else
-			{
-				while (line[i] != ' ' && line[i] != '$' && line[i] != '\0')
-					i++;
-			}
+			i = i + j;
 		}
 	}
 	return (cpy);
