@@ -8,7 +8,7 @@ int	read_line(t_vars *ms)
 	prompt = create_prompt(ms);
 	if (ms->cmd_line)
 		ft_free_string(&ms->cmd_line);
-	rl_init();
+	rl_init(0);
 	if (prompt)
 		ms->cmd_line = readline(prompt);
 	else
