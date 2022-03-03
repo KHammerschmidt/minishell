@@ -6,7 +6,7 @@
 /*   By: katharinahammerschmidt <katharinahammer    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 21:48:24 by khammers          #+#    #+#             */
-/*   Updated: 2022/02/28 19:52:15 by katharinaha      ###   ########.fr       */
+/*   Updated: 2022/03/03 17:15:30 by katharinaha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,11 @@ int	pipex(t_vars *ms)
 	current = ms->cmd;
 	while (current != NULL)
 	{
+		// if (current->command == NULL)		//Kathi: damit kein segfault mehr bei '<< eof' aber er printed die Zeilen,
+		// {									//Kathi: Frage was soll passieren wenn command == NULL?
+		// 	current = current->next;
+		// 	continue;
+		// }
 		if (current->flag == -1)
 		{
 			ms->exit_status = 1;
@@ -146,7 +151,7 @@ int	pipex(t_vars *ms)
 			ft_processes(ms, current, &pid);
 		current = current->next;
 	}
-	while (ft_waiting(&pid, &save) == -1)		//geht das so?? :D 
+	while (ft_waiting(&pid, &save) == -1)		//Kathi: geht das so?? :D 
 		ms->exit_status = save;
 	ms->exit_status = save;	
 	return (WEXITSTATUS(ms->exit_status));
