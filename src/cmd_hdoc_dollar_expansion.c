@@ -32,34 +32,35 @@ char	*hdoc_dollar_expansion(t_vars *ms, char *line)
 	int		j;
 	char	*cpy;
 	char	*envar;
+	char	*expansion;
 
 	i = 0;
 	j = 0;
+	cpy = NULL;
 	envar = NULL;
-	cpy = ft_strdup("");
+	expansion = NULL;
 	while (line[i] != '\0')
 	{
 		j = i;
 		while (line[i] != '$' && line[i] != '\0')
 			i++;
-		if (line[i] == '\0' && cpy == NULL)
-			cpy = ft_strdup(line);
-		else if (cpy != NULL)
-			cpy = ft_strjoin(cpy, ft_substr(line, j, i));
-		if (line[i] == '$')
+		if (cpy == NULL)
+			cpy = ft_substr(line, j, i);					//copy for the first time part of string that is before $ sign
+		else if (line[i] != '$' || (j + 1)< i)
+			cpy = ft_strjoin(cpy, ft_substr(line, j, i));	//when there is no dollar sign append the rest of the string
+		else if (line[i] == '$')							//when there is a dollar sign!
 		{
 			i++;
 			j = i;
 			while (line[i] != '\0' && line[i] != ' ' && line[i] != '$')
 				i++;
-			envar = ft_substr(line, j, i - j);
-			envar = search_for_var(ms, envar);
+			expansion = ft_substr(line, j, i - j);
+			envar = search_for_var(ms, expansion);
 			if (envar != NULL)
 			{
-				j = ft_strlen(envar);
 				cpy = ft_strjoin(cpy, envar);
+				ft_free_string(&envar);
 			}
-			i = i + j;
 		}
 	}
 	return (cpy);
