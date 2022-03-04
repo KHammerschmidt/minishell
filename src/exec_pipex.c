@@ -6,7 +6,7 @@
 /*   By: katharinahammerschmidt <katharinahammer    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 21:48:24 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/03 17:15:30 by katharinaha      ###   ########.fr       */
+/*   Updated: 2022/03/04 14:51:19 by katharinaha      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,13 @@ int	builtin_check(t_vars *ms, t_cmd *current)
 	return (1);
 }
 
+		// {									//Kathi: Frage was soll passieren wenn command == NULL?
+		// 	if (current->next == NULL)
+		// 		return (0);
+		// 	else
+		// 		current = current->next;
+		// 	continue;
+
 
 /* Checks if input is only a builtin, if yes executes the builtin in the parent
 otherwise calls ft_proceses() to introduce child and parent process. Waiting
@@ -134,12 +141,9 @@ int	pipex(t_vars *ms)
 	current = ms->cmd;
 	while (current != NULL)
 	{
-		// if (current->command == NULL)		//Kathi: damit kein segfault mehr bei '<< eof' aber er printed die Zeilen,
-		// {									//Kathi: Frage was soll passieren wenn command == NULL?
-		// 	current = current->next;
-		// 	continue;
-		// }
-		if (current->flag == -1)
+		if (current->command == NULL && current->next == NULL)
+			return (0);
+		else if (current->flag == -1)
 		{
 			ms->exit_status = 1;
 			if (current->next == NULL)
@@ -151,7 +155,7 @@ int	pipex(t_vars *ms)
 			ft_processes(ms, current, &pid);
 		current = current->next;
 	}
-	while (ft_waiting(&pid, &save) == -1)		//Kathi: geht das so?? :D 
+	while (ft_waiting(&pid, &save) == -1)
 		ms->exit_status = save;
 	ms->exit_status = save;	
 	return (WEXITSTATUS(ms->exit_status));

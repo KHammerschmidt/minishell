@@ -47,12 +47,15 @@ void	check_and_append(t_vars *ms, char **cpy, char *line, int *i)
 }
 
 /* Looks for $-signs and expands if variable is found in envar list. */
-char	*hdoc_dollar_expansion(t_vars *ms, char *line)
+char	*hdoc_dollar_expansion(t_vars *ms, char *line, int dollar_flag)
 {
 	int		i;
 	char	*cpy;
 
 	i = 0;
+	cpy = NULL;
+	if (dollar_flag != 0 || ft_strchr_pos(line, '$') == -1)
+		return (line);
 	cpy = ft_strdup("");
 	while (line[i] != '\0')
 	{		
@@ -70,44 +73,3 @@ char	*hdoc_dollar_expansion(t_vars *ms, char *line)
 	ft_free_string(&line);
 	return (cpy);
 }
-
-// OLD
-// char	*hdoc_dollar_expansion(t_vars *ms, char *line)
-// {
-// 	int		i;
-// 	int		j;
-// 	char	*cpy;
-// 	char	*envar;
-// 	char	*expansion;
-
-// 	i = 0;
-// 	j = 0;
-// 	cpy = NULL;
-// 	envar = NULL;
-// 	expansion = NULL;
-// 	while (line[i] != '\0')
-// 	{		
-// 		j = i;
-// 		while (line[i] != '$' && line[i] != '\0')
-// 			i++;
-// 		if (cpy == NULL)
-// 			cpy = ft_substr(line, j, i);					//copy for the first time part of string that is before $ sign
-// 		else if (line[i] != '$' || (j + 1)< i)
-// 			cpy = ft_strjoin(cpy, ft_substr(line, j, i));	//when there is no dollar sign append the rest of the string
-// 		else if (line[i] == '$')							//when there is a dollar sign!
-// 		{
-// 			i++;
-// 			j = i;
-// 			while (line[i] != '\0' && line[i] != ' ' && line[i] != '$')
-// 				i++;
-// 			expansion = ft_substr(line, j, i - j);
-// 			envar = search_for_var(ms, expansion);
-// 			if (envar != NULL)
-// 			{
-// 				cpy = ft_strjoin(cpy, envar);
-// 				ft_free_string(&envar);
-// 			}
-// 		}
-// 	}
-// 	return (cpy);
-// }

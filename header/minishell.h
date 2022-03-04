@@ -154,10 +154,9 @@ void	handle_squotes(char *str, int *i, int quote_2, char **line);
 void	handle_dsign(t_quotes *qt, char *str);
 int		closed_single_quote_in_double_quote(char *str, int i);
 char	*cut_quotes(char *str);
-char	*hdoc_dollar_expansion(t_vars *ms, char *line);
+char	*hdoc_dollar_expansion(t_vars *ms, char *line, int dollar_flag);
 
 /* redirections */
-// void	handle_redirections(char **string, t_vars *ms);
 int		input_redirection(t_vars *ms, char **string, int red_in);
 int		output_redirection(t_vars *ms, char **string, int red_out);
 int		ft_here_doc(t_vars *ms, char *limiter);
