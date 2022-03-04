@@ -51,6 +51,38 @@ int	prepare_hdoc_expansion(t_vars *ms, int *dollar_flag, char **limiter)
 	return (0);
 }
 
+/* Sets the right fds for redirection and opens the pipe. */
+static int	hdoc_hdle_pipe_fds_init(t_vars *ms, int *hdoc_pipe_fd)
+{
+	ms->tmp_fd = dup(STDIN_FILENO);
+	if (pipe(hdoc_pipe_fd) == -1)
+	{
+		printf("PIPE ERROR\n");
+		return (-1);
+	}
+	if (dup2(hdoc_pipe_fd[0], ms->tmp_fd) < 0)
+	{
+		perror("dup2 hdoc_fd into tmp_fd: ");
+		return (-1);
+	}
+	close(hdoc_pipe_fd[0]);
+	return (0);
+}
+
+static void	hdoc_hdle_pipe_fds_end(int *hdoc_pipe_fd, int fd, char **line)
+{
+	close(hdoc_pipe_fd[1]);
+	dup2(fd, STDIN_FILENO);
+	ft_free_string(line);	
+}
+
+static void	sending_input_and_reset(char **line, int *hdoc_pipe_fd)
+{
+	write(hdoc_pipe_fd[1], *line, ft_strlen(*line));
+	write(hdoc_pipe_fd[1], "\n", 1);
+	ft_free_string(line);
+}
+
 /* Reads with readline() into a pipe until delimiter, which becomes STDIN. */
 int	ft_here_doc(t_vars *ms, char *limiter)
 {
@@ -61,38 +93,22 @@ int	ft_here_doc(t_vars *ms, char *limiter)
 
 	line = NULL;
 	dollar_flag = 0;
-	hdoc_pipe_fd[0] = 0;						// Mio: Diese drei Zeilen braucht's wahrtscheinlich nicht. Habe ich hinzugefügt zum Testen.
-	hdoc_pipe_fd[1] = 0;						// Mio: so. o.
-	fd = 0;										// Mio: so. o.
+	hdoc_pipe_fd[0] = 0;
+	hdoc_pipe_fd[1] = 0;
 	fd = dup(STDIN_FILENO);
-	if (prepare_hdoc_expansion(ms, &dollar_flag, &limiter) == -1)
+	if (prepare_hdoc_expansion(ms, &dollar_flag, &limiter) == -1
+		|| hdoc_hdle_pipe_fds_init(ms, hdoc_pipe_fd) == -1)
 		return (-1);
-	// if (ms->tmp_fd != STDIN_FILENO)			// Mio: Glaub, das brauchen wir gar nicht - falls du Zeilen sparen willst. Dafür den Einzeiler unten.
-	// {
-	// 	close(ms->tmp_fd);
-	// 	ms->tmp_fd = dup(STDIN_FILENO);
-	// }
-	ms->tmp_fd = dup(STDIN_FILENO);				// Mio: s. o.
-	if (pipe(hdoc_pipe_fd) == -1)
-		printf("PIPE ERROR\n");
-	if (dup2(hdoc_pipe_fd[0], ms->tmp_fd) < 0)
-		perror("dup2 hdoc_fd into tmp_fd: ");
-	close(hdoc_pipe_fd[0]);
 	rl_init(1);
 	while (1)
 	{
 		line = readline("heredoc> ");
-		if (dollar_flag == 0 && ft_strchr_pos(line, '$') != -1)
-			line = hdoc_dollar_expansion(ms, line);
+		line = hdoc_dollar_expansion(ms, line, dollar_flag);
 		if (line == NULL || ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
 			break ;
-		write(hdoc_pipe_fd[1], line, ft_strlen(line));
-		write(hdoc_pipe_fd[1], "\n", 1);
-		free(line);
+		sending_input_and_reset(&line, hdoc_pipe_fd);
 	}
 	rl_reset();
-	close(hdoc_pipe_fd[1]);
-	dup2(fd, STDIN_FILENO);
-	free(line);
+	hdoc_hdle_pipe_fds_end(hdoc_pipe_fd, fd, &line);
 	return (0);
 }
