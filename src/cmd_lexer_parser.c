@@ -5,12 +5,6 @@
 static char	*lexer_parser_quotes(t_vars *ms, char *crr)
 {
 	lexer_parser_redirections(&ms->cmd_line, ms);
-	// if (lexer_parser_redirections(&ms->cmd_line, ms) == 1)
-	// {
-		// ms->info.flag = -1;
-		// ft_free_string(&crr);
-		// return (NULL);
-	// }
 	ms->info.command = ft_split_quotes(ms->cmd_line);
 	ft_free_string(&ms->cmd_line);
 	if (crr == NULL)
@@ -43,13 +37,6 @@ static char	*lexer_parser_pipe(t_vars *ms, char *nxt, char *crr)
 		p_index++;
 	nxt = ft_substr(ms->cmd_line, p_index, ft_strlen(ms->cmd_line) - p_index);
 	lexer_parser_redirections(&crr, ms);
-	// if (lexer_parser_redirections(&crr, ms) == 1)
-	// {
-	// 	ms->info.flag = -1;
-	// 	ft_free_string(&crr);
-	// 	// ft_free_string(&nxt);
-	// 	return (nxt);
-	// }
 	if (ft_strchr_pos(crr, 34) != -1 || ft_strchr_pos(crr, 39) != -1)
 		return (lexer_parser_quotes_pipe(ms, crr, nxt));
 	else
@@ -65,8 +52,6 @@ it in t_info command. It returns NULL as there is no next command. */
 static char	*lexer_parser_smple(t_vars *ms)
 {
 	lexer_parser_redirections(&ms->cmd_line, ms);
-	// if (lexer_parser_redirections(&ms->cmd_line, ms) == 1)
-	// 	ms->info.flag = -1;
 	ms->info.command = ft_split(ms->cmd_line, ' ');
 	return (NULL);
 }

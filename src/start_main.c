@@ -28,10 +28,9 @@ int	main(__attribute__((unused)) int argc, __attribute__((unused))
 		if (create_cmd_table(&ms) == 0)
 		{
 			get_paths(&ms);
-			ms.exit_status = pipex(&ms);
+			ms.exit_status = execution_process_loop(&ms);
 		}
 		reset(&ms);
-		// system("leaks minishell > OUTFILE");
 	}
 	last_free(&ms, 0);
 	close(ms.tmp_fd);

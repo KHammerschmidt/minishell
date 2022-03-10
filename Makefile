@@ -1,8 +1,9 @@
 NAME		=	minishell
-# BONUS		=	minishell_bonus
 
 CC			=	gcc
 CFLAGS		=	-Wall -Werror -Wextra
+
+# Flags when readline is in goinfre installed
 # L_FLAGS		=	-lreadline -L /goinfre/$(USER)/.brew/opt/readline/lib
 # C_FLAG		=	-I /goinfre/$(USER)/.brew/opt/readline/include
 
@@ -52,9 +53,11 @@ SRC_LIST	=	builtin_cd.c				\
 				env_lst_utils.c				\
 				exec_builtin_parent.c		\
 				exec_builtin.c				\
+				exec_check_cmd_table.c		\
 				exec_cmd.c					\
-				exec_here_doc.c				\
-				exec_pipex.c				\
+				exec_here_doc_1.c			\
+				exec_here_doc_2.c			\
+				exec_processes.c			\
 				signals.c					\
 				start_create_prompt.c		\
 				start_main.c				\
@@ -63,15 +66,10 @@ SRC_LIST	=	builtin_cd.c				\
 				utils_reset.c				\
 				utils_str_mngt.c
 
-# BONUS_LIST	=	minishell_bonus.c
-
 SRC			=	$(addprefix $(SRC_DIR), $(SRC_LIST))
 OBJ			=	$(addprefix $(OBJ_DIR), $(patsubst %.c, %.o, $(SRC_LIST)))
-# BONUS_SRC	=	$(addprefix $(BONUS_DIR), $(BONUS_LIST))
-# BONUS_OBJ	=	$(addprefix $(BONUS_ODIR), $(patsubst %.c, %.o, $(BONUS_LIST)))
 
 INCLUDES	=	./header/minishell.h
-# B_INCLUDES	=	./header/minishell_bonus.h
 
 LIBFT		=	./lib/libft/
 
@@ -103,20 +101,6 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@$(CC) $(CFLAGS) $(C_FLAG) $^ -c -o $@
 	@echo "$(GREEN)>$(NC)\c"
 
-# bonus: $(BONUS_ODIR) $(BONUS_OBJ) $(LIBFT) $(B_INCLUDES)
-# 	@make -C $(LIBFT)
-# 	@$(CC) $(CFLAGS) $(BONUS_OBJ) $(LIBFT)/libft.a -o $(BONUS)
-# 	@echo "$(GREEN)creating: $(BONUS)$(NC)"
-
-# $(BONUS_ODIR):
-# 	@mkdir -p $(OBJ_DIR)
-# 	@mkdir $(BONUS_ODIR)
-# 	@echo "$(GREEN)creating: bonus object-files: $(NC)\c"
-
-# $(BONUS_ODIR)%.o: $(BONUS_DIR)%.c
-# 	@$(CC) $(CFLAGS) $^ -c -o $@
-# 	@echo "$(GREEN)>$(NC)\c"
-
 clean:
 	@rm -rf $(OBJ)
 	@rm -rf -d $(OBJ_DIR)
@@ -125,10 +109,8 @@ clean:
 
 fclean: clean
 	@rm -rf $(NAME)
-	# @rm -rf $(BONUS)
 	@make -C $(LIBFT) fclean
 	@echo "$(RED)deleting: $(NAME)$(NC)"
-	# @echo "$(RED)deleting: $(BONUS)$(NC)"
 
 re: fclean all
 
