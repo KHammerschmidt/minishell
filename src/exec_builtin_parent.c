@@ -16,6 +16,12 @@ static void	dup2_fd_parent_builtin(int fd_in, int standard)
 		perror("Error: dup2 ");
 }
 
+static int	exit_error(t_vars *ms)
+{
+	ms->exit_status = 1;
+	return (ms->exit_status);
+}
+
 /* Duplicates the STDIN/STDOUT fds into temp fds in case of an infile/
 outfile redirection. Executes the builtin and swaps STDIN/STDOUT back
 to its standard value. */
@@ -25,10 +31,7 @@ int	ft_builtin_parent(t_cmd *current, t_vars *ms)
 	int	temp_fd_out;
 
 	if(current->fd_out == -1 || current->fd_in == -1)
-	{
-		ms->exit_status = 1;
-		return (ms->exit_status);
-	}
+		return (exit_error(ms));
 	temp_fd_in = dup(STDIN_FILENO);
 	temp_fd_out = dup(STDOUT_FILENO);
 	if (temp_fd_in == -1 || temp_fd_out == -1)

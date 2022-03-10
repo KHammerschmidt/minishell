@@ -155,6 +155,7 @@ void	handle_dsign(t_quotes *qt, char *str);
 int		closed_single_quote_in_double_quote(char *str, int i);
 char	*cut_quotes(char *str);
 char	*hdoc_dollar_expansion(t_vars *ms, char *line, int dollar_flag);
+int		prepare_hdoc_expansion(t_vars *ms, int *dollar_flag, char **limiter);
 void	no_envar_found(t_vars *ms, char *var);
 
 /* redirections */
@@ -166,7 +167,8 @@ int		ft_strchr_pos_red(char *s, char c, int i);
 
 /* command execution */
 int		get_paths(t_vars *ms);
-int		pipex(t_vars *ms);
+int		execution_process_loop(t_vars *ms);
+void	ft_processes(t_vars *ms, t_cmd *current, pid_t *pid);
 int		ft_builtin_parent(t_cmd *current, t_vars *ms);
 void	execute_builtin(t_vars *ms, t_cmd *current);
 void	execute_cmd(t_vars *ms, t_cmd *current);

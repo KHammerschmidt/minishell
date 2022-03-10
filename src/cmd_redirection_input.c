@@ -5,7 +5,10 @@ files are checked before it is opend and the fd is saved. */
 static int	infile_fd(t_vars *ms)
 {
 	if (ms->info.fd_in != STDIN_FILENO)
-		close(ms->info.fd_in);			//muss ich das hier == STDIN setzen?
+	{
+		close(ms->info.fd_in);
+		ms->info.fd_in = dup(STDIN_FILENO);
+	}
 	if (access(ms->info.infile, F_OK) != 0)
 	{
 		ft_putstr_fd("zsh: No such file or directory: ", 2);
@@ -28,7 +31,7 @@ static int	infile_fd(t_vars *ms)
 }
 
 /* Cuts out the redirections associated with the infile from the cmd_line. */
-static void	cut_infile_red(char **string, int fd_in)		//spaces!!!!
+static void	cut_infile_red(char **string, int fd_in)
 {
 	int		i;
 	char	*tmp;
