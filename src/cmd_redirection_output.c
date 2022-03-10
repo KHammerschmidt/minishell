@@ -9,9 +9,8 @@ int	outfile_fd(t_vars *ms)
 	}
 	if (ms->info.output_op == -1)
 	{
-		ms->info.fd_out = open(ms->info.outfile, 
+		ms->info.fd_out = open(ms->info.outfile,
 				O_RDWR | O_CREAT | O_TRUNC, 0644);
-
 	}
 	if (ms->info.output_op == -2)
 	{

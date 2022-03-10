@@ -30,7 +30,8 @@ SRC_LIST	=	builtin_cd.c				\
 				builtin_unset.c				\
 				builtin_utils.c				\
 				cmd_dollar_expansion.c		\
-				cmd_dollar_expand_utils.c	\
+				cmd_dollar_expand_utils_1.c	\
+				cmd_dollar_expand_utils_2.c	\
 				cmd_get_paths.c				\
 				cmd_hdoc_dollar_expansion.c	\
 				cmd_info.c					\

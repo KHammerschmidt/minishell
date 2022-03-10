@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_syntax_check.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katharinahammerschmidt <katharinahammer    +#+  +:+       +#+        */
+/*   By: mio <mio@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 14:56:31 by katharinaha       #+#    #+#             */
-/*   Updated: 2022/03/04 16:45:20 by katharinaha      ###   ########.fr       */
+/*   Updated: 2022/03/10 12:58:40 by mio              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	ft_syntax_check(char *str, t_vars *ms)
 	{
 		if (str[i] == 34 | str[i] == 39)
 			set_quote_index(str, &i, &quote_type, &quote_on);
-		if (((str[i] == '|' && str[i + 1] == '|') 
+		if (((str[i] == '|' && str[i + 1] == '|')
 			|| (str[i] == '<' && str[i + 1] == '<' && str[i + 2] == '<')
 			|| (str[i] == '>' && str[i + 1] == '>' && str[i + 2] == '>'))
 			&& quote_on == 0)
