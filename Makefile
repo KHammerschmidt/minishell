@@ -53,10 +53,10 @@ SRC_LIST	=	builtin_cd.c				\
 				env_lst_utils.c				\
 				exec_builtin_parent.c		\
 				exec_builtin.c				\
-				exec_check_cmd_table.c		\
 				exec_cmd.c					\
 				exec_here_doc_1.c			\
 				exec_here_doc_2.c			\
+				exec_process_loop.c			\
 				exec_processes.c			\
 				signals.c					\
 				start_create_prompt.c		\
