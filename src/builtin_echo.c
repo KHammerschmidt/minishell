@@ -4,8 +4,7 @@ int	find_n_flag(t_vars *ms)
 {
 	if (ms->cmd->command[1] != NULL)
 	{
-		if (ft_strncmp(ms->cmd->command[1], "-n", \
-				ft_strlen(ms->cmd->command[1])) == 0)
+		if (compare_str(ms->cmd->command[1], "-n") == 0)
 			return (1);
 		else
 			return (0);

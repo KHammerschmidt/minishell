@@ -73,7 +73,7 @@ static void	hdoc_hdle_pipe_fds_end(int *hdoc_pipe_fd, int fd, char **line)
 {
 	close(hdoc_pipe_fd[1]);
 	dup2(fd, STDIN_FILENO);
-	ft_free_string(line);	
+	ft_free_string(line);
 }
 
 static void	sending_input_and_reset(char **line, int *hdoc_pipe_fd)
@@ -93,8 +93,6 @@ int	ft_here_doc(t_vars *ms, char *limiter)
 
 	line = NULL;
 	dollar_flag = 0;
-	hdoc_pipe_fd[0] = 0;
-	hdoc_pipe_fd[1] = 0;
 	fd = dup(STDIN_FILENO);
 	if (prepare_hdoc_expansion(ms, &dollar_flag, &limiter) == -1
 		|| hdoc_hdle_pipe_fds_init(ms, hdoc_pipe_fd) == -1)
@@ -104,7 +102,8 @@ int	ft_here_doc(t_vars *ms, char *limiter)
 	{
 		line = readline("heredoc> ");
 		line = hdoc_dollar_expansion(ms, line, dollar_flag);
-		if (line == NULL || ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
+		if (line == NULL || \
+			ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
 			break ;
 		sending_input_and_reset(&line, hdoc_pipe_fd);
 	}

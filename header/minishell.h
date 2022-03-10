@@ -155,6 +155,7 @@ void	handle_dsign(t_quotes *qt, char *str);
 int		closed_single_quote_in_double_quote(char *str, int i);
 char	*cut_quotes(char *str);
 char	*hdoc_dollar_expansion(t_vars *ms, char *line, int dollar_flag);
+void	no_envar_found(t_vars *ms, char *var);
 
 /* redirections */
 int		input_redirection(t_vars *ms, char **string, int red_in);

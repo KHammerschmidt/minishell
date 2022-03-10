@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_pipex.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: katharinahammerschmidt <katharinahammer    +#+  +:+       +#+        */
+/*   By: mio <mio@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 21:48:24 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/04 14:51:19 by katharinaha      ###   ########.fr       */
+/*   Updated: 2022/03/10 13:22:38 by mio              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,6 @@ int	builtin_check(t_vars *ms, t_cmd *current)
 		// 		current = current->next;
 		// 	continue;
 
-
 /* Checks if input is only a builtin, if yes executes the builtin in the parent
 otherwise calls ft_proceses() to introduce child and parent process. Waiting
 for any children, indicated by pid == -1. */
@@ -157,10 +156,9 @@ int	pipex(t_vars *ms)
 	}
 	while (ft_waiting(&pid, &save) == -1)
 		ms->exit_status = save;
-	ms->exit_status = save;	
+	ms->exit_status = save;
 	return (WEXITSTATUS(ms->exit_status));
 }
-
 
 // 	while (ft_waiting != -1)
 // 	while (i != -1)
@@ -171,7 +169,6 @@ int	pipex(t_vars *ms)
 // 	}
 // 	return (WEXITSTATUS(ms->exit_status));
 // }
-
 
 	//  && current->next == NULL)
 	// 		return (1);

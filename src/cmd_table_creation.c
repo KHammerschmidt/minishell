@@ -25,7 +25,8 @@ char	*cut_empty_quotes(t_vars *ms)
 			}
 			(quote_on)++;
 		}
-		if ((ms->cmd_line[i] == quote_type) && (ms->cmd_line[i + 1] == quote_type))
+		if ((ms->cmd_line[i] == quote_type) \
+			&& (ms->cmd_line[i + 1] == quote_type))
 		{
 			i++;
 			if (ms->cmd_line[i] == '\0')

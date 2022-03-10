@@ -33,7 +33,7 @@ void	check_and_append(t_vars *ms, char **cpy, char *line, int *i)
 
 	j = *i;
 	envar = NULL;
-	expansion = NULL;	
+	expansion = NULL;
 	while (line[*i] != ' ' && line[*i] != '$' && line[*i] != '\0')
 		(*i)++;
 	expansion = ft_substr(line, j, *i - j);

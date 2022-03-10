@@ -21,20 +21,6 @@ static char	*search_for_var(t_vars *ms, char *var)
 	return (NULL);
 }
 
-void	no_envar_found(t_vars *ms, char *var)
-{
-	if (ms->line == NULL)
-	{
-		ms->line = ft_strdup("$");
-		ms->line = ft_strjoin(ms->line, var);
-	}
-	else
-	{
-		ms->line = ft_strjoin(ms->line, "$");
-		ms->line = ft_strjoin(ms->line, var);
-	}
-}
-
 static void	add_expanded_var(t_vars *ms, int *i, int *j)
 {
 	char	*tmp;
@@ -70,6 +56,15 @@ static void	replicate_text(t_vars *ms, int *i, int *j)
 	*j = *i;
 }
 
+static void	generate_new_line(t_vars *ms, int *i, int *j)
+{
+	replicate_text(ms, i, j);
+	while (ft_isspace(ms->cmd_line[*i]) == 0 && ms->cmd_line[*i] != '\0' \
+		&& ms->cmd_line[*i] != 34 && ms->cmd_line[*i] != 39)
+		(*i)++;
+	add_expanded_var(ms, i, j);
+}
+
 /* Looks for $-signs and expands if respective variable is found in envar
 list. */
 void	dollar_expansion(t_vars *ms)
@@ -87,13 +82,7 @@ void	dollar_expansion(t_vars *ms)
 	{
 		quote_type = valid_dollar_sign(ms, i, &quote_on, quote_type);
 		if (ms->cmd_line[i] == '$' && quote_type != 39)
-		{
-			replicate_text(ms, &i, &j);
-			while (ft_isspace(ms->cmd_line[i]) == 0 && ms->cmd_line[i] != '\0' \
-				&& ms->cmd_line[i] != 34 && ms->cmd_line[i] != 39)
-				i++;
-			add_expanded_var(ms, &i, &j);
-		}
+			generate_new_line(ms, &i, &j);
 		else
 			i++;
 	}
