@@ -32,31 +32,46 @@ static void	sending_input_and_reset(char **line, int *hdoc_pipe_fd)
 	ft_free_string(line);
 }
 
-/* Reads with readline() into a pipe until delimiter, which becomes STDIN. */
-int	ft_here_doc(t_vars *ms, char *limiter)
+/* Reads the here_doc input line calling readling(), expands $-signs when
+appropriate and checks whether the limiter has been found. If not, input to
+written to the pipe, if limiter has been found, 1 is returned. */
+static int	hdoc_input(t_vars *ms, int d_flag, char *limiter, int *hdoc_pipe_fd)
 {
-	int		dollar_flag;
-	int		hdoc_pipe_fd[2];
-	int		fd;
 	char	*line;
 
 	line = NULL;
-	dollar_flag = 0;
+	line = readline("heredoc> ");
+	line = hdoc_dollar_expansion(ms, line, d_flag);
+	if (line == NULL || ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
+		return (1);
+	sending_input_and_reset(&line, hdoc_pipe_fd);
+	return (0);
+}
+
+/* Reads with readline() into a pipe until delimiter, which becomes STDIN. */
+int	ft_here_doc(t_vars *ms)
+{
+	int		d_flag;
+	int		hdoc_pipe_fd[2];
+	int		fd;
+	char	*line;
+	char	*limiter;
+
+	line = NULL;
+	d_flag = 0;
 	fd = dup(STDIN_FILENO);
-	if (prepare_hdoc_expansion(ms, &dollar_flag, &limiter) == -1
+	limiter = ft_strdup(ms->info.infile);
+	if (prepare_hdoc_expansion(ms, &d_flag, &limiter) == -1
 		|| hdoc_hdle_pipe_fds_init(ms, hdoc_pipe_fd) == -1)
 		return (-1);
 	rl_init(1);
 	while (1)
 	{
-		line = readline("heredoc> ");
-		line = hdoc_dollar_expansion(ms, line, dollar_flag);
-		if (line == NULL || \
-			ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
+		if (hdoc_input(ms, d_flag, limiter, hdoc_pipe_fd) != 0)
 			break ;
-		sending_input_and_reset(&line, hdoc_pipe_fd);
 	}
 	rl_reset();
 	hdoc_hdle_pipe_fds_end(hdoc_pipe_fd, fd, &line);
+	ft_free_string(&(ms->info.infile));
 	return (0);
 }

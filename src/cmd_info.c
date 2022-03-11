@@ -23,7 +23,13 @@ void	pass_on_infos_node(t_vars *ms, t_cmd *node)
 	node->fd_out = ms->info.fd_out;
 	node->fd_in = ms->info.fd_in;
 	node->flag = ms->info.flag;
-	node->infile = ft_strdup(ms->info.infile);
-	node->outfile = ft_strdup(ms->info.outfile);
+	if (ms->info.infile != NULL)
+		node->infile = ft_strdup(ms->info.infile);
+	else
+		node->infile = NULL;
+	if (ms->info.outfile != NULL)
+		node->outfile = ft_strdup(ms->info.outfile);
+	else
+		node->outfile = NULL;
 	reset_info_struct(ms);
 }
