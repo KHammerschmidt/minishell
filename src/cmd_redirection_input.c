@@ -64,7 +64,7 @@ int	redirect_input(t_vars *ms)
 {
 	if (ms->info.input_op == -2)
 	{
-		if (ft_here_doc(ms, ms->info.infile) != 0)
+		if (ft_here_doc(ms) != 0)
 			return (1);
 	}
 	else if (ms->info.input_op == -1)
@@ -86,7 +86,7 @@ static void	expansion_infile_red(char **string, t_vars *ms, int j)
 	k = j;
 	while ((*string)[k] != ' ' && (*string)[k] != '<' && (*string)[k] != '\0')
 		k++;
-	ft_free_string(&ms->info.infile);
+	ft_free_string(&(ms->info.infile));
 	ms->info.infile = ft_substr(*string, j, k - j);
 }
 
