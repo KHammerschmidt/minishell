@@ -1,5 +1,14 @@
 #include "../header/minishell.h"
 
+static void	outfile_permission_denied(t_vars *ms)
+{
+	ft_putstr_fd("Error: permission denied: ", 2);
+	ft_putendl_fd((ms->info.outfile), 2);
+	ms->exit_status = 1;
+	ms->info.fd_out = STDOUT_FILENO;
+	ms->info.flag = -1;
+}
+
 int	outfile_fd(t_vars *ms)
 {
 	if (ms->info.fd_out != STDOUT_FILENO)
@@ -21,11 +30,7 @@ int	outfile_fd(t_vars *ms)
 	}
 	if (ms->info.fd_out == -1 || access(ms->info.outfile, W_OK) != 0)
 	{
-		ft_putstr_fd("Error: permission denied: ", 2);
-		ft_putendl_fd((ms->info.outfile), 2);
-		ms->exit_status = 1;
-		ms->info.fd_out = STDOUT_FILENO;
-		ms->info.flag = -1;
+		outfile_permission_denied(ms);
 		return (1);
 	}
 	return (0);

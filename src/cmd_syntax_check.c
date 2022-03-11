@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_syntax_check.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mio <mio@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 14:56:31 by katharinaha       #+#    #+#             */
-/*   Updated: 2022/03/10 12:58:40 by mio              ###   ########.fr       */
+/*   Updated: 2022/03/11 16:33:41 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ int	ft_syntax_check(char *str, t_vars *ms)
 		if (str[i] == 34 | str[i] == 39)
 			set_quote_index(str, &i, &quote_type, &quote_on);
 		if (((str[i] == '|' && str[i + 1] == '|')
-			|| (str[i] == '<' && str[i + 1] == '<' && str[i + 2] == '<')
-			|| (str[i] == '>' && str[i + 1] == '>' && str[i + 2] == '>'))
+				|| (str[i] == '<' && str[i + 1] == '<' && str[i + 2] == '<')
+				|| (str[i] == '>' && str[i + 1] == '>' && str[i + 2] == '>'))
 			&& quote_on == 0)
-		return (ft_syntax_error(ms));
+			return (ft_syntax_error(ms));
 		i++;
 	}
 	return (0);

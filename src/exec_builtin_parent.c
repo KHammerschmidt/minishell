@@ -30,7 +30,7 @@ int	ft_builtin_parent(t_cmd *current, t_vars *ms)
 	int	temp_fd_in;
 	int	temp_fd_out;
 
-	if(current->fd_out == -1 || current->fd_in == -1)
+	if (current->fd_out == -1 || current->fd_in == -1)
 		return (exit_error(ms));
 	temp_fd_in = dup(STDIN_FILENO);
 	temp_fd_out = dup(STDOUT_FILENO);
