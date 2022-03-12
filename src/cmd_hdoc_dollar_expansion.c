@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_hdoc_dollar_expansion.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/12 20:15:43 by khammers          #+#    #+#             */
+/*   Updated: 2022/03/12 20:15:44 by khammers         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/minishell.h"
 
 /* Searches if the to be expanded var is found in env list.
@@ -58,7 +70,7 @@ char	*hdoc_dollar_expansion(t_vars *ms, char *line, int dollar_flag)
 		return (line);
 	cpy = ft_strdup("");
 	while (line[i] != '\0')
-	{		
+	{
 		while (line[i] != '$' && line[i] != '\0')
 		{
 			cpy = ft_strjoin_2(cpy, line, i);

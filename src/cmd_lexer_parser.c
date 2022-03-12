@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_lexer_parser.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/12 20:15:55 by khammers          #+#    #+#             */
+/*   Updated: 2022/03/12 20:15:58 by khammers         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/minishell.h"
 
 /* Splits the input cmd_line in according to the quotes. */
-// wenn in quotes keine redirection abfangen
 static char	*lexer_parser_quotes(t_vars *ms, char *crr)
 {
 	lexer_parser_redirections(&ms->cmd_line, ms);

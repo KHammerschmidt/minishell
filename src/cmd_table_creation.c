@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_table_creation.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/12 20:16:37 by khammers          #+#    #+#             */
+/*   Updated: 2022/03/12 20:16:38 by khammers         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/minishell.h"
 
 /* Sets the quote type (34 or 39) in case opening quote has been found and
@@ -26,7 +38,7 @@ static int	set_quote_index(char *str, int *i, int *quote_type, int *quote_on)
 	return (0);
 }
 
-/* When a quote is found the function sets the quote index of opening or 
+/* When a quote is found the function sets the quote index of opening or
 closing quote. Simultaneously it is checked for empty quotes, which are then
 cut out. Thereby char *temp is filled character for character. */
 char	*cut_empty_quotes(t_vars *ms)
