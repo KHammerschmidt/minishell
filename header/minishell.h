@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/12 20:18:10 by khammers          #+#    #+#             */
+/*   Updated: 2022/03/12 20:20:59 by khammers         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -136,27 +148,40 @@ void	signal_handler(int signum);
 void	rl_init(int i);
 void	rl_reset(void);
 
-/* input parsing, command table development */
+/* lexer and parser, command table development */
 int		create_cmd_table(t_vars *ms);
 int		ft_syntax_check(char *str, t_vars *ms);
 void	dollar_expansion(t_vars *ms);
 char	*lexer_parser(t_vars *ms);
-int		quote_status(char *str);
-int		valid_pipe(char *str);
 int		lexer_parser_redirections(char **string, t_vars *ms);
+int		valid_pipe(char *str);
 char	*parser_lexer_pipe(t_vars *ms, int quotes, char *crr, char *nxt);
+
+/* $-sign */
+void	handle_dsign(t_quotes *qt, char *str);
+char	*hdoc_dollar_expansion(t_vars *ms, char *line, int dollar_flag);
+int		prepare_hdoc_expansion(t_vars *ms, int *dollar_flag, char **limiter);
+void	no_envar_found(t_vars *ms, char *var);
+int		valid_dollar_sign(t_vars *ms, int i, int *quote_on, int quote_type);
+char	*cut_unused_envar(char *str);
+
+/* quotes */
+int		quote_status(char *str);
 char	**ft_split_quotes(char *str);
 int		ft_count_chars(char *str, t_vars *ms);
 int		check_open_closed_quote(char *str, int stop,
 			int *within_quotes, int quote);
 void	handle_dquotes(char *str, int *i, int quote_type, char **line);
 void	handle_squotes(char *str, int *i, int quote_2, char **line);
-void	handle_dsign(t_quotes *qt, char *str);
 int		closed_single_quote_in_double_quote(char *str, int i);
 char	*cut_quotes(char *str);
-char	*hdoc_dollar_expansion(t_vars *ms, char *line, int dollar_flag);
-int		prepare_hdoc_expansion(t_vars *ms, int *dollar_flag, char **limiter);
-void	no_envar_found(t_vars *ms, char *var);
+
+/* str handling quoting */
+int		compare_str(char *s1, char *s2);
+int		ft_strchr_pos(char *s, char c);
+char	*ft_strjoin_2(char *line, char *str, int i);
+int		ft_count_substrings(char *str);
+char	**copy_strarray(char **strarray);
 
 /* redirections */
 int		input_redirection(t_vars *ms, char **string, int red_in);
@@ -172,17 +197,6 @@ void	ft_processes(t_vars *ms, t_cmd *current, pid_t *pid);
 int		ft_builtin_parent(t_cmd *current, t_vars *ms);
 void	execute_builtin(t_vars *ms, t_cmd *current);
 void	execute_cmd(t_vars *ms, t_cmd *current);
-
-/* str handling quoting */
-int		compare_str(char *s1, char *s2);
-int		ft_strchr_pos(char *s, char c);
-char	*ft_strjoin_2(char *line, char *str, int i);
-int		ft_count_substrings(char *str);
-char	**copy_strarray(char **strarray);
-
-/* Dollar sign */
-int		valid_dollar_sign(t_vars *ms, int i, int *quote_on, int quote_type);
-char	*cut_unused_envar(char *str);
 
 /* free and exit */
 void	last_free(t_vars *ms, int e_code);

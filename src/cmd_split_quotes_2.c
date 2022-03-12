@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd_split_quotes_2.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/12 20:16:30 by khammers          #+#    #+#             */
+/*   Updated: 2022/03/12 20:16:31 by khammers         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/minishell.h"
 
 /* Indicates if the found quote is an opening (within_quotes == 0) or closing
