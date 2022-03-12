@@ -186,7 +186,7 @@ char	**copy_strarray(char **strarray);
 /* redirections */
 int		input_redirection(t_vars *ms, char **string, int red_in);
 int		output_redirection(t_vars *ms, char **string, int red_out);
-int		ft_here_doc(t_vars *ms, char *limiter);
+int		ft_here_doc(t_vars *ms);
 int		valid_red(char *str, int pos);
 int		ft_strchr_pos_red(char *s, char c, int i);
 

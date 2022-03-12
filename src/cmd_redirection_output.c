@@ -33,14 +33,14 @@ int	outfile_fd(t_vars *ms)
 		ms->info.fd_out = open(ms->info.outfile,
 				O_RDWR | O_CREAT | O_TRUNC, 0644);
 	}
-	else if (ms->info.output_op == -2)
+	if (ms->info.output_op == -2)
 	{
 		if (ms->info.fd_out != STDOUT_FILENO)
 			close(ms->info.fd_out);
 		ms->info.fd_out = open(ms->info.outfile,
 				O_RDWR | O_CREAT | O_APPEND, 0644);
 	}
-	else if (ms->info.fd_out == -1 || access(ms->info.outfile, W_OK) != 0)
+	if (ms->info.fd_out == -1 || access(ms->info.outfile, W_OK) != 0)
 	{
 		outfile_permission_denied(ms);
 		return (1);
