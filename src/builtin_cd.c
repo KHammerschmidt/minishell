@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mio <mio@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:14:55 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:14:56 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/13 17:04:05 by mio              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,24 @@ static void	adjust_envar_list(t_vars *ms, char *start_wd)
 	create_old_pwd(ms, flag, start_wd);
 }
 
-int	validate_and_change_path(t_vars *ms, char *new_path, char *start_wd)
+int	validate_and_change_path(t_vars *ms, char **new_path, char *start_wd)
 {
 	char	*tmp;
 
 	tmp = NULL;
-	if (!(ft_strncmp(new_path, "/", 1) == 0) \
-			&& !(ft_strncmp(new_path, ".", 1) == 0))
+	if (!(ft_strncmp(*new_path, "/", 1) == 0) \
+			&& !(ft_strncmp(*new_path, ".", 1) == 0))
 	{
-		tmp = malloc(ft_strlen(new_path) + 3);
+		tmp = malloc(ft_strlen(*new_path) + 3);
 		ft_strlcat(tmp, "./", 3);
-		ft_strlcat(tmp, new_path, ft_strlen(new_path) + 3);
+		ft_strlcat(tmp, *new_path, ft_strlen(*new_path) + 3);
 	}
-	if (access(new_path, F_OK) != 0)
+	if (access(*new_path, F_OK) != 0)
 	{
-		printf("minishell: cd: %s: No such file or directory\n", new_path);
+		printf("minishell: cd: %s: No such file or directory\n", *new_path);
 		return (1);
 	}
-	chdir(new_path);
+	chdir(*new_path);
 	adjust_envar_list(ms, start_wd);
 	update_envp_array(ms);
 	ft_free_string(&tmp);
@@ -62,11 +62,11 @@ int	validate_and_change_path(t_vars *ms, char *new_path, char *start_wd)
 	return (0);
 }
 
-static int	check_special_cases(t_vars *ms, char **new_path, t_env *home)
+static int	check_special_cases(t_vars *ms, char **new_path/* , t_env *home */)
 {
-	if ((*new_path == NULL && home->content) \
-			|| (compare_str(*new_path, "~") == 0 && home->content))
-		*new_path = home->content;
+	// if ((*new_path == NULL && home->content) 
+	// 		|| (compare_str(*new_path, "~") == 0 && home->content))
+	// 	*new_path = home->content;
 	if (compare_str(*new_path, "-") == 0 && get_env_var(ms, "OLDPWD") == NULL)
 	{
 		printf("minishell: cd: OLDPWD not set\n");
@@ -77,9 +77,9 @@ static int	check_special_cases(t_vars *ms, char **new_path, t_env *home)
 	return (0);
 }
 
-int	check_home_and_path(char *new_path, t_env *home)
+int	check_home_and_path(char **new_path, t_env *home)
 {
-	if (new_path == NULL || compare_str(new_path, "~") == 0)
+	if (*new_path == NULL || compare_str(*new_path, "~") == 0)
 	{
 		if (home == NULL)
 		{
@@ -92,7 +92,7 @@ int	check_home_and_path(char *new_path, t_env *home)
 			return (1);
 		}
 		else
-			new_path = home->content;
+			*new_path = home->content;
 	}
 	return (0);
 }
@@ -114,11 +114,11 @@ int	builtin_cd(t_vars *ms, t_cmd *current)
 	new_path = NULL;
 	new_path = current->command[1];
 	home = get_env_var(ms, "HOME");
-	if (check_home_and_path(new_path, home) == 1)
+	if (check_home_and_path(&new_path, home) == 1)
 		return (1);
-	if (check_special_cases(ms, &new_path, home) == 1)
+	if (check_special_cases(ms, &new_path/* , home */) == 1)
 		return (1);
-	if (validate_and_change_path(ms, new_path, start_wd) == 1)
+	if (validate_and_change_path(ms, &new_path, start_wd) == 1)
 		return (1);
 	return (0);
 }
