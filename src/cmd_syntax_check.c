@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 14:56:31 by katharinaha       #+#    #+#             */
-/*   Updated: 2022/03/12 19:47:59 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/14 19:16:23 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	ft_syntax_check(char *str, t_vars *ms)
 		return (ft_syntax_error(ms));
 	while (str[i] != '\0')
 	{
+		if (str[i + 1] == '\0')
+			return (0);
 		if (str[i] == 34 || str[i] == 39)
 			set_quote_index(str, &i, &quote_type, &quote_on);
 		if (((str[i] == '|' && str[i + 1] == '|')

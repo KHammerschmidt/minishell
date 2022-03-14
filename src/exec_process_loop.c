@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:17:14 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:17:15 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/14 19:05:39 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,59 +92,3 @@ int	execution_process_loop(t_vars *ms)
 	}
 	return (WEXITSTATUS(ms->exit_status));
 }
-
-// OLD PIPEX PART --> in case I fucked it up :D
-
-// /* Checks if the current command is a builtin, returns 0 if yes. */
-// int	builtin_check(t_vars *ms, t_cmd *current)
-// {
-// 	if (current->next == NULL && current->previous == NULL
-// 	&& is_builtin(ms, current->command[0]) == 1)
-// 		return (0);
-// 	return (1);
-// }
-
-// /* Checks if input is only a builtin, if yes executes the builtin in
-// the parent otherwise calls ft_proceses() to introduce child and
-// parent process. Waiting
-// for any children, indicated by pid == -1. */
-// int	pipex(t_vars *ms)
-// {
-// 	int		save;
-// 	pid_t	pid;
-// 	t_cmd	*current;
-
-// 	pid = 0;
-// 	save = 0;
-// 	current = ms->cmd;
-// 	while (current != NULL)
-// 	{
-// 		if (current->command == NULL && current->next == NULL)
-// 			return (0);
-// 		else if (current->flag == -1)
-// 		{
-// 			ms->exit_status = 1;
-// 			if (current->next == NULL)
-// 				return (ms->exit_status);
-// 		}
-// 		else if (builtin_check(ms, current) == 0)
-// 			return (ft_builtin_parent(current, ms));
-// 		else
-// 			ft_processes(ms, current, &pid);
-// 		current = current->next;
-// 	}
-// 	while (ft_waiting(&pid, &save) == -1)
-// 		ms->exit_status = save;
-// 	ms->exit_status = save;
-// 	return (WEXITSTATUS(ms->exit_status));
-// }
-
-// 	while (ft_waiting != -1)
-// 	while (i != -1)
-// 	{
-// 		i = waitpid(0, &save, 0);
-// 		if (i == pid)
-// 			ms->exit_status = save;
-// 	}
-// 	return (WEXITSTATUS(ms->exit_status));
-// }

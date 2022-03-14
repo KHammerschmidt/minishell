@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:17:46 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:17:47 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/14 19:23:28 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	free_cmd_struct(t_vars *ms)
 /* Resets the allocated memory and variables needed for the next input. */
 void	reset(t_vars *ms)
 {
+	ft_free_string(&ms->cmd_line);
 	ft_free_strarray(&ms->paths);
 	free_cmd_struct(ms);
 	ft_free_string(&ms->line);
