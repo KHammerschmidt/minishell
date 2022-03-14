@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/12 20:17:06 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:17:07 by khammers         ###   ########.fr       */
+/*   Created: 2022/03/14 19:28:01 by khammers          #+#    #+#             */
+/*   Updated: 2022/03/14 19:30:02 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,6 @@ void	execute_cmd(t_vars *ms, t_cmd *current)
 	}
 	if (current->command == NULL)
 		ms->exit_status = 1;
+	last_free(ms, 0);
 	exit(ms->exit_status);
 }

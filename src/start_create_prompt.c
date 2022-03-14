@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:17:33 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:17:34 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/14 19:05:14 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,12 @@ char	*create_prompt(t_vars *ms)
 	pwd = get_pwd(ms);
 	if (user != NULL && pwd != NULL)
 	{
-		prompt = ft_calloc(ft_strlen(user) + ft_strlen(pwd) + 6, sizeof(char));
-		if (prompt)
-		{
-			ft_strlcat(prompt, user, ft_strlen(user) + 1);
-			ft_strlcat(prompt, "@", ft_strlen(prompt) + 2);
-			ft_strlcat(prompt, pwd, ft_strlen(prompt) + ft_strlen(pwd) + 2);
-			ft_strlcat(prompt, " ॐ  ", ft_strlen(prompt) + ft_strlen(pwd) + 6);
-		}
-	}
-	if (user)
+		prompt = ft_strdup(user);
+		prompt = ft_strjoin(prompt, "@");
+		prompt = ft_strjoin(prompt, pwd);
+		prompt = ft_strjoin(prompt, " ॐ  ");
 		ft_free_string(&user);
-	if (pwd)
 		ft_free_string(&pwd);
+	}
 	return (prompt);
 }

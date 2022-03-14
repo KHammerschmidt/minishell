@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:17:43 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:17:44 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/14 19:24:59 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,10 @@ void	last_free(t_vars *ms, int e_flag)
 	free_t_env(&ms->env);
 	ft_free_strarray(&ms->envp);
 	free_builtin_list(ms);
+	free_cmd_struct(ms);
 	ft_free_strarray(&ms->paths);
+	ft_free_string(&ms->cmd_line);
+	ft_free_string(&ms->line);
 	if (e_flag == 1)
 		exit(ms->exit_status);
 }

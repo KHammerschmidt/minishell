@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mio <mio@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:14:55 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/13 17:04:05 by mio              ###   ########.fr       */
+/*   Updated: 2022/03/14 19:17:35 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	validate_and_change_path(t_vars *ms, char **new_path, char *start_wd)
 	if (access(*new_path, F_OK) != 0)
 	{
 		printf("minishell: cd: %s: No such file or directory\n", *new_path);
+		ft_free_string(&tmp);
+		ft_free_string(&start_wd);
 		return (1);
 	}
 	chdir(*new_path);
@@ -62,11 +64,8 @@ int	validate_and_change_path(t_vars *ms, char **new_path, char *start_wd)
 	return (0);
 }
 
-static int	check_special_cases(t_vars *ms, char **new_path/* , t_env *home */)
+static int	check_special_cases(t_vars *ms, char **new_path)
 {
-	// if ((*new_path == NULL && home->content) 
-	// 		|| (compare_str(*new_path, "~") == 0 && home->content))
-	// 	*new_path = home->content;
 	if (compare_str(*new_path, "-") == 0 && get_env_var(ms, "OLDPWD") == NULL)
 	{
 		printf("minishell: cd: OLDPWD not set\n");
@@ -116,7 +115,7 @@ int	builtin_cd(t_vars *ms, t_cmd *current)
 	home = get_env_var(ms, "HOME");
 	if (check_home_and_path(&new_path, home) == 1)
 		return (1);
-	if (check_special_cases(ms, &new_path/* , home */) == 1)
+	if (check_special_cases(ms, &new_path) == 1)
 		return (1);
 	if (validate_and_change_path(ms, &new_path, start_wd) == 1)
 		return (1);
