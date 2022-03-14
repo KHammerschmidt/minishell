@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:16:51 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:16:52 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/14 19:55:58 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	create_element_name(char *content, char *tmp, \
 {
 	while (content[*i] != '=')
 		(*i)++;
-	tmp = malloc(*i * sizeof(char) + 1);
+	tmp = malloc((*i + 1) * (sizeof(char)));
 	*i = 0;
 	while (content[*i] != '=')
 	{
@@ -39,7 +39,7 @@ static void	create_element_content(char *content, char *tmp, \
 	i = 0;
 	while (content[i] != '\0')
 		i++;
-	tmp = malloc(i * sizeof(char) + 1);
+	tmp = malloc((i + 1) * sizeof(char));
 	i = j;
 	j = 0;
 	while (content[i] != '\0')

@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:17:10 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:17:11 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/14 22:44:32 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,11 @@ static int	hdoc_input(t_vars *ms, int d_flag, char *limiter, int *hdoc_pipe_fd)
 	line = readline("heredoc> ");
 	line = hdoc_dollar_expansion(ms, line, d_flag);
 	if (line == NULL || ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
+	{
+		ft_free_string(&limiter);
+		ft_free_string(&line);
 		return (1);
+	}
 	sending_input_and_reset(&line, hdoc_pipe_fd);
 	return (0);
 }

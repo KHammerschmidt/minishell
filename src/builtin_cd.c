@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:14:55 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/14 19:17:35 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/14 19:49:04 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,8 @@ int	validate_and_change_path(t_vars *ms, char **new_path, char *start_wd)
 	if (!(ft_strncmp(*new_path, "/", 1) == 0) \
 			&& !(ft_strncmp(*new_path, ".", 1) == 0))
 	{
-		tmp = malloc(ft_strlen(*new_path) + 3);
-		ft_strlcat(tmp, "./", 3);
-		ft_strlcat(tmp, *new_path, ft_strlen(*new_path) + 3);
+		tmp = ft_strdup("./");
+		tmp = ft_strjoin(tmp, *new_path);
 	}
 	if (access(*new_path, F_OK) != 0)
 	{

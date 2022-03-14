@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:17:43 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/14 19:24:59 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/14 20:03:36 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	free_t_env(t_env **env)
 /* Frees all allocated memory and exits the program if necessary. */
 void	last_free(t_vars *ms, int e_flag)
 {
-	free_t_env(&ms->env);
 	ft_free_strarray(&ms->envp);
+	free_t_env(&ms->env);
 	free_builtin_list(ms);
 	free_cmd_struct(ms);
 	ft_free_strarray(&ms->paths);

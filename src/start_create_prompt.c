@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:17:33 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/14 19:05:14 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/14 20:10:55 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ char	*create_prompt(t_vars *ms)
 		prompt = ft_strjoin(prompt, "@");
 		prompt = ft_strjoin(prompt, pwd);
 		prompt = ft_strjoin(prompt, " ॐ  ");
-		ft_free_string(&user);
-		ft_free_string(&pwd);
 	}
+	ft_free_string(&user);
+	ft_free_string(&pwd);
 	return (prompt);
 }
