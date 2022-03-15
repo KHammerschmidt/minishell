@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_qhandling.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mio <mio@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:16:21 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:16:22 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 11:30:28 by mio              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	handle_squotes(char *str, int *i, int quote_2, char **line)
 
 void	handle_dsign(t_quotes *qt, char *str)
 {
-	if (str[qt->i] == '$')
+	if (str[qt->i] == '$' && ft_isspace(str[qt->i + 1]) == 0 \
+		&& str[qt->i + 1] != '\0')
 	{
 		if (qt->quote_type == 39)
 			handle_dquotes(str, &qt->i, qt->quote_type, &qt->line);
