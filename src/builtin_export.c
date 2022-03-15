@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:15:11 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:15:12 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 20:32:58 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	builtin_export(t_vars *ms, t_cmd *current)
 	k = 1;
 	if (current->command[k] == NULL)
 	{
-		declare_x(ms, current);
+		declare_x(ms);
 		return (0);
 	}
 	while (current->command[k] != NULL)

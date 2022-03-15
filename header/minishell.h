@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:18:10 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/15 14:33:03 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 20:33:21 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,11 +121,11 @@ void	update_envp_array(t_vars *ms);
 int		init_builtin(t_vars *ms);
 int		builtin_cd(t_vars *ms, t_cmd *current);
 int		builtin_echo(t_vars *ms, t_cmd *current);
-int		builtin_env(t_vars *ms, t_cmd *current);
+int		builtin_env(t_vars *ms);
 int		builtin_exit(t_vars *ms, t_cmd *current);
 int		builtin_export(t_vars *ms, t_cmd *current);
-void	declare_x(t_vars *ms, t_cmd *current);
-int		builtin_pwd(t_vars *ms, t_cmd *current);
+void	declare_x(t_vars *ms);
+int		builtin_pwd(t_vars *ms);
 int		builtin_unset(t_vars *ms, t_cmd *current);
 int		is_builtin(t_vars *ms, char *cmd);
 void	create_old_pwd(t_vars *ms, int flag, char *start_wd);
