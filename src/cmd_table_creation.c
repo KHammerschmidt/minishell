@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:16:37 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/15 15:10:19 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 20:07:10 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,18 @@ static int	set_quote_index(char *str, int *i, int *quote_type, int *quote_on)
 	return (0);
 }
 
+/* Returns 1 if there are empty quotes which aren't within other quotes. */
+static int	check_for_empty_quotes(t_vars *ms, int i, int quote_type)
+{
+	if (ms->cmd_line[i] == 34 && ms->cmd_line[i + 1] == 34
+		&& quote_type == 34)
+		return (1);
+	if (ms->cmd_line[i] == 39 && ms->cmd_line[i + 1] == 39
+		&& quote_type == 39)
+		return (1);
+	return (0);
+}
+
 /* When a quote is found the function sets the quote index of opening or
 closing quote. Simultaneously it is checked for empty quotes, which are then
 cut out. Thereby char *temp is filled character for character. */
@@ -56,8 +68,7 @@ char	*cut_empty_quotes(t_vars *ms)
 	temp = ft_strdup("");
 	while (ms->cmd_line[i] != '\0')
 	{
-		if ((ms->cmd_line[i] == 34 && ms->cmd_line[i + 1] == 34)
-			|| (ms->cmd_line[i] == 39 && ms->cmd_line[i + 1] == 39))
+		if (check_for_empty_quotes(ms, i, quote_type) == 1)
 		{
 			if (set_quote_index(ms->cmd_line, &i, &quote_type, &quote_on) == 1)
 			{
