@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:16:37 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:16:38 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 15:10:19 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ static int	set_quote_index(char *str, int *i, int *quote_type, int *quote_on)
 		*quote_type = 0;
 		if (str[*i] == '\0')
 			return (1);
+		else
+			return (2);
 	}
 	return (0);
 }
@@ -54,8 +56,8 @@ char	*cut_empty_quotes(t_vars *ms)
 	temp = ft_strdup("");
 	while (ms->cmd_line[i] != '\0')
 	{
-		if ((ms->cmd_line[i] == quote_type)
-			&& (ms->cmd_line[i + 1] == quote_type))
+		if ((ms->cmd_line[i] == 34 && ms->cmd_line[i + 1] == 34)
+			|| (ms->cmd_line[i] == 39 && ms->cmd_line[i + 1] == 39))
 		{
 			if (set_quote_index(ms->cmd_line, &i, &quote_type, &quote_on) == 1)
 			{
@@ -75,20 +77,23 @@ sign before cutting empty quotes of the input string. */
 static int	input_preparation(t_vars *ms)
 {
 	char	*temp;
+	int		dflag;
 
 	temp = NULL;
+	dflag = 0;
 	if (ft_syntax_check(ms->cmd_line, ms) != 0)
 		return (1);
-	if (ft_strchr_pos(ms->cmd_line, '$') != -1)
+	dflag = ft_strchr_pos(ms->cmd_line, '$');
+	if (dflag != -1)
 	{
 		dollar_expansion(ms);
 		if (ft_strchr_pos(ms->cmd_line, '$') != -1)
 			ms->cmd_line = cut_unused_envar(ms->cmd_line);
+		temp = cut_empty_quotes(ms);
+		ft_free_string(&ms->cmd_line);
+		ms->cmd_line = ft_strdup(temp);
+		ft_free_string(&temp);
 	}
-	temp = cut_empty_quotes(ms);
-	ft_free_string(&ms->cmd_line);
-	ms->cmd_line = ft_strdup(temp);
-	ft_free_string(&temp);
 	return (0);
 }
 

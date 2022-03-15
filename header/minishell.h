@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:18:10 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:20:59 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 14:33:03 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ void	handle_dquotes(char *str, int *i, int quote_type, char **line);
 void	handle_squotes(char *str, int *i, int quote_2, char **line);
 int		closed_single_quote_in_double_quote(char *str, int i);
 char	*cut_quotes(char *str);
+void	set_quote_index_1(char *str, int *i, int *quote_type, int *quote_on);
 
 /* str handling quoting */
 int		compare_str(char *s1, char *s2);

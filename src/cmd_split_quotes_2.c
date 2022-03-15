@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:16:30 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:16:31 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 14:33:53 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,19 @@ int	quote_status(char *str)
 	if (quote_type == 0)
 		return (0);
 	return (1);
+}
+
+/* Sets the quote type (34 or 39) in case opening quote has been found and
+closes the index respectively in the second call. */
+void	set_quote_index_1(char *str, int *i, int *quote_type, int *quote_on)
+{
+	if (*quote_on == 0)
+		*quote_type = str[*i];
+	if (str[*i] == *quote_type)
+	{
+		if (*quote_on == 1)
+			*quote_on = -1;
+		(*quote_on)++;
+		(*i)++;
+	}
 }
