@@ -6,7 +6,7 @@
 /*   By: mio <mio@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:15:36 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/15 12:12:26 by mio              ###   ########.fr       */
+/*   Updated: 2022/03/15 22:00:24 by mio              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ static void	generate_new_line(t_vars *ms, int *i, int *j)
 {
 	replicate_text(ms, i, j);
 	while (ft_isspace(ms->cmd_line[*i]) == 0 && ms->cmd_line[*i] != '\0' \
-		&& ms->cmd_line[*i] != 34 && ms->cmd_line[*i] != 39)
+		&& ms->cmd_line[*i] != 34 && ms->cmd_line[*i] != 39 \
+		&& ms->cmd_line[*i] != '/')
 		(*i)++;
 	add_expanded_var(ms, i, j);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mio <mio@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:18:10 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/15 20:33:21 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 21:38:28 by mio              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,14 @@
 # include <limits.h>
 # include <errno.h>
 # include <signal.h>
+# include <fcntl.h>
 # include <sys/ioctl.h>
 # include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/libft/libft.h"
-# include <fcntl.h>
 
 # define BUFFER_SIZE 1
 
@@ -196,6 +198,10 @@ int		get_paths(t_vars *ms);
 int		execution_process_loop(t_vars *ms);
 void	ft_processes(t_vars *ms, t_cmd *current, pid_t *pid);
 int		ft_builtin_parent(t_cmd *current, t_vars *ms);
+void	if_fail(t_vars *ms, t_cmd *current, char **tmp);
+void	create_tmp(t_vars *ms, t_cmd *current, char **tmp);
+int		if_paths(t_vars *ms, t_cmd *current, char **tmp, int *i);
+int		check_if_dir(t_cmd *current);
 void	execute_builtin(t_vars *ms, t_cmd *current);
 void	execute_cmd(t_vars *ms, t_cmd *current);
 
