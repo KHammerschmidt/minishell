@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:17:23 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:17:24 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 14:06:29 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	ft_handle_stdout(t_cmd *current, t_vars *ms)
 	if (current->output_op == -1 || current->output_op == -2)
 	{
 		if (dup2(current->fd_out, STDOUT_FILENO) < 0)
-			perror("dup2 oufile1: ");
+			perror("Error: dup2-oufile1: ");
 		close(current->fd_out);
 		close(ms->pipe_fd[1]);
 	}
@@ -39,7 +39,7 @@ static void	ft_handle_stdout(t_cmd *current, t_vars *ms)
 	else
 	{
 		if (dup2(ms->pipe_fd[1], STDOUT_FILENO) < 0)
-			perror("dup2 outfile2: ");
+			perror("error: dup2-outfile2: ");
 		current->fd_out = dup(ms->pipe_fd[1]);
 		close(ms->pipe_fd[1]);
 	}
@@ -53,14 +53,14 @@ static void	ft_handle_stdin(t_cmd *current, t_vars *ms)
 	{
 		close(ms->pipe_fd[0]);
 		if (dup2(current->fd_in, STDIN_FILENO) < 0)
-			perror("dup2  infile1: ");
+			perror("Error: dup2-infile1: ");
 		close(current->fd_in);
 	}
 	else if (current->input_op == 0 || current->input_op == -2)
 	{
 		close(ms->pipe_fd[0]);
 		if (dup2(ms->tmp_fd, STDIN_FILENO) < 0)
-			perror("dup2 infile2: ");
+			perror("Error: dup2-infile2: ");
 		current->fd_in = dup(ms->tmp_fd);
 		close(ms->tmp_fd);
 	}
@@ -70,12 +70,12 @@ static void	ft_handle_stdin(t_cmd *current, t_vars *ms)
 void	ft_processes(t_vars *ms, t_cmd *current, pid_t *pid)
 {
 	if (pipe(ms->pipe_fd) == -1)
-		printf("PIPE ERROR\n");
+		printf("Error: ms->pipe_fd\n");
 	else
 	{
 		*pid = fork();
 		if (*pid < 0)
-			printf("PID ERROR\n");
+			printf("Error: process could not be forked\n");
 		if (*pid == 0)
 		{
 			ft_handle_stdin(current, ms);
@@ -90,7 +90,7 @@ void	ft_processes(t_vars *ms, t_cmd *current, pid_t *pid)
 		close(ms->pipe_fd[1]);
 		close(ms->tmp_fd);
 		if (dup2(ms->pipe_fd[0], ms->tmp_fd) < 0)
-			perror("dup2 fd[0] into tmp_fd: ");
+			perror("Error: dup2 fd[0] into tmp_fd: ");
 		close(ms->pipe_fd[0]);
 	}
 }

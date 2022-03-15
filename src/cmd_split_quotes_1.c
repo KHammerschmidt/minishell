@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:16:28 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:16:29 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 19:11:19 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static int	get_stop(char *str, int start)
 	within_quotes = 0;
 	while (str[stop] != ' ' && str[stop] != '\0' && within_quotes == 0)
 	{
-		if ((str[stop] == 34 && within_quotes == 0) || (str[stop] == 39
-				&& within_quotes == 0))
+		if ((str[stop] == 34 && within_quotes == 0)
+			|| (str[stop] == 39 && within_quotes == 0))
 			quote = str[stop];
 		check_open_closed_quote(str, stop, &within_quotes, quote);
 		stop++;
@@ -40,21 +40,6 @@ static int	get_stop(char *str, int start)
 	while ((str[stop] != ' ' || str[stop] == quote) && str[stop] != '\0')
 		stop++;
 	return (stop);
-}
-
-/* Sets the quote type (34 or 39) in case opening quote has been found and
-closes the index respectively in the second call. */
-static void	set_quote_index(char *str, int *i, int *quote_type, int *quote_on)
-{
-	if (*quote_on == 0)
-		*quote_type = str[*i];
-	if (str[*i] == *quote_type)
-	{
-		if (*quote_on == 1)
-			*quote_on = -1;
-		(*quote_on)++;
-		(*i)++;
-	}
 }
 
 /* Cuts the quotes out of the string. */
@@ -72,7 +57,7 @@ char	*cut_quotes(char *str)
 	while (str[i] != '\0')
 	{
 		if (str[i] == 34 || str[i] == 39)
-			set_quote_index(str, &i, &quote_type, &quote_on);
+			set_quote_index_1(str, &i, &quote_type, &quote_on);
 		if (str[i] == '\0')
 			break ;
 		line = ft_strjoin_2(line, str, i);
@@ -98,6 +83,32 @@ static char	*get_substring(int *start, int *stop, char *str)
 	return (tmp);
 }
 
+static char	*split_quotes_loop(char *str, int *start, int *stop)
+{
+	char	*tmp;
+	char	*tmp_rtrn;
+
+	tmp_rtrn = NULL;
+	tmp = get_substring(start, stop, str);
+	if (tmp == NULL)
+		return (NULL);
+	if (tmp[0] == 39 && tmp[1] == 39 && ft_strlen(tmp) == 2)
+	{
+		ft_free_string(&tmp);
+		tmp_rtrn = ft_strdup("");
+		return (tmp_rtrn);
+	}
+	else if (tmp[0] == 34 && tmp[1] == 34 && ft_strlen(tmp) == 2)
+	{
+		tmp_rtrn = ft_strdup(" ");
+		ft_free_string(&tmp);
+		return (tmp_rtrn);
+	}
+	tmp_rtrn = cut_quotes(tmp);
+	ft_free_string(&tmp);
+	return (tmp_rtrn);
+}
+
 /* Split the input string by its spaces and groups together input in quotes. */
 char	**ft_split_quotes(char *str)
 {
@@ -116,10 +127,10 @@ char	**ft_split_quotes(char *str)
 		printf("Error\n");
 	while (str[start] != '\0')
 	{
-		tmp = get_substring(&start, &stop, str);
+		tmp = split_quotes_loop(str, &start, &stop);
 		if (tmp == NULL)
 			break ;
-		string[k] = cut_quotes(tmp);
+		string[k] = ft_strdup(tmp);
 		k++;
 		ft_free_string(&tmp);
 	}
