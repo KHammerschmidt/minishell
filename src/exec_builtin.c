@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:16:59 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:17:00 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 20:34:49 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,9 @@ void	execute_builtin(t_vars *ms, t_cmd *current)
 	else if (compare_str(current->command[0], "cd") == 0)
 		ms->exit_status = builtin_cd(ms, current);
 	else if (compare_str(current->command[0], "pwd") == 0)
-		ms->exit_status = builtin_pwd(ms, current);
+		ms->exit_status = builtin_pwd(ms);
 	else if (compare_str(current->command[0], "env") == 0)
-		ms->exit_status = builtin_env(ms, current);
+		ms->exit_status = builtin_env(ms);
 	else if (compare_str(current->command[0], "export") == 0)
 		ms->exit_status = builtin_export(ms, current);
 	else if (compare_str(current->command[0], "unset") == 0)

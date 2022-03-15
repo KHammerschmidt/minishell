@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:14:58 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/15 19:23:33 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 20:28:29 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ int	builtin_echo(t_vars *ms, t_cmd *current)
 	}
 	while (current->command[i] != NULL)
 	{
-		ft_putstr_fd(current->command[i], current->fd_out);
+		ft_putstr_fd(current->command[i], STDOUT_FILENO);
 		if (current->command[i + 1] != NULL)
-			ft_putchar_fd(' ', current->fd_out);
+			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}
 	if (n_flag == 0)
-		ft_putchar_fd('\n', current->fd_out);
+		ft_putchar_fd('\n', STDOUT_FILENO);
 	return (0);
 }
