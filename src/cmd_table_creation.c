@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:16:37 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/15 20:07:10 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 20:02:07 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ static int	set_quote_index(char *str, int *i, int *quote_type, int *quote_on)
 		*quote_type = 0;
 		if (str[*i] == '\0')
 			return (1);
-		else
-			return (2);
 	}
 	return (0);
 }

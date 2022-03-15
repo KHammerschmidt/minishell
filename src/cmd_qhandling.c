@@ -6,7 +6,7 @@
 /*   By: mio <mio@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:16:21 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/15 11:30:28 by mio              ###   ########.fr       */
+/*   Updated: 2022/03/15 19:39:41 by mio              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ void	handle_squotes(char *str, int *i, int quote_2, char **line)
 	else
 	{
 		while (str[*i] != 34)
-		{
-			*line = ft_strjoin_2(*line, str, *i);
 			(*i)++;
-		}
 	}
 }
 
