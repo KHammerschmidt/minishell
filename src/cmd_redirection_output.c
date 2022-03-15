@@ -6,7 +6,7 @@
 /*   By: khammers <khammers@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/12 20:16:13 by khammers          #+#    #+#             */
-/*   Updated: 2022/03/12 20:16:14 by khammers         ###   ########.fr       */
+/*   Updated: 2022/03/15 19:23:28 by khammers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ int	outfile_fd(t_vars *ms)
 	}
 	if (ms->info.output_op == -2)
 	{
-		if (ms->info.fd_out != STDOUT_FILENO)
-			close(ms->info.fd_out);
 		ms->info.fd_out = open(ms->info.outfile,
 				O_RDWR | O_CREAT | O_APPEND, 0644);
 	}
